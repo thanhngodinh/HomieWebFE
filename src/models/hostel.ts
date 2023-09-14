@@ -1,0 +1,22 @@
+export type Hostel = {
+  id: string;
+  name: string | undefined;
+  province: string | undefined;
+  district: string | undefined;
+  ward: string | undefined;
+  street: string | undefined;
+  postType: string | undefined;
+  status: string | undefined;
+  cost: number | undefined;
+  electricityPrice: number | undefined;
+  waterPrice: number | undefined;
+  parkingPrice: number | undefined;
+  wifiPrice: number | undefined;
+  capacity: number | undefined;
+  area: number | undefined;
+  description: string | undefined;
+  createdAt: string | undefined;
+  createdBy: string | undefined;
+  updatedAt: string | undefined;
+  updatedBy: string | undefined;
+};

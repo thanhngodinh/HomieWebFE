@@ -3,7 +3,7 @@ import _ from "lodash";
 import { getToken } from "../app/token";
 
 const axiosClient =  axios.create({
-  baseURL: 'https://localhost:7131/',
+  baseURL: 'http://localhost:8080/',
 });
 
 // Interceptors

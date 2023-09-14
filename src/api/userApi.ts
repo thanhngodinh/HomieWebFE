@@ -1,6 +1,6 @@
-import { BaseResponse, ListParams } from "../model";
-import User from "../model/user";
-import axiosClient from "./axiosClient";
+import { BaseResponse, ListParams } from '../models';
+import User from '../models/user';
+import axiosClient from './axiosClient';
 
 const userApi = {
   getAll({}): Promise<BaseResponse<User[]>> {

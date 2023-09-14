@@ -1,12 +1,12 @@
-import { Account, AccountReponse } from "../model/account";
-import axiosClient from "./axiosClient";
+import { Account, AccountReponse } from '../models/account';
+import axiosClient from './axiosClient';
 
 const account = {
   login(params: Account): Promise<AccountReponse> {
-    const url = '/Account/login';
+    const url = 'auth/login';
     return axiosClient.post(url, {
-        userName : params.userName,
-        password: params.password
+      username: params.username,
+      password: params.password,
     });
   },
 };

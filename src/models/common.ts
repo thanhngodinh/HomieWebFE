@@ -19,9 +19,9 @@ export interface ListParams {
 
 export interface BaseResponse<T> {
   data: T;
-  message?: boolean;
-  code: string;
-  status: boolean;
+  total?: number;
+  message?: string;
+  status?: string;
 }
 
 export type Pagination = {
@@ -43,4 +43,9 @@ export type PaginationRequest = {
 export type PaginationBaseReponse<T> = Pagination & {
   data: T;
   message?: boolean;
+};
+
+export type PaginationReponse<T> = {
+  data: T;
+  total?: number;
 };

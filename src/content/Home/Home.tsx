@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Home.module.scss';
 import SearchIcon from '@mui/icons-material/Search';
@@ -7,6 +7,15 @@ import SuggestItemBasic, {
   SuggestItemBasicProps,
 } from '../../components/SuggestItemBasic/SuggestItemBasic';
 import { Carousel } from 'antd';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { Hostel } from '../../models/hostel';
+import {
+  HostelState,
+  actionTypes,
+  fetchHostels,
+  hostelsSelector,
+} from '../../features/hostel';
+import { useDispatch, useSelector } from 'react-redux';
 
 const cx = classNames.bind(styles);
 
@@ -16,6 +25,13 @@ interface HomeProps {
 }
 
 const Home: FC<HomeProps> = (props) => {
+  const dispatch = useDispatch();
+  const { loading, list, error } = useSelector((state: HostelState) => state);
+
+  useEffect(() => {
+    // dispatch({ type: actionTypes.LOAD });
+  }, []);
+
   return (
     <div className="home w-screen bg-slate-100">
       <div className="w-full h-3/5 relative">
@@ -53,8 +69,8 @@ const Home: FC<HomeProps> = (props) => {
           </div>
         </div>
       </div>
-      <HostelList title="Gợi ý của chúng tôi" />
-      <HostelList title="Tìm homie chung nhà" />
+      {/* <HostelList title="Gợi ý của chúng tôi" hostels={list} />
+      <HostelList title="Tìm homie chung nhà" hostels={list} /> */}
     </div>
   );
 };

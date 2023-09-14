@@ -2,9 +2,9 @@ import {
   ListParams,
   ListResponse,
   PaginationParams,
-} from '../../model/common';
+} from '../../models/common';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Student } from '../../model';
+import { Student } from '../../models';
 import { RootState } from '../../app/store';
 
 export interface StudentState {
@@ -24,10 +24,7 @@ const studentSlice = createSlice({
     fetchStudentList(state) {
       state.loading = true;
     },
-    fetchStudentListSuccess(
-      state,
-      action: PayloadAction<Student[]>
-    ) {
+    fetchStudentListSuccess(state, action: PayloadAction<Student[]>) {
       state.list = action.payload;
       state.loading = false;
     },
@@ -39,7 +36,7 @@ const studentSlice = createSlice({
 
 // Actions
 export const studentActions = studentSlice.actions;
-export const {fetchStudentList} = studentSlice.actions;
+export const { fetchStudentList } = studentSlice.actions;
 
 // Selectors
 export const selectStudentLoading = (state: RootState) => state.student.loading;

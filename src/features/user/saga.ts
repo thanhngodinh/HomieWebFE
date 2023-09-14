@@ -1,14 +1,14 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { call, debounce, put, takeLatest } from 'redux-saga/effects';
 import userApi from '../../api/userApi';
-import { BaseResponse, ListParams} from '../../model';
-import User from '../../model/user';
+import { BaseResponse, ListParams } from '../../models';
+import User from '../../models/user';
 import * as studentActions from './actions';
 
 function* fetchUserList(action: PayloadAction<ListParams>) {
   try {
     const response: BaseResponse<User[]> = yield call(
-        userApi.getAll,
+      userApi.getAll,
       action.payload
     );
     yield put(studentActions.fetchUsersSuccess(response));

@@ -1,7 +1,7 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { call, debounce, put, takeLatest } from 'redux-saga/effects';
 import accountApi from '../../api/accountApi';
-import { Account, AccountReponse } from '../../model/account';
+import { Account, AccountReponse } from '../../models/account';
 import * as actions from './actions';
 
 function* authen(action: PayloadAction<Account>) {

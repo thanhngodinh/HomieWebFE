@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { login, usersSelector } from '../../features/account';
-import { Account } from '../../model/account';
-import User from '../../model/user';
+import { Account } from '../../models/account';
+import User from '../../models/user';
 import classNames from 'classnames/bind';
 import styles from './Login.module.scss';
 import bg from '../../assets/img/bg-login.png';
@@ -15,7 +15,7 @@ import Link from 'next/link';
 const cx = classNames.bind(styles);
 
 type FormValues = {
-  userName: string;
+  username: string;
   password: string;
 };
 
@@ -38,11 +38,11 @@ const LoginPage: React.FC = () => {
       <div className={cx('right-side')}>
         <h3>Đăng nhập</h3>
         <form onSubmit={onSubmit}>
-          <label htmlFor="userName">Email hoặc số điện thoại</label>
+          <label htmlFor="username">Email hoặc số điện thoại</label>
           <input
             type="text"
             placeholder="Email hoặc số điện thoại"
-            {...register('userName')}
+            {...register('username')}
           />
           <label htmlFor="password">Mật khẩu</label>
           <input type="text" placeholder="Mật khẩu" {...register('password')} />

@@ -1,7 +1,7 @@
 import User from './user';
 
 export type Account = {
-  userName: string;
+  username: string;
   password: string;
 };
 
@@ -10,6 +10,7 @@ export type Token = {
   tokenType: string;
   expiresIn: string;
 };
+
 export interface AccountReponse {
   token: Token;
   profile: User;
