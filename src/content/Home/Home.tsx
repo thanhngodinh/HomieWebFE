@@ -16,6 +16,8 @@ import {
   hostelsSelector,
 } from '../../features/hostel';
 import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../app/store';
+import { getHostels, selectHostels } from '../../redux/hostel/slice';
 
 const cx = classNames.bind(styles);
 
@@ -25,11 +27,11 @@ interface HomeProps {
 }
 
 const Home: FC<HomeProps> = (props) => {
-  const dispatch = useDispatch();
-  const { loading, list, error } = useSelector((state: HostelState) => state);
-
+  const { list, total, loading, error } = useSelector(selectHostels);
+  const dispatch = useDispatch<AppDispatch>();
+  console.log(list, total);
   useEffect(() => {
-    // dispatch({ type: actionTypes.LOAD });
+    dispatch(getHostels());
   }, []);
 
   return (
@@ -69,8 +71,8 @@ const Home: FC<HomeProps> = (props) => {
           </div>
         </div>
       </div>
-      {/* <HostelList title="Gợi ý của chúng tôi" hostels={list} />
-      <HostelList title="Tìm homie chung nhà" hostels={list} /> */}
+      <HostelList title="Gợi ý của chúng tôi" hostels={list} />
+      <HostelList title="Tìm homie chung nhà" hostels={list} />
     </div>
   );
 };

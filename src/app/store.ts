@@ -12,6 +12,8 @@ import studentReducer from '../features/student/studentSlice';
 import { userReducer } from '../features/user';
 import { hostelReducer } from '../features/hostel';
 import rootSaga from './rootSaga';
+import { hostelSlice } from '../redux/hostel/slice';
+import { authSlice } from '../redux/auth/slice';
 
 const rootReducer = combineReducers({
   counter: counterReducer,
@@ -40,3 +42,10 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   unknown,
   Action<string>
 >;
+
+export const storeRedux = configureStore({
+  reducer: {
+    hostel: hostelSlice.reducer,
+    login: authSlice.reducer,
+  },
+});
