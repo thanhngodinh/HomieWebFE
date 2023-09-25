@@ -27,12 +27,14 @@ interface HomeProps {
 }
 
 const Home: FC<HomeProps> = (props) => {
-  const { list, total, loading, error } = useSelector(selectHostels);
   const dispatch = useDispatch<AppDispatch>();
-  console.log(list, total);
+  const { list, total, loading, error } = useSelector(selectHostels);
+
   useEffect(() => {
     dispatch(getHostels());
-  }, []);
+  }, [dispatch]);
+
+  console.log(list);
 
   return (
     <div className="home w-screen bg-slate-100">

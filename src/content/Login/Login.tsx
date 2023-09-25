@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { login, usersSelector } from '../../features/account';
+// import { login, usersSelector } from '../../features/account';
 import { Account } from '../../models/account';
 import User from '../../models/user';
 import classNames from 'classnames/bind';
@@ -11,6 +11,9 @@ import google from '../../assets/img/icons8-google-48.png';
 import facebook from '../../assets/img/icons8-facebook-48.png';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../app/store';
+import { login, selectAuths } from '../../redux/auth/slice';
 
 const cx = classNames.bind(styles);
 
@@ -20,8 +23,11 @@ type FormValues = {
 };
 
 const LoginPage: React.FC = () => {
-  const dispatch = useAppDispatch();
-  const users: User[] = useAppSelector(usersSelector) || [];
+  // const dispatch = useAppDispatch();
+  // const users: User[] = useAppSelector(usersSelector) || [];
+  
+  const dispatch = useDispatch<AppDispatch>();
+  const { token, loading, error } = useSelector(selectAuths);
 
   const { register, handleSubmit } = useForm<FormValues>();
 

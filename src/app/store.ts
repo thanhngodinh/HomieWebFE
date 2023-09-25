@@ -15,33 +15,32 @@ import rootSaga from './rootSaga';
 import { hostelSlice } from '../redux/hostel/slice';
 import { authSlice } from '../redux/auth/slice';
 
-const rootReducer = combineReducers({
-  counter: counterReducer,
-  student: studentReducer,
-  currentUser: accountReducer,
-  hostel: hostelReducer,
-  user: userReducer,
-});
+// const rootReducer = combineReducers({
+//   counter: counterReducer,
+//   student: studentReducer,
+//   currentUser: accountReducer,
+//   hostel: hostelReducer,
+//   user: userReducer,
+// });
 
-const sagaMiddleware = createSagaMiddleware();
+// const sagaMiddleware = createSagaMiddleware();
 
-export const store = configureStore({
-  reducer: rootReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(sagaMiddleware),
-  devTools: process.env.NODE_ENV !== 'production',
-});
+// export const store = configureStore({
+//   reducer: rootReducer,
+//   middleware: (getDefaultMiddleware) =>
+//     getDefaultMiddleware().concat(sagaMiddleware),
+//   devTools: process.env.NODE_ENV !== 'production',
+// });
 
-sagaMiddleware.run(rootSaga);
+// sagaMiddleware.run(rootSaga);
 
-export type AppDispatch = typeof store.dispatch;
-export type RootState = ReturnType<typeof store.getState>;
-export type AppThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  RootState,
-  unknown,
-  Action<string>
->;
+// export type RootState = ReturnType<typeof store.getState>;
+// export type AppThunk<ReturnType = void> = ThunkAction<
+//   ReturnType,
+//   RootState,
+//   unknown,
+//   Action<string>
+// >;
 
 export const storeRedux = configureStore({
   reducer: {
@@ -49,3 +48,4 @@ export const storeRedux = configureStore({
     login: authSlice.reducer,
   },
 });
+export type AppDispatch = typeof storeRedux.dispatch;

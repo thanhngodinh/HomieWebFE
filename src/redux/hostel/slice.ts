@@ -37,19 +37,17 @@ export const hostelSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getHostels.pending, (state, action) => {
-        console.log(action);
         state.loading = true;
         state.error = false;
       })
       .addCase(getHostels.fulfilled, (state, action) => {
-        console.log(action);
         state.list = action.payload?.data || [];
         state.total = action.payload?.total || 0;
+        console.log(state.list);
         state.loading = false;
         state.error = false;
       })
       .addCase(getHostels.rejected, (state, action) => {
-        console.log(action);
         state.error = true;
         state.loading = false;
       });
