@@ -81,7 +81,7 @@ const Home: FC<HomeProps> = (props) => {
 
 Home.defaultProps = {
   bgImg:
-    'https://lh3.googleusercontent.com/bX1zQAzOo05wVVEVWG8HauZVI4xkOmZftOKEfIOjXcKt_q5nBD6yfFaXpD83hPVeqyPRifwrzq-BfynzP_-AfwHsJE_dWzGdb5_Mz_M',
+    'https://firebasestorage.googleapis.com/v0/b/nextjs-img.appspot.com/o/image%2Fhero-Fullwidth.png?alt=media&token=87167ea2-8c41-4dd7-87f8-b85a5a1a375c',
   city: [
     {
       img: 'https://cdn.vntrip.vn/cam-nang/wp-content/uploads/2017/07/ho-hoan-kiem-3.jpg',

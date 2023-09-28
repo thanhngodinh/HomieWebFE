@@ -28,7 +28,7 @@ const HostelItem: FC<HostelItemProps> = ({ id, img, name, size, desc }) => {
           <hr className="w-1/5" />
         </div>
         <p className="text-base row-span-1">
-          Phòng {size} người · Nhà nguyên căn · 3 phòng ngủ · 2 WC
+          Phòng {size} người
         </p>
         <p className="text-base col-span-1">{desc}</p>
       </div>

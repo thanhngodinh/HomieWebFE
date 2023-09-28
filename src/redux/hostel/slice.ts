@@ -54,9 +54,9 @@ export const hostelSlice = createSlice({
   },
 });
 
-export const selectHostels = (state: HostelState) => state;
-export const selectLoadingState = (state: HostelState) => state.loading;
-export const selectErrorState = (state: HostelState) => state.error;
+export const selectHostels = (state: any) => state.hostel;
+export const selectLoadingState = (state: any) => state.hostel.loading;
+export const selectErrorState = (state: any) => state.hostel.error;
 
 export const hostelAction = hostelSlice.actions;
 
