@@ -1,0 +1,25 @@
+@import "./_variables";
+
+.button{
+    width: 125px;
+    padding: 0.25rem 0.35rem;
+    height: auto;
+    &__border{
+        &:hover{
+            background-color: $main-color1;
+            color: white;
+        };
+        border: 1px solid $main-color1;
+        border-radius: 0.5rem;
+        color: $main-color1;
+        background-color: white;
+        // transition: ;
+    }
+    &__fill{
+        border: none;
+        outline: none;
+        border-radius: 0.5rem;
+        background-color: $main-color1;
+        color: white
+    }
+}

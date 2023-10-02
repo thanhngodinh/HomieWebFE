@@ -1,3 +1,9 @@
 .wrapper {
     
 }
+
+.mypost {
+    &:nth-child(even){
+        border-bottom-width: none;
+    }
+}
