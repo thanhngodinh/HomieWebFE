@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axiosClient from '../../api/axiosClient';
 import accountApi from '../../api/accountApi';
 import { Account } from '../../models/account';
+import { setToken } from '../../app/token';
 
 export interface AuthState {
   loading?: boolean;
@@ -22,8 +23,8 @@ export const login = createAsyncThunk(
         username: account.username,
         password: account.password,
       });
-      console.log(response);
-      return response.token.accessToken;
+      setToken(response.token);
+      return response.token;
     } catch (error) {
       console.error(error);
     }
@@ -63,4 +64,3 @@ export const selectErrorState = (state: AuthState) => state.error;
 export const authAction = authSlice.actions;
 
 export default authSlice.reducer;
-

@@ -18,7 +18,7 @@ export interface ListParams {
 }
 
 export interface BaseResponse<T> {
-  data: T;
+  data?: T;
   total?: number;
   message?: string;
   status?: string;

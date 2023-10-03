@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { Hostel } from '../../models/hostel';
+import { Hostel, HostelCreate } from '../../models/hostel';
 import axiosClient from '../../api/axiosClient';
 import hostelApi from '../../api/hostelApi';
 
@@ -19,12 +19,23 @@ const initialState: HostelState = {
 export const getHostels = createAsyncThunk('hostel/getHostels', async () => {
   try {
     const response = await hostelApi.get({});
-    console.log(response);
     return response;
   } catch (error) {
     console.error(error);
   }
 });
+
+export const createHostel = createAsyncThunk(
+  'hostel/createHostel',
+  async (hostel: HostelCreate) => {
+    try {
+      const response = await hostelApi.post(hostel);
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
 
 export const hostelSlice = createSlice({
   name: 'hostel',
@@ -48,6 +59,19 @@ export const hostelSlice = createSlice({
         state.error = false;
       })
       .addCase(getHostels.rejected, (state, action) => {
+        state.error = true;
+        state.loading = false;
+      })
+      // create
+      .addCase(createHostel.pending, (state, action) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(createHostel.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+      })
+      .addCase(createHostel.rejected, (state, action) => {
         state.error = true;
         state.loading = false;
       });

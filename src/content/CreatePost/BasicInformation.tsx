@@ -5,76 +5,66 @@ import { useForm } from 'react-hook-form';
 import React, { useState } from 'react';
 import { storage } from '../../app/firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { Hostel } from '../../models/hostel';
+import { Hostel, HostelCreate } from '../../models/hostel';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../app/store';
+import { createHostel } from '../../redux/hostel/slice';
+import { District, Province, Ward } from '../../models';
 
 const cx = classNames.bind(styles);
 
 interface BasicInforProps {}
 
-type FormValues = {
-  name: string;
-  province: string;
-  district: string;
-  ward: string;
-  street: string;
-  postType: string;
-  status: string;
-  cost: number;
-  electricityPrice: number;
-  waterPrice: number;
-  parkingPrice: number;
-  wifiPrice: number;
-  capacity: number;
-  area: number;
-  description: string;
-  images: string[];
-  utilities: string[];
-};
-
 const BasicInformation: FC<BasicInforProps> = (props) => {
-  // return <div className={cx('wrapper')}>Create Post</div>;
-  const [province, setProvince] = useState([]);
-  const [district, setDistrict] = useState([]);
-  const [ward, setWard] = useState([]);
-  const [isDisableButton, setIsDisableButton] = useState(true);
-  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const dispatch = useDispatch<AppDispatch>();
+  // const { loading, error } = useSelector(createHostel);
+
+  let filesPreview: string[] = [];
+  const [province, setProvince] = useState<Province[]>([]);
+  const [district, setDistrict] = useState<District[]>([]);
+  const [ward, setWard] = useState<Ward[]>([]);
+  const [imagesPreview, setImagesPreview] = useState<string[]>([]);
   const [imagesURL, setImagesURL] = useState<string[]>([]);
-  const [progressUpload, setProgressUpload] = useState(0);
+  const [imagesFile, setImagesFile] = useState<File[]>([]);
 
   const {
     register,
     setValue,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>();
-  const onSubmit = handleSubmit((data: any) => {
-    const province = JSON.parse(data.province)?.name;
-    const district = JSON.parse(data.district)?.name;
-    const ward = JSON.parse(data.ward)?.name;
-    console.log({ ...data, province, district, ward });
-  });
+  } = useForm<HostelCreate>();
+
+  const onSubmit = async (data: HostelCreate) => {
+    handleSelectedFile(imagesFile);
+    console.log({ ...data });
+    dispatch(createHostel(data));
+  };
 
   const getProvince = () => {
     fetch('https://provinces.open-api.vn/api/p')
       .then((res) => res.json())
-      .then((data) => {
+      .then((data: Province[]) => {
         setProvince(data);
+        setValue('province', data[0].name);
       });
   };
-  const getDistrict = (id: any) => {
+  const getDistrict = (id: number) => {
     fetch(`https://provinces.open-api.vn/api/p/${id}?depth=2`)
       .then((res) => res.json())
-      .then((data) => {
+      .then((data: Province) => {
         setDistrict(data?.districts);
+        setValue('district', data?.districts[0]?.name);
       });
   };
-  const getWard = (id: any) => {
+  const getWard = (id: number) => {
     fetch(`https://provinces.open-api.vn/api/d/${id}?depth=2`)
       .then((res) => res.json())
-      .then((data) => {
+      .then((data: District) => {
         setWard(data?.wards);
+        setValue('ward', data?.wards[0]?.name || "");
       });
   };
+
   useEffect(() => {
     getProvince();
     getDistrict(1);
@@ -82,57 +72,63 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log(imagesURL);
+    district ? getWard(district[0]?.code) : getDistrict(1);
+  }, [district]);
+
+  useEffect(() => {
     setValue('images', imagesURL, {
       shouldDirty: true,
     });
-    setIsDisableButton(false);
   }, [imagesURL]);
 
-  const handleSelectedFile = (files: any) => {
-    if (files) {
-      for (const image of files) {
-        if (image.size < 10000000) {
-          if (image) {
-            const name = image.name;
-            const storageRef = ref(storage, `image/${name}`);
-            const uploadTask = uploadBytesResumable(storageRef, image);
+  const handlePreviewImage = (files: File[]) => {
+    for (let i = 0; i < files.length; i++) {
+      filesPreview.push(URL.createObjectURL(files[i]));
+    }
+    setImagesFile(files);
+    setImagesPreview(filesPreview);
+  };
 
-            uploadTask.on(
-              'state_changed',
-              (snapshot: any) => {
-                const progress =
-                  (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+  const handleSelectedFile = (files: File[]) => {
+    // console.log(files);
+    for (let i = 0; i < files.length; i++) {
+      if (files[i].size < 10000000) {
+        if (files[i]) {
+          const name = files[i].name;
+          const storageRef = ref(storage, `image/${name}`);
+          const uploadTask = uploadBytesResumable(storageRef, files[i]);
 
-                setProgressUpload(progress); // to show progress upload
-
-                switch (snapshot.state) {
-                  case 'paused':
-                    console.log('Upload is paused');
-                    break;
-                  case 'running':
-                    console.log('Upload is running');
-                    break;
-                }
-              },
-              (error: any) => {
-                console.log(error.message);
-              },
-              () => {
-                getDownloadURL(uploadTask.snapshot.ref).then((url: string) => {
-                  //url is download url of file
-                  setImagesURL([...imagesURL, url]);
-                });
+          uploadTask.on(
+            'state_changed',
+            (snapshot: any) => {
+              const progress =
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              switch (snapshot.state) {
+                case 'paused':
+                  console.log(`Upload file ${i} is paused`);
+                  break;
+                case 'running':
+                  console.log(`Upload file ${i} is running`);
+                  break;
               }
-            );
-          } else {
-            console.log('File not found');
-          }
+            },
+            (error: any) => {
+              console.log(error.message);
+            },
+            () => {
+              getDownloadURL(uploadTask.snapshot.ref).then((url: string) => {
+                setImagesURL([...imagesURL, url]); //url is download url of file
+              });
+            }
+          );
         } else {
-          console.log('File size to large');
+          console.log('File not found');
         }
+      } else {
+        console.log('File size to large');
       }
     }
+    return;
   };
 
   return (
@@ -143,7 +139,7 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
         mọi người đến nhà của bạn nhé.
       </div>
       <div className="mt-6 mb-8 text-xs w-full p-6 m-auto bg-white rounded-md shadow-xl ring-2 lg:max-w-xl">
-        <form className="">
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="block mb-2">
             <p className="text-lg font-semibold text-indigo-700 leading-relaxed">
               Thông tin cơ bản
@@ -202,13 +198,15 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
                 <select
                   className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   id="grid-state"
-                  {...register('province', { required: true })}
-                  onChange={(e) =>
-                    getDistrict(JSON.parse(e.target.value)?.code)
-                  }
+                  onChange={(e) => {
+                    getDistrict(JSON.parse(e.target.value)?.code);
+                    setValue('province', JSON.parse(e.target.value).name);
+                  }}
                 >
-                  {province?.map((item: any) => (
-                    <option value={JSON.stringify(item)}>{item.name}</option>
+                  {province?.map((item: any, i) => (
+                    <option key={i} value={JSON.stringify(item)}>
+                      {item.name}
+                    </option>
                   ))}
                 </select>
                 {errors.province && (
@@ -241,11 +239,16 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
                 <select
                   className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   id="grid-state"
-                  {...register('district', { required: true })}
-                  onChange={(e) => getWard(JSON.parse(e.target.value)?.code)}
+                  // {...register('district', { required: true })}
+                  onChange={(e) => {
+                    getWard(JSON.parse(e.target.value)?.code);
+                    setValue('district', JSON.parse(e.target.value)?.name);
+                  }}
                 >
-                  {district?.map((item: any) => (
-                    <option value={JSON.stringify(item)}>{item.name}</option>
+                  {district?.map((item: any, i) => (
+                    <option key={i} value={JSON.stringify(item)}>
+                      {item.name}
+                    </option>
                   ))}
                 </select>
                 {errors.district && (
@@ -279,10 +282,13 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
                 <select
                   className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   id="grid-state"
-                  {...register('ward', { required: false })}
+                  // {...register('ward', { required: false })}
+                  onChange={(e) => {
+                    setValue('ward', JSON.parse(e.target.value)?.name);
+                  }}
                 >
-                  {ward?.map((item: any) => (
-                    <option value={JSON.stringify(item)} id={item.code}>
+                  {ward?.map((item: any, i) => (
+                    <option key={i} value={JSON.stringify(item)} id={item.code}>
                       {item.name}
                     </option>
                   ))}
@@ -609,9 +615,9 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
                 id="grid-first-name"
                 type="text"
                 placeholder="Số điện thoại"
-                {...register('phoneNumber', { required: true })}
+                {...register('phone', { required: true })}
               />
-              {errors.phoneNumber && (
+              {errors.phone && (
                 <p className="text-red-500 text-xs italic">
                   Hãy điền Số điện thoại
                 </p>
@@ -633,10 +639,9 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
                 id="grid-first-name"
                 type="file"
                 multiple
-                onChange={async (files: any) => {
-                  handleSelectedFile(files.target.files);
+                onChange={(files: any) => {
+                  handlePreviewImage(files.target.files);
                 }}
-                // {...register('image', { required: true })}
               />
 
               {errors.images && (
@@ -645,23 +650,34 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
                 </p>
               )}
             </div>
+            <div className="grid grid-cols-3 gap-2 px-3">
+              {imagesPreview?.map((img, i) => {
+                return (
+                  <img
+                    key={i}
+                    src={img}
+                    alt="preview"
+                    className="h-44 object-cover rounded"
+                  />
+                );
+              })}
+            </div>
           </div>
 
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mt-5">
             <button
               className="bg-transparent hover:bg-indigo-100 text-black font-bold py-2 px-4 border-solid border-indigo rounded shadow py-2 px-4 border border-blue-500 hover:border-transparent rounded"
               type="button"
             >
               Quay lại
             </button>
-            <button
+            <input
               className="bg-indigo-500 hover:bg-indigo-300 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="button"
-              disabled={isDisableButton}
-              onClick={onSubmit}
-            >
-              Tiếp tục
-            </button>
+              type="submit"
+              onClick={() => {
+                handleSelectedFile(imagesFile);
+              }}
+            />
           </div>
         </form>
       </div>

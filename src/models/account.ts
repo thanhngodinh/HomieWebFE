@@ -12,6 +12,6 @@ export type Token = {
 };
 
 export interface AccountReponse {
-  token: Token;
+  token: string;
   profile?: User;
 }
