@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-// import { login, usersSelector } from '../../features/account';
 import { Account } from '../../models/account';
 import User from '../../models/user';
 import classNames from 'classnames/bind';
@@ -23,8 +21,6 @@ type FormValues = {
 };
 
 const LoginPage: React.FC = () => {
-  // const dispatch = useAppDispatch();
-  // const users: User[] = useAppSelector(usersSelector) || [];
   
   const dispatch = useDispatch<AppDispatch>();
   const { token, loading, error } = useSelector(selectAuths);

@@ -7,14 +7,7 @@ import SuggestItemBasic, {
   SuggestItemBasicProps,
 } from '../../components/SuggestItemBasic/SuggestItemBasic';
 import { Carousel } from 'antd';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { Hostel } from '../../models/hostel';
-import {
-  HostelState,
-  actionTypes,
-  fetchHostels,
-  hostelsSelector,
-} from '../../features/hostel';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../app/store';
 import { getHostels, selectHostels } from '../../redux/hostel/slice';
@@ -34,7 +27,6 @@ const Home: FC<HomeProps> = (props) => {
     dispatch(getHostels());
   }, [dispatch]);
 
-  console.log(list);
 
   return (
     <div className="home w-screen bg-slate-100">
