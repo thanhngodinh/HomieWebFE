@@ -21,7 +21,6 @@ type FormValues = {
 };
 
 const LoginPage: React.FC = () => {
-  
   const dispatch = useDispatch<AppDispatch>();
   const { token, loading, error } = useSelector(selectAuths);
 
@@ -48,6 +47,7 @@ const LoginPage: React.FC = () => {
           />
           <label htmlFor="password">Mật khẩu</label>
           <input type="text" placeholder="Mật khẩu" {...register('password')} />
+
           <button className={cx('login-btn')}>Đăng nhập</button>
         </form>
         <div className="flex w-full text-sm">

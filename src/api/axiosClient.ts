@@ -53,7 +53,3 @@ axiosClient.interceptors.response.use(
 );
 
 export default axiosClient;
-
-// const getToken = () => {
-//   return localStorage.getItem('TokenApp');
-// }

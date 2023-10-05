@@ -1,26 +1,27 @@
 export type Hostel = {
   id: string;
-  name: string | undefined;
-  province: string | undefined;
-  district: string | undefined;
-  ward: string | undefined;
-  street: string | undefined;
+  name: string;
+  province: string;
+  district: string;
+  ward: string;
+  street: string;
   postType: string | undefined;
   status: string | undefined;
-  cost: number | undefined;
+  cost: number;
   electricityPrice: number | undefined;
   waterPrice: number | undefined;
   parkingPrice: number | undefined;
-  wifiPrice: number | undefined;
+  serviecPrice: number | undefined;
   capacity: number | undefined;
   area: number | undefined;
   description: string | undefined;
+  phone: string | undefined;
+  imageUrl: string[];
   createdAt: string | undefined;
   createdBy: string | undefined;
   updatedAt: string | undefined;
   updatedBy: string | undefined;
 };
-
 
 export type HostelCreate = {
   name: string;
@@ -28,18 +29,17 @@ export type HostelCreate = {
   district: string;
   ward: string;
   street: string;
-  postType: string;
   status: string;
   cost: number;
+  deposit: number;
   electricityPrice: number;
   waterPrice: number;
   parkingPrice: number;
-  wifiPrice: number;
+  servicePrice: number;
   capacity: number;
   area: number;
   phone: number;
   description: string;
-  images: string[];
+  imageUrl: string[];
   utilities: string[];
 };
-

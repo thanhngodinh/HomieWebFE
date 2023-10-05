@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import HostelItem from '../HostelItem';
 import { Hostel } from '../../models/hostel';
+import { genAddress } from '../../utils/common';
 
 interface HostelListProps {
   title?: string;
@@ -18,11 +19,15 @@ const HostelList: FC<HostelListProps> = ({ title, hostels }) => {
             <HostelItem
               id={'hostel/' + item.id}
               name={item.name}
-              img={
-                'https://tuvannhadep.com.vn/uploads/images/hinh-anh-nha-dep-1.jpg'
-              }
+              img={item.imageUrl[0]}
               size={item.capacity}
-              desc={item.description}
+              address={genAddress(
+                item.street,
+                item.ward,
+                item.district,
+                item.province
+              )}
+              cost={item.cost}
             />
           );
         })}

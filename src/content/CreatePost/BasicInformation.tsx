@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../app/store';
 import { createHostel } from '../../redux/hostel/slice';
 import { District, Province, Ward } from '../../models';
+import uuid from 'react-uuid';
 
 const cx = classNames.bind(styles);
 
@@ -24,7 +25,6 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
   const [district, setDistrict] = useState<District[]>([]);
   const [ward, setWard] = useState<Ward[]>([]);
   const [imagesPreview, setImagesPreview] = useState<string[]>([]);
-  const [imagesURL, setImagesURL] = useState<string[]>([]);
   const [imagesFile, setImagesFile] = useState<File[]>([]);
 
   const {
@@ -32,12 +32,22 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
     setValue,
     handleSubmit,
     formState: { errors },
-  } = useForm<HostelCreate>();
+  } = useForm<HostelCreate>({
+    defaultValues: {
+      area: 0,
+      capacity: 1,
+      deposit: 0,
+      electricityPrice: 0,
+      waterPrice: 0,
+      parkingPrice: 0,
+      servicePrice: 0,
+    },
+  });
 
-  const onSubmit = async (data: HostelCreate) => {
-    handleSelectedFile(imagesFile);
-    console.log({ ...data });
-    dispatch(createHostel(data));
+  const onSubmit = (data: HostelCreate) => {
+    handleSelectedFile(imagesFile).then((res) => {
+      dispatch(createHostel({ ...data, imageUrl: res }));
+    });
   };
 
   const getProvince = () => {
@@ -54,6 +64,7 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
       .then((data: Province) => {
         setDistrict(data?.districts);
         setValue('district', data?.districts[0]?.name);
+        getWard(data?.districts[0]?.code);
       });
   };
   const getWard = (id: number) => {
@@ -61,25 +72,14 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
       .then((res) => res.json())
       .then((data: District) => {
         setWard(data?.wards);
-        setValue('ward', data?.wards[0]?.name || "");
+        setValue('ward', data?.wards[0]?.name || '');
       });
   };
 
   useEffect(() => {
     getProvince();
     getDistrict(1);
-    getWard(1);
   }, []);
-
-  useEffect(() => {
-    district ? getWard(district[0]?.code) : getDistrict(1);
-  }, [district]);
-
-  useEffect(() => {
-    setValue('images', imagesURL, {
-      shouldDirty: true,
-    });
-  }, [imagesURL]);
 
   const handlePreviewImage = (files: File[]) => {
     for (let i = 0; i < files.length; i++) {
@@ -89,38 +89,41 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
     setImagesPreview(filesPreview);
   };
 
-  const handleSelectedFile = (files: File[]) => {
-    // console.log(files);
+  const handleSelectedFile = (files: File[]): Promise<any> => {
+    let uploadProgress = [];
     for (let i = 0; i < files.length; i++) {
       if (files[i].size < 10000000) {
         if (files[i]) {
-          const name = files[i].name;
-          const storageRef = ref(storage, `image/${name}`);
-          const uploadTask = uploadBytesResumable(storageRef, files[i]);
-
-          uploadTask.on(
-            'state_changed',
-            (snapshot: any) => {
-              const progress =
-                (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-              switch (snapshot.state) {
-                case 'paused':
-                  console.log(`Upload file ${i} is paused`);
-                  break;
-                case 'running':
-                  console.log(`Upload file ${i} is running`);
-                  break;
+          const uploadPromise = new Promise((resolve, reject) => {
+            const name = files[i].name;
+            const storageRef = ref(storage, `image/${name + uuid()}`);
+            const uploadTask = uploadBytesResumable(storageRef, files[i]);
+            uploadTask.on(
+              'state_changed',
+              (snapshot: any) => {
+                const progress =
+                  (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                switch (snapshot.state) {
+                  case 'paused':
+                    console.log(`Upload file ${i} is paused`);
+                    break;
+                  case 'running':
+                    console.log(`Upload file ${i} is running`);
+                    break;
+                }
+              },
+              (error: any) => {
+                console.log(error.message);
+                reject(error);
+              },
+              () => {
+                getDownloadURL(uploadTask.snapshot.ref).then((url: string) => {
+                  resolve(url);
+                });
               }
-            },
-            (error: any) => {
-              console.log(error.message);
-            },
-            () => {
-              getDownloadURL(uploadTask.snapshot.ref).then((url: string) => {
-                setImagesURL([...imagesURL, url]); //url is download url of file
-              });
-            }
-          );
+            );
+          });
+          uploadProgress.push(uploadPromise);
         } else {
           console.log('File not found');
         }
@@ -128,7 +131,11 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
         console.log('File size to large');
       }
     }
-    return;
+    if (uploadProgress.length > 0) {
+      return Promise.all(uploadProgress);
+    } else {
+      return Promise.resolve([]);
+    }
   };
 
   return (
@@ -342,8 +349,16 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                 id="grid-first-name"
                 type="text"
+                value={0}
                 placeholder="Diện tích"
-                {...register('area', { required: false })}
+                {...register('area', {
+                  required: false,
+                  valueAsNumber: true,
+                  pattern: {
+                    value: /[1-9][0-9]{1,}/,
+                    message: 'Hãy nhập đúng dạng số',
+                  },
+                })}
               />
               {/* <p className="text-red-500 text-xs italic">Please fill out this field.</p> */}
             </div>
@@ -361,9 +376,10 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                 id="grid-first-name"
                 type="text"
-                placeholder="Mức giá"
+                placeholder="Giá phòng"
                 {...register('cost', {
                   required: true,
+                  valueAsNumber: true,
                   pattern: {
                     value: /[1-9][0-9]{1,}/,
                     message: 'Hãy nhập đúng dạng số',
@@ -375,7 +391,35 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
                   Hãy điền giá phòng
                 </p>
               )}
-              {/* <p className="text-red-500 text-xs italic">Please fill out this field.</p> */}
+            </div>
+          </div>
+
+          <div className="flex flex-wrap -mx-3 mb-6">
+            <div className="w-full px-3 mb-6 md:mb-0">
+              <label
+                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                htmlFor="grid-first-name"
+              >
+                Tiền cọc
+              </label>
+              <input
+                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                id="grid-first-name"
+                type="text"
+                placeholder="Tiền cọc"
+                {...register('deposit', {
+                  valueAsNumber: true,
+                  pattern: {
+                    value: /[1-9][0-9]{1,}/,
+                    message: 'Hãy nhập đúng dạng số',
+                  },
+                })}
+              />
+              {errors.deposit && (
+                <p className="text-red-500 text-xs italic">
+                  Hãy điền giá phòng
+                </p>
+              )}
             </div>
           </div>
 
@@ -391,9 +435,9 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                 id="grid-first-name"
                 type="text"
-                placeholder="Mức giá"
+                placeholder="Giá điện"
                 {...register('electricityPrice', {
-                  required: true,
+                  valueAsNumber: true,
                   pattern: {
                     value: /[1-9][0-9]{1,}/,
                     message: 'Hãy nhập đúng dạng số',
@@ -415,7 +459,7 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
                 type="text"
                 placeholder="Giá nước"
                 {...register('waterPrice', {
-                  required: true,
+                  valueAsNumber: true,
                   pattern: {
                     value: /[1-9][0-9]{1,}/,
                     message: 'Hãy nhập đúng dạng số',
@@ -429,15 +473,15 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
                 className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                 htmlFor="grid-first-name"
               >
-                Giá bãi đỗ xe
+                Giá giữ xe
               </label>
               <input
                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                 id="grid-first-name"
                 type="text"
-                placeholder="Mức giá"
+                placeholder="Giá xe"
                 {...register('parkingPrice', {
-                  required: true,
+                  valueAsNumber: true,
                   pattern: {
                     value: /[1-9][0-9]{1,}/,
                     message: 'Hãy nhập đúng dạng số',
@@ -457,9 +501,9 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                 id="grid-first-name"
                 type="text"
-                placeholder="Mức giá"
-                {...register('cost', {
-                  required: true,
+                placeholder="Giá dịch vụ"
+                {...register('servicePrice', {
+                  valueAsNumber: true,
                   pattern: {
                     value: /[1-9][0-9]{1,}/,
                     message: 'Hãy nhập đúng dạng số',
@@ -477,31 +521,23 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
               >
                 Sức chứa
               </label>
-              <div className="relative">
-                <select
-                  className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="grid-state"
-                  {...register('capacity', { required: false })}
-                >
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  <svg
-                    className="fill-current h-4 w-4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                  </svg>
-                </div>
-              </div>
-              {/* <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="Doe" /> */}
+              <input
+                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                id="grid-first-name"
+                type="text"
+                placeholder="Sức chứa"
+                {...register('capacity', {
+                  valueAsNumber: true,
+                  pattern: {
+                    value: /[1-9][0-9]{1,}/,
+                    message: 'Hãy nhập đúng dạng số',
+                  },
+                })}
+              />
             </div>
           </div>
 
-          <div className="flex flex-wrap -mx-3 mb-6">
+          {/* <div className="flex flex-wrap -mx-3 mb-6">
             <div className="w-full px-3 mb-6 md:mb-0">
               <label
                 className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -516,9 +552,8 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
                 placeholder="Tiện ích khác"
                 {...register('utilities', { required: false })}
               />
-              {/* <p className="text-red-500 text-xs italic">Please fill out this field.</p> */}
             </div>
-          </div>
+          </div> */}
 
           <div className="block mb-2 mt-6">
             <p className="text-lg font-semibold text-indigo-700 leading-relaxed">
@@ -526,28 +561,13 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
             </p>
           </div>
 
-          {/* <div className="flex flex-wrap -mx-3 mb-6">
-            <div className="w-full px-3 mb-6 md:mb-0">
-              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-first-name">
-                Loại tin đăng
-              </label>
-
-              <input id='home1' name="home1" value="home1" className="mr-1" type="radio" />
-              <label htmlFor="home1" className="">Tin ở ghép</label>
-
-
-              <input id="home2" name="home1" value="home2" className="ml-3 mr-1" type="radio" aria-labelledby="home2" aria-describedby="home2" />
-              <label htmlFor="home2" className="">Tin nhà ở</label>
-            </div>
-          </div> */}
-
           <div className="flex flex-wrap -mx-3 mb-6">
             <div className="w-full px-3 mb-6 md:mb-0">
               <label
                 className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                 htmlFor="grid-first-name"
               >
-                Tiêu đề bài đăng
+                Tiêu đề
               </label>
               <input
                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
@@ -644,7 +664,7 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
                 }}
               />
 
-              {errors.images && (
+              {errors.imageUrl && (
                 <p className="text-red-500 text-xs italic">
                   Hãy điền chọn Ảnh của phòng
                 </p>
@@ -674,9 +694,6 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
             <input
               className="bg-indigo-500 hover:bg-indigo-300 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
-              onClick={() => {
-                handleSelectedFile(imagesFile);
-              }}
             />
           </div>
         </form>

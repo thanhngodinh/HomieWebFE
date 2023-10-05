@@ -1,8 +1,7 @@
-
 export const getToken = () => {
-    return localStorage.getItem("TokenApp")
-}
+  return localStorage.getItem('token') || undefined;
+};
 
 export const setToken = (token: string) => {
-  return localStorage.setItem('TokenApp', token);
+  return localStorage?.setItem('token', token);
 };

@@ -1,11 +1,18 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Header.module.scss';
 import Link from 'next/link';
+import { getToken } from '../../../app/token';
 
 const cx = classNames.bind(styles);
 
 const Header: FC = () => {
+  const [token, setToken] = useState('');
+  useEffect(() => {
+    let value;
+    value = localStorage.getItem('token') || '';
+    setToken(value);
+  }, []);
   return (
     <header className="w-screen h-fit">
       <div className="suggestion w-screen h-9 bg-purple text-center light flex items-center justify-center">
@@ -50,25 +57,47 @@ const Header: FC = () => {
         <div className="col-span-2 text-center">
           <ul className="flex flex-col md:flex-row h-full items-center gap-2">
             <li>
-              <Link href="/create">
+              <Link href={token.length > 0 ? '/create' : '/login'}>
                 <span className="block py-2 pl-3 pr-4 text-purple font-medium light text-base hover:underline cursor-pointer">
                   Đăng tin
                 </span>
               </Link>
             </li>
-            <li className="flex">
-              <Link href="/login">
-                <span className="block py-2 pl-3 pr-4 text-purple font-medium light text-base hover:underline cursor-pointer">
-                  Đăng nhập
-                </span>
-              </Link>
-              <span className="text-purple">/</span>
-              <Link href="/register">
-                <span className="block py-2 pl-3 pr-4 text-purple font-medium light text-base hover:underline cursor-pointer">
-                  Đăng ký
-                </span>
-              </Link>
-            </li>
+            {token.length > 0 ? (
+              <>
+                <li className="flex">
+                  <Link href="/my">
+                    <span className="block py-2 pl-3 pr-4 text-purple font-medium light text-base hover:underline cursor-pointer">
+                      My
+                    </span>
+                  </Link>
+                </li>
+                <li className="flex">
+                  <a href="/">
+                    <span
+                      onClick={() => localStorage?.setItem('token', '')}
+                      className="block py-2 pl-3 pr-4 text-purple font-medium light text-base hover:underline cursor-pointer"
+                    >
+                      Logout
+                    </span>
+                  </a>
+                </li>
+              </>
+            ) : (
+              <li className="flex">
+                <Link href="/login">
+                  <span className="block py-2 pl-3 pr-4 text-purple font-medium light text-base hover:underline cursor-pointer">
+                    Đăng nhập
+                  </span>
+                </Link>
+                <span className="text-purple">/</span>
+                <Link href="/register">
+                  <span className="block py-2 pl-3 pr-4 text-purple font-medium light text-base hover:underline cursor-pointer">
+                    Đăng ký
+                  </span>
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
       </div>
