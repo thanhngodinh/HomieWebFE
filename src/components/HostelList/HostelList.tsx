@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import HostelItem from '../HostelItem';
 import { Hostel } from '../../models/hostel';
-import { genAddress } from '../../utils/common';
+import { GenAddress } from '../../utils/func';
 
 interface HostelListProps {
   title?: string;
@@ -21,7 +21,7 @@ const HostelList: FC<HostelListProps> = ({ title, hostels }) => {
               name={item.name}
               img={item.imageUrl[0]}
               size={item.capacity}
-              address={genAddress(
+              address={GenAddress(
                 item.street,
                 item.ward,
                 item.district,

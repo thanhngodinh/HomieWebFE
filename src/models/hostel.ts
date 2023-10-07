@@ -43,3 +43,9 @@ export type HostelCreate = {
   imageUrl: string[];
   utilities: string[];
 };
+
+export type Utilities = {
+  id: string;
+  name: string;
+  icon: string;
+};

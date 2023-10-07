@@ -11,7 +11,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../app/store';
-import { login, selectAuths } from '../../redux/auth/slice';
+import { loginAccount, selectAuths } from '../../redux/auth/slice';
+import { useRouter } from 'next/router';
 
 const cx = classNames.bind(styles);
 
@@ -21,6 +22,8 @@ type FormValues = {
 };
 
 const LoginPage: React.FC = () => {
+  const router = useRouter();
+
   const dispatch = useDispatch<AppDispatch>();
   const { token, loading, error } = useSelector(selectAuths);
 
@@ -28,7 +31,12 @@ const LoginPage: React.FC = () => {
 
   const onSubmit = handleSubmit((data) => {
     const acc: Account = { ...data };
-    dispatch(login(acc));
+    dispatch(
+      loginAccount({
+        account: acc,
+        callback: () => router.push('/'),
+      })
+    );
   });
 
   return (

@@ -1,10 +1,10 @@
-import { HostelCreate } from './../models/hostel';
+import { utilitiesAction } from './../redux/utilities/slice';
+import { HostelCreate, Utilities } from './../models/hostel';
 import { BaseResponse } from '../models';
 import { Hostel } from '../models/hostel';
 import axiosClient from './axiosClient';
 
-
-const hostelApi = {
+export const hostelApi = {
   get({}): Promise<BaseResponse<Hostel[]>> {
     const url = '/hostels';
     return axiosClient.get(url);
@@ -13,8 +13,12 @@ const hostelApi = {
     const url = '/hostels';
     return axiosClient.get(url);
   },
-  getById({}): Promise<BaseResponse<Hostel>> {
-    const url = '/hostels/{id}';
+  getSuggest({}): Promise<BaseResponse<Hostel[]>> {
+    const url = '/hostels/suggest';
+    return axiosClient.get(url);
+  },
+  getById(id: string): Promise<Hostel> {
+    const url = `/hostels/${id}`;
     return axiosClient.get(url);
   },
   post(params: HostelCreate): Promise<BaseResponse<Hostel>> {
@@ -27,4 +31,9 @@ const hostelApi = {
   },
 };
 
-export default hostelApi;
+export const utilitiesApi = {
+  get({}): Promise<Utilities[]> {
+    const url = '/utilities';
+    return axiosClient.get(url);
+  },
+};

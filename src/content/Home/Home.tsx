@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Home.module.scss';
 import SearchIcon from '@mui/icons-material/Search';
@@ -10,7 +10,12 @@ import { Carousel } from 'antd';
 import { Hostel } from '../../models/hostel';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../app/store';
-import { getHostels, selectHostels } from '../../redux/hostel/slice';
+import {
+  getHostelSuggest,
+  getHostels,
+  selectHostels,
+} from '../../redux/hostel/slice';
+import { getUtilitiess, selectUtilitiess } from '../../redux/utilities/slice';
 
 const cx = classNames.bind(styles);
 
@@ -21,12 +26,12 @@ interface HomeProps {
 
 const Home: FC<HomeProps> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { list, total, loading, error } = useSelector(selectHostels);
+  const { list, listSuggest, loading, error } = useSelector(selectHostels);
 
   useEffect(() => {
     dispatch(getHostels());
+    dispatch(getHostelSuggest());
   }, [dispatch]);
-
 
   return (
     <div className="home w-screen bg-slate-100">
@@ -65,8 +70,9 @@ const Home: FC<HomeProps> = (props) => {
           </div>
         </div>
       </div>
-      <HostelList title="Gợi ý của chúng tôi" hostels={list} />
-      <HostelList title="Tìm homie chung nhà" hostels={list} />
+
+      <HostelList title="Gợi ý của chúng tôi" hostels={listSuggest} />
+      <HostelList title="Những nhà mới nhất được đăng" hostels={list} />
     </div>
   );
 };

@@ -1,12 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { Hostel, HostelCreate } from '../../models/hostel';
-import axiosClient from '../../api/axiosClient';
-import hostelApi from '../../api/hostelApi';
+import { hostelApi } from '../../api/hostelApi';
 
 export interface HostelState {
   loading?: boolean;
   list: Hostel[];
+  listSuggest?: Hostel[];
+  totalSuggest?: number;
   total: number;
+  hostel?: Hostel;
   error?: boolean;
 }
 
@@ -24,6 +26,30 @@ export const getHostels = createAsyncThunk('hostel/getHostels', async () => {
     console.error(error);
   }
 });
+
+export const getHostelSuggest = createAsyncThunk(
+  'hostel/getHostelSuggest',
+  async () => {
+    try {
+      const response = await hostelApi.getSuggest({});
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
+export const getHostelById = createAsyncThunk(
+  'hostel/getHostelById',
+  async (id: string) => {
+    try {
+      const response = await hostelApi.getById(id);
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
 
 export const createHostel = createAsyncThunk(
   'hostel/createHostel',
@@ -47,6 +73,7 @@ export const hostelSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // get
       .addCase(getHostels.pending, (state, action) => {
         state.loading = true;
         state.error = false;
@@ -62,6 +89,21 @@ export const hostelSlice = createSlice({
         state.error = true;
         state.loading = false;
       })
+      // suggest
+      .addCase(getHostelSuggest.pending, (state, action) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(getHostelSuggest.fulfilled, (state, action) => {
+        state.listSuggest = action.payload?.data || [];
+        state.totalSuggest = action.payload?.total || 0;
+        state.loading = false;
+        state.error = false;
+      })
+      .addCase(getHostelSuggest.rejected, (state, action) => {
+        state.error = true;
+        state.loading = false;
+      })
       // create
       .addCase(createHostel.pending, (state, action) => {
         state.loading = true;
@@ -72,6 +114,21 @@ export const hostelSlice = createSlice({
         state.error = false;
       })
       .addCase(createHostel.rejected, (state, action) => {
+        state.error = true;
+        state.loading = false;
+      })
+      //getHostelById
+      .addCase(getHostelById.pending, (state, action) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(getHostelById.fulfilled, (state, action) => {
+        state.hostel = action.payload || undefined;
+        console.log(state.hostel);
+        state.loading = false;
+        state.error = false;
+      })
+      .addCase(getHostelById.rejected, (state, action) => {
         state.error = true;
         state.loading = false;
       });
