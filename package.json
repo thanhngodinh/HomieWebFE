@@ -44,6 +44,7 @@
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
     "react-hook-form": "^7.39.2",
+    "react-hook-form-antd": "^0.0.2",
     "react-material-ui-carousel": "^3.4.2",
     "react-redux": "^8.0.4",
     "react-router": "^6.4.2",

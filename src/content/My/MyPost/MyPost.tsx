@@ -11,15 +11,15 @@ interface MyPostProps {}
 const MyPost: FC<MyPostProps> = () => {
   return (
     <>
-      <SubHeader title="Quản lý tài khoản" items={[{id: 'info',name: 'Hồ Sơ'},{id: 'secure',name: 'Bảo mật'},{id: 'post',name: 'Quản lý tin đăng'}]}></SubHeader>
+      <SubHeader title="Quản lý tài khoản" items={[{id: 'profile',name: 'Hồ Sơ'},{id: 'security',name: 'Bảo mật'},{id: 'post',name: 'Quản lý tin đăng'}]}></SubHeader>
       <div className="container mx-auto  my-12">
           <div className={cx("mypost")}>
             <div className="py-4 border-t-4  border-b-4">
-              <PostItem />
+              <PostItem id={''} />
             </div>
             
             <div className="py-4 border-t-4  border-b-4">
-              <PostItem />
+              <PostItem  id={''}/>
             </div>
           </div>
       </div>

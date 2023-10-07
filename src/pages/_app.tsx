@@ -5,6 +5,8 @@ import React from 'react';
 import BaseLayout from '../layouts/BaseLayout';
 import './style.css';
 import '../assets/scss/text.scss';
+import '../assets/scss/common.scss';
+import '../assets/scss/input.scss';
 import '../assets/scss/button.scss';
 import { storeRedux } from '../app/store';
 

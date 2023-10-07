@@ -1,25 +1,49 @@
 @import "./_variables";
 
 .button{
-    width: 125px;
+    // width: 125px;
+    width: auto;
+    min-width: 125px;
     padding: 0.25rem 0.35rem;
     height: auto;
     &__border{
-        &:hover{
-            background-color: $main-color1;
-            color: white;
-        };
         border: 1px solid $main-color1;
         border-radius: 0.5rem;
         color: $main-color1;
         background-color: white;
         // transition: ;
+        &:hover{
+            border: 1px solid $main-color1 !important;
+            background-color: $main-color1 !important;
+            color: white !important;
+        };
+        &-large{
+            min-width: 300px;
+            padding: 0.5rem 1rem;
+            &:hover{
+                border: 1px solid $main-color1 !important;
+                background-color: $main-color1 !important;
+                color: white !important;
+            }
+        }
     }
     &__fill{
         border: none;
         outline: none;
         border-radius: 0.5rem;
         background-color: $main-color1;
-        color: white
+        color: white;
+        &:hover{
+            background-color: $main-color2 !important;
+            color: white !important;
+        }
+        &-large{
+            min-width: 300px;
+            padding: 0.5rem 1rem;
+            &:hover{
+                background-color: $main-color2!important;
+                color: white!important;
+            }
+        }
     }
 }

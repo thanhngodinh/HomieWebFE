@@ -7,7 +7,7 @@ import { PostTitleMapping } from '../../utils/common';
 
 
 interface PostItemProps {
-  id: string;
+  id?: string;
   img?: string;
   name?: string;
   code?: string;

@@ -1,0 +1,39 @@
+@import "./_variables";
+
+input {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 4px 11px;
+    color: $text-color2;
+    font-size: 14px;
+    line-height: 1.5714285714285714;
+    list-style: none;
+    // font-family: 
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    min-width: 0;
+    background-color: #ffffff;
+    background-image: none;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #d9d9d9;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+input[type="text" i] {
+    padding-block: 10px;
+    // margin-block-start: -10px;
+    padding-inline: 10px;
+}
+
+input[required]::before {
+    display: inline-block;
+    margin-inline-end: 4px;
+    color: #ff4d4f;
+    font-size: 14px;
+    font-family: SimSun,sans-serif;
+    line-height: 1;
+    content: "*";
+}
