@@ -17,6 +17,7 @@ export type Hostel = {
   description: string | undefined;
   phone: string | undefined;
   imageUrl: string[];
+  utilities: string[];
   createdAt: string | undefined;
   createdBy: string | undefined;
   updatedAt: string | undefined;

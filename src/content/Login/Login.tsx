@@ -30,10 +30,9 @@ const LoginPage: React.FC = () => {
   const { register, handleSubmit } = useForm<FormValues>();
 
   const onSubmit = handleSubmit((data) => {
-    const acc: Account = { ...data };
     dispatch(
       loginAccount({
-        account: acc,
+        param: { ...data },
         callback: () => router.push('/'),
       })
     );

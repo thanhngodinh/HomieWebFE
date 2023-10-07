@@ -1,3 +1,4 @@
+import { CallBackParam } from './../../models/common';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { Hostel, HostelCreate } from '../../models/hostel';
 import { hostelApi } from '../../api/hostelApi';
@@ -53,9 +54,10 @@ export const getHostelById = createAsyncThunk(
 
 export const createHostel = createAsyncThunk(
   'hostel/createHostel',
-  async (hostel: HostelCreate) => {
+  async (hostel: CallBackParam<HostelCreate>) => {
     try {
-      const response = await hostelApi.post(hostel);
+      const response = await hostelApi.post(hostel.param);
+      hostel.callback && hostel.callback();
       return response;
     } catch (error) {
       console.error(error);

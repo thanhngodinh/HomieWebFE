@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import accountApi from '../../api/accountApi';
 import { Account } from '../../models/account';
 import { setToken } from '../../app/token';
+import { CallBackParam } from '../../models';
 
 export interface AuthState {
   loading?: boolean;
@@ -14,18 +15,13 @@ const initialState: AuthState = {
   token: '',
 };
 
-type LoginParam = {
-  account: Account;
-  callback?: any;
-};
-
 export const loginAccount = createAsyncThunk(
   'auth/login',
-  async (params: LoginParam) => {
+  async (params: CallBackParam<Account>) => {
     try {
       const response = await accountApi.login({
-        username: params.account.username,
-        password: params.account.password,
+        username: params.param.username,
+        password: params.param.password,
       });
       setToken(response.token);
       params.callback && params.callback();

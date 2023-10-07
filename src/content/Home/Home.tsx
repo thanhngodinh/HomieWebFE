@@ -61,7 +61,11 @@ const Home: FC<HomeProps> = (props) => {
                 ...props.city.map((i, index) => {
                   return (
                     <div className="p-2 mb-4">
-                      <SuggestItemBasic img={i.img} title={i.title} />
+                      <SuggestItemBasic
+                        link={'/'}
+                        img={i.img}
+                        title={i.title}
+                      />
                     </div>
                   );
                 }),
@@ -84,22 +88,27 @@ Home.defaultProps = {
     {
       img: 'https://cdn.vntrip.vn/cam-nang/wp-content/uploads/2017/07/ho-hoan-kiem-3.jpg',
       title: 'Ha Noi',
+      link: '/',
     },
     {
       img: 'https://cdn.vntrip.vn/cam-nang/wp-content/uploads/2017/07/ho-hoan-kiem-3.jpg',
       title: 'TP HCM',
+      link: '/',
     },
     {
       img: 'https://cdn.vntrip.vn/cam-nang/wp-content/uploads/2017/07/ho-hoan-kiem-3.jpg',
       title: 'Da Nang',
+      link: '/',
     },
     {
       img: 'https://cdn.vntrip.vn/cam-nang/wp-content/uploads/2017/07/ho-hoan-kiem-3.jpg',
       title: 'Can Tho',
+      link: '/',
     },
     {
       img: 'https://cdn.vntrip.vn/cam-nang/wp-content/uploads/2017/07/ho-hoan-kiem-3.jpg',
       title: 'Binh Duong',
+      link: '/',
     },
   ],
 };

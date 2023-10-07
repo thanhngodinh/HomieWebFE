@@ -209,6 +209,7 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
                   return (
                     <div key={i} className="p-2 mb-4">
                       <SuggestItemBasic
+                        link={`${hostel.id}`}
                         img={hostel.imageUrl[0]}
                         title={hostel.name}
                         address={GenAddress(
