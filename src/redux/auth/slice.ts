@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axiosClient from '../../api/axiosClient';
 import accountApi from '../../api/accountApi';
 import { Account } from '../../models/account';
 import { setToken } from '../../app/token';
+import { CallBackParam } from '../../models';
 
 export interface AuthState {
   loading?: boolean;
@@ -15,15 +15,16 @@ const initialState: AuthState = {
   token: '',
 };
 
-export const login = createAsyncThunk(
+export const loginAccount = createAsyncThunk(
   'auth/login',
-  async (account: Account) => {
+  async (params: CallBackParam<Account>) => {
     try {
       const response = await accountApi.login({
-        username: account.username,
-        password: account.password,
+        username: params.param.username,
+        password: params.param.password,
       });
       setToken(response.token);
+      params.callback && params.callback();
       return response.token;
     } catch (error) {
       console.error(error);
@@ -41,16 +42,16 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(login.pending, (state, action) => {
+      .addCase(loginAccount.pending, (state, action) => {
         state.loading = true;
         state.error = false;
       })
-      .addCase(login.fulfilled, (state, action) => {
+      .addCase(loginAccount.fulfilled, (state, action) => {
         state.token = action.payload || '';
         state.loading = false;
         state.error = false;
       })
-      .addCase(login.rejected, (state, action) => {
+      .addCase(loginAccount.rejected, (state, action) => {
         state.error = true;
         state.loading = false;
       });

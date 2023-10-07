@@ -1,14 +1,15 @@
 import { FC } from 'react';
 import Link from 'next/link';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import { GenCurrecy } from '../../utils/func';
 
 interface HostelItemProps {
   id: string;
-  img?: string;
-  name?: string;
+  img: string;
+  name: string;
   size?: number;
-  cost?: number;
-  address?: string;
+  cost: number;
+  address: string;
 }
 
 const HostelItem: FC<HostelItemProps> = ({
@@ -36,7 +37,7 @@ const HostelItem: FC<HostelItemProps> = ({
           <hr className="w-1/5" />
         </div>
         <p className="text-base row-span-1">Địa chỉ: {address}</p>
-        <p className="text-base row-span-1">Giá thuê: {cost}</p>
+        <p className="text-base row-span-1">Giá thuê: {GenCurrecy(cost)}</p>
         <p className="text-base row-span-1">Phòng {size} người</p>
       </div>
       <div className="row-span-2 text-right cursor-pointer">

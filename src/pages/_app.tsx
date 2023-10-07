@@ -10,6 +10,37 @@ import '../assets/scss/input.scss';
 import '../assets/scss/button.scss';
 import { storeRedux } from '../app/store';
 
+import { library } from '@fortawesome/fontawesome-svg-core';
+import {
+  faKitchenSet,
+  faWifi,
+  faTableColumns,
+  faTemperatureHalf,
+  faSnowflake,
+  faDog,
+  faBoxesPacking,
+  faBed,
+  faMotorcycle,
+  faRestroom,
+  faCamera,
+  faSun,
+} from '@fortawesome/free-solid-svg-icons';
+
+library.add(
+  faKitchenSet,
+  faWifi,
+  faTableColumns,
+  faTemperatureHalf,
+  faSnowflake,
+  faDog,
+  faBoxesPacking,
+  faBed,
+  faSun,
+  faMotorcycle,
+  faRestroom,
+  faCamera
+);
+
 type MyAppProps = AppProps & {
   Component: AppProps['Component'] & { Layout?: FC };
 };

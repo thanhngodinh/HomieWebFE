@@ -5,27 +5,42 @@ import { useForm } from 'react-hook-form';
 import React, { useState } from 'react';
 import { storage } from '../../app/firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { Hostel, HostelCreate } from '../../models/hostel';
+import { Hostel, HostelCreate, Utilities } from '../../models/hostel';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../app/store';
 import { createHostel } from '../../redux/hostel/slice';
 import { District, Province, Ward } from '../../models';
 import uuid from 'react-uuid';
+import { useRouter } from 'next/router';
+import { Select } from 'antd';
+import type { SelectProps } from 'antd';
+import { getUtilitiess, selectUtilitiess } from '../../redux/utilities/slice';
 
 const cx = classNames.bind(styles);
 
 interface BasicInforProps {}
 
-const BasicInformation: FC<BasicInforProps> = (props) => {
+const BasicInformation: FC<BasicInforProps> = () => {
+  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   // const { loading, error } = useSelector(createHostel);
+  const { listUtilities } = useSelector(selectUtilitiess);
 
-  let filesPreview: string[] = [];
   const [province, setProvince] = useState<Province[]>([]);
   const [district, setDistrict] = useState<District[]>([]);
   const [ward, setWard] = useState<Ward[]>([]);
   const [imagesPreview, setImagesPreview] = useState<string[]>([]);
   const [imagesFile, setImagesFile] = useState<File[]>([]);
+
+  let filesPreview: string[] = [];
+  const listUtilitiesOpt: SelectProps['options'] = listUtilities.map(
+    (u: Utilities) => {
+      return {
+        label: u.name,
+        value: u.id,
+      };
+    }
+  );
 
   const {
     register,
@@ -34,7 +49,6 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
     formState: { errors },
   } = useForm<HostelCreate>({
     defaultValues: {
-      area: 0,
       capacity: 1,
       deposit: 0,
       electricityPrice: 0,
@@ -46,7 +60,12 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
 
   const onSubmit = (data: HostelCreate) => {
     handleSelectedFile(imagesFile).then((res) => {
-      dispatch(createHostel({ ...data, imageUrl: res }));
+      dispatch(
+        createHostel({
+          param: { ...data, imageUrl: res },
+          callback: () => router.push('/my'),
+        })
+      );
     });
   };
 
@@ -75,6 +94,10 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
         setValue('ward', data?.wards[0]?.name || '');
       });
   };
+
+  useEffect(() => {
+    dispatch(getUtilitiess());
+  }, [dispatch]);
 
   useEffect(() => {
     getProvince();
@@ -349,10 +372,9 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                 id="grid-first-name"
                 type="text"
-                value={0}
                 placeholder="Diện tích"
                 {...register('area', {
-                  required: false,
+                  required: true,
                   valueAsNumber: true,
                   pattern: {
                     value: /[1-9][0-9]{1,}/,
@@ -360,7 +382,11 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
                   },
                 })}
               />
-              {/* <p className="text-red-500 text-xs italic">Please fill out this field.</p> */}
+              {errors.area && (
+                <p className="text-red-500 text-xs italic">
+                  Hãy điền diện tích
+                </p>
+              )}
             </div>
           </div>
 
@@ -537,7 +563,7 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
             </div>
           </div>
 
-          {/* <div className="flex flex-wrap -mx-3 mb-6">
+          <div className="flex flex-wrap -mx-3 mb-6">
             <div className="w-full px-3 mb-6 md:mb-0">
               <label
                 className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -545,15 +571,24 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
               >
                 Tiện ích khác
               </label>
-              <input
+              <Select
+                size="large"
+                mode="multiple"
+                allowClear
+                style={{ width: '100%' }}
+                placeholder="Please select"
+                onChange={(value: string[]) => setValue('utilities', value)}
+                options={listUtilitiesOpt}
+                // {...register('utilities', { required: false })}
+              />
+              {/* <input
                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                 id="grid-first-name"
                 type="text"
                 placeholder="Tiện ích khác"
-                {...register('utilities', { required: false })}
-              />
+              /> */}
             </div>
-          </div> */}
+          </div>
 
           <div className="block mb-2 mt-6">
             <p className="text-lg font-semibold text-indigo-700 leading-relaxed">
@@ -607,20 +642,6 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
               {/* <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder="Tên khu dân cư / dự án" /> */}
             </div>
           </div>
-          {/* <div className="w-full md:w-1/2 px-3"></div> */}
-
-          {/* <div className="flex flex-wrap -mx-3 mb-6">
-            <div className="w-full px-3 mb-6 md:mb-0">
-              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-first-name">
-                Tên người đăng
-              </label>
-              <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                id="grid-first-name"
-                type="text"
-                placeholder="Tên người đăng" />
-              <p className="text-red-500 text-xs italic">Please fill out this field.</p>
-            </div>
-          </div> */}
 
           <div className="flex flex-wrap -mx-3 mb-6">
             <div className="w-full px-3 mb-6 md:mb-0">
@@ -642,7 +663,6 @@ const BasicInformation: FC<BasicInforProps> = (props) => {
                   Hãy điền Số điện thoại
                 </p>
               )}
-              {/* <p className="text-red-500 text-xs italic">Please fill out this field.</p> */}
             </div>
           </div>
 
