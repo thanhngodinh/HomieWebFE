@@ -1,6 +1,6 @@
 import { CallBackParam } from './../../models/common';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { Hostel, HostelCreate } from '../../models/hostel';
+import { Hostel, HostelCreate, HostelFilter } from '../../models/hostel';
 import { hostelApi } from '../../api/hostelApi';
 
 export interface HostelState {
@@ -21,7 +21,16 @@ const initialState: HostelState = {
 
 export const getHostels = createAsyncThunk('hostel/getHostels', async () => {
   try {
-    const response = await hostelApi.get({});
+    const response = await hostelApi.get();
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+export const getHostelsWithQuerryParams = createAsyncThunk('hostel/getHostelsWithQuerryParams', async (query?:HostelFilter) => {
+  try {
+    const response = await hostelApi.get(query);
     return response;
   } catch (error) {
     console.error(error);
@@ -133,7 +142,23 @@ export const hostelSlice = createSlice({
       .addCase(getHostelById.rejected, (state, action) => {
         state.error = true;
         state.loading = false;
-      });
+      })
+      //getHostelWithQuerryParams
+      .addCase(getHostelsWithQuerryParams.pending, (state, action) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(getHostelsWithQuerryParams.fulfilled, (state, action) => {
+        state.list = action.payload?.data || [];
+        state.total = action.payload?.total || 0;
+        console.log(state.list);
+        state.loading = false;
+        state.error = false;
+      })
+      .addCase(getHostelsWithQuerryParams.rejected, (state, action) => {
+        state.error = true;
+        state.loading = false;
+      })
   },
 });
 
@@ -143,6 +168,6 @@ export const selectErrorState = (state: any) => state.hostel.error;
 
 export const hostelAction = hostelSlice.actions;
 
-export const { setHostel } = hostelSlice.actions;
+export const { setHostel  } = hostelSlice.actions;
 
 export default hostelSlice.reducer;

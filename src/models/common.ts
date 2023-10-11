@@ -13,3 +13,9 @@ export type CallBackParam<T> = {
   param: T;
   callback?: any;
 };
+
+export type PageFilter = {
+  pageSize?:number;
+  pageIdx?:number;
+  sort?:string;
+}

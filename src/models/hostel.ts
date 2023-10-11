@@ -1,3 +1,6 @@
+import { extend } from "lodash";
+import { PageFilter } from "./common";
+
 export type Hostel = {
   id: string;
   name: string;
@@ -50,3 +53,17 @@ export type Utilities = {
   name: string;
   icon: string;
 };
+
+export interface HostelFilter extends PageFilter {
+  name?: string;
+  province?: string;
+  district?: string;
+  ward?: string;
+  street?: string;
+  status?: string;
+  costFrom?: number;
+  costTo?: number;
+  depositFrom?: number;
+  depositTo?: number;
+  capacity?: number;
+}

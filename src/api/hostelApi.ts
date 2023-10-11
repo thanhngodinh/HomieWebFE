@@ -1,12 +1,15 @@
 import { utilitiesAction } from './../redux/utilities/slice';
-import { HostelCreate, Utilities } from './../models/hostel';
+import { HostelCreate, HostelFilter, Utilities } from './../models/hostel';
 import { BaseResponse } from '../models';
 import { Hostel } from '../models/hostel';
 import axiosClient from './axiosClient';
+import { objectToQueryParams } from '../utils/func';
 
 export const hostelApi = {
-  get({}): Promise<BaseResponse<Hostel[]>> {
-    const url = '/hostels';
+  get(query?: HostelFilter): Promise<BaseResponse<Hostel[]>> {
+    const queryParams = objectToQueryParams(query)
+    const queryString  =  queryParams ? `/search?${queryParams}` : ""
+    const url = `/hostels${queryString}`;
     return axiosClient.get(url);
   },
   search({}): Promise<BaseResponse<Hostel[]>> {

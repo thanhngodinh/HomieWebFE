@@ -24,4 +24,10 @@ export type User = {
   cmndAddress?: string
 };
 
+export type ResetUser = {
+  oldPassword?:string
+  newPassword?:string
+  confirmPassword?:string
+}
+
 export default User;

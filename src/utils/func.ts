@@ -19,3 +19,14 @@ export const GenAddress = (
 export const GenCurrecy = (cost: number) => {
   return cost?.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
 };
+
+
+export const  objectToQueryParams = (obj: any) => {
+  const queryParams = [];
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      queryParams.push(encodeURIComponent(key) + '=' + encodeURIComponent(obj[key]));
+    }
+  }
+  return queryParams.join('&');
+}
