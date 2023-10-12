@@ -711,10 +711,12 @@ const BasicInformation: FC<BasicInforProps> = () => {
             >
               Quay lại
             </button>
-            <input
-              className="bg-indigo-500 hover:bg-indigo-300 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="submit"
-            />
+            <div>
+              <input
+                className="bg-indigo-500 hover:bg-indigo-300 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                type="submit"
+              />
+            </div>
           </div>
         </form>
       </div>

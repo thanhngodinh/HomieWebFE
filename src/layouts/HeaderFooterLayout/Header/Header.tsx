@@ -66,7 +66,7 @@ const Header: FC = () => {
             {token.length > 0 ? (
               <>
                 <li className="flex">
-                  <Link href="/my">
+                  <Link href="/my/profile">
                     <span className="block py-2 pl-3 pr-4 text-purple font-medium light text-base hover:underline cursor-pointer">
                       My
                     </span>

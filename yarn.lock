@@ -1438,12 +1438,12 @@
   "resolved" "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.5.tgz"
   "version" "15.7.5"
 
-"@types/react-dom@^16.8 || ^17.0 || ^18.0", "@types/react-dom@^16.9.8":
-  "integrity" "sha512-Oqc0RY4fggGA3ltEgyPLc3IV9T73IGoWjkONbsyJ3ZBn+UPPCYpU2ec0i3cEbJuEdZtkqcCF2l1zf2pBdgUGSg=="
-  "resolved" "https://registry.npmjs.org/@types/react-dom/-/react-dom-16.9.16.tgz"
-  "version" "16.9.16"
+"@types/react-dom@^16.8 || ^17.0 || ^18.0", "@types/react-dom@^18.0.5":
+  "integrity" "sha512-QWZuiA/7J/hPIGocXreCRbx7wyoeet9ooxfbSA+zbIWqyQEE7GMtRn4A37BdYyksnN+/NDnWgfxZH9UVGDw1hg=="
+  "resolved" "https://registry.npmjs.org/@types/react-dom/-/react-dom-18.2.12.tgz"
+  "version" "18.2.12"
   dependencies:
-    "@types/react" "^16"
+    "@types/react" "*"
 
 "@types/react-is@^16.7.1 || ^17.0.0":
   "integrity" "sha512-aBTIWg1emtu95bLTLx0cpkxwGW3ueZv71nE2YFBpL8k/z5czEW8yYpOo8Dp+UUAFAtKwNaOsh/ioSeQnWlZcfw=="
@@ -1469,10 +1469,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^16", "@types/react@^16.8 || ^17.0 || ^18.0", "@types/react@^16.9.0 || ^17.0.0 || ^18.0.0", "@types/react@^16.9.41", "@types/react@^17.0.0 || ^18.0.0", "@types/react@>=16.14.8", "@types/react@>=16.9.11":
-  "integrity" "sha512-hvEy4vGVADbtj/U6+CA5SRC5QFIjdxD7JslAie8EuAYZwhYY9bgforpXNyF1VFzhnkEOesDy1278t1wdjN74cw=="
-  "resolved" "https://registry.npmjs.org/@types/react/-/react-16.14.32.tgz"
-  "version" "16.14.32"
+"@types/react@*", "@types/react@^16.8 || ^17.0 || ^18.0", "@types/react@^16.9.0 || ^17.0.0 || ^18.0.0", "@types/react@^17.0.0 || ^18.0.0", "@types/react@^18.0.10", "@types/react@>=16.14.8", "@types/react@>=16.9.11":
+  "integrity" "sha512-Wfv7B7FZiR2r3MIqbAlXoY1+tXm4bOqfz4oRr+nyXdBqapDBZ0l/IGcSlAfvxIHEEJjkPU0MYAc/BlFPOcrgLw=="
+  "resolved" "https://registry.npmjs.org/@types/react/-/react-18.2.27.tgz"
+  "version" "18.2.27"
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -1722,7 +1722,7 @@
   dependencies:
     "color-convert" "^2.0.1"
 
-"antd@^5.8.4":
+"antd@^5", "antd@^5.8.4":
   "integrity" "sha512-DbQUmRWf9GAllZsc9NxL9gnrup75F7iZ0OlFY+mXh31JdSYQLLP07CAOK7z/sdQLQdYnAHWyuWvkb2mrRKxnYA=="
   "resolved" "https://registry.npmjs.org/antd/-/antd-5.8.4.tgz"
   "version" "5.8.4"
@@ -4663,7 +4663,12 @@
     "react-fast-compare" "^3.1.1"
     "react-side-effect" "^2.1.0"
 
-"react-hook-form@^7.0.0", "react-hook-form@^7.39.2":
+"react-hook-form-antd@^0.0.2":
+  "integrity" "sha512-K49gVTejkGe1pxcQt0IcJIqKwZ/tloNrHnBPcxvCA2mdkTDTuFaGF3pqSZYMWCme7VO+Iv8IXi/ivuKT6+9EKg=="
+  "resolved" "https://registry.npmjs.org/react-hook-form-antd/-/react-hook-form-antd-0.0.2.tgz"
+  "version" "0.0.2"
+
+"react-hook-form@^7", "react-hook-form@^7.0.0", "react-hook-form@^7.39.2":
   "integrity" "sha512-rCeCa1+sIcgI9PjgGmev9bVqHCwYwhjkbsXitr+giQ/P0mf/AGwUBtCdKC1lRu7egrxbLwqO9cWNWpXW4FrsHA=="
   "resolved" "https://registry.npmjs.org/react-hook-form/-/react-hook-form-7.39.2.tgz"
   "version" "7.39.2"
