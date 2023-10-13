@@ -39,16 +39,16 @@ const Header: FC = () => {
               </Link>
             </li>
             <li>
-              <Link href="/share">
+              <Link href="/roommates">
                 <span className="block py-2 pl-3 pr-4 text-purple font-medium light text-base hover:underline cursor-pointer">
-                  Tin ở ghép
+                  Tìm bạn
                 </span>
               </Link>
             </li>
             <li>
-              <Link href="/hostel">
+              <Link href="/posts">
                 <span className="block py-2 pl-3 pr-4 text-purple font-medium light text-base hover:underline cursor-pointer">
-                  Tin nhà
+                  Tìm nhà
                 </span>
               </Link>
             </li>
@@ -66,7 +66,7 @@ const Header: FC = () => {
             {token.length > 0 ? (
               <>
                 <li className="flex">
-                  <Link href="/my">
+                  <Link href="/my/profile">
                     <span className="block py-2 pl-3 pr-4 text-purple font-medium light text-base hover:underline cursor-pointer">
                       My
                     </span>

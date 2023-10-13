@@ -1,33 +1,23 @@
 export type User = {
   id: string;
-  userName: string;
-  email: string;
-  lastName: string;
-  middleName?: string;
-  firstName: string;
-  gender: string;
-  userStatus: string;
-  phoneName: string;
-  isEmailVerified: boolean;
-  birthDay: string;
-
-  fullName?: string;
-
-  province?: string
-  district?: string
-  ward?: string
-  street?: string
-
-  displayAddress?: string
-  cmnd?:string
-  cmndDate?: string | Date
-  cmndAddress?: string
+  username: string;
+  email?: string;
+  name?: string;
+  gender?: string;
+  phone?: string;
+  isVerifiedEmail?: boolean;
+  isFindRoommate?: boolean;
+  dateOfBirth?: string;
+  province?: string;
+  district?: string[];
+  costFrom?: number;
+  costTo?: number;
 };
 
 export type ResetUser = {
-  oldPassword?:string
-  newPassword?:string
-  confirmPassword?:string
-}
+  oldPassword?: string;
+  newPassword?: string;
+  confirmPassword?: string;
+};
 
 export default User;
