@@ -30,3 +30,26 @@ export const  objectToQueryParams = (obj: any) => {
   }
   return queryParams.join('&');
 }
+
+export const queryParamsToObject = (queryParams: any) => {
+  const obj = {} as any;
+  const paramPairs = queryParams.split('&');
+
+  for (const pair of paramPairs) {
+    const [key, value] = pair.split('=');
+    obj[decodeURIComponent(key)] = decodeURIComponent(value);
+  }
+
+  return obj;
+}
+
+export const objectWithoutEmptyFields = (object:any) =>{
+  const rs = Object.keys(object)
+  .filter(key => object[key] !== undefined && object[key] !== "" && object[key] !== null && !Number.isNaN(object[key]))
+  .reduce((result:any, key) => {
+    result[key] = object[key];
+    return result;
+  }, {});
+  console.log(53,rs)
+  return rs
+}

@@ -15,9 +15,15 @@ interface SearchResultsProps  {
 
 const SearchResults: FC<SearchResultsProps> = ({query, total ,children}) => {
   console.log(query)
+  const keys = Object.keys(query)
+  const values = Object.values(query)
   return (
       <div>
-          {Object.values(query).length >0 &&<h2 className="suggest-room mt-8 w-4/5 mx-auto">{total || 0} kết quả cho “{Object.values(query)}”</h2>}
+          {keys.length >0 &&<h2 className="suggest-room mt-8 w-4/5 mx-auto">{total || 0} kết quả cho 
+          “{keys.map((k: string,idx:number)=> (
+            <span>{k}: {values[idx]}  </span>
+          ))}”</h2>
+          }
           {children}
       </div>
   );
