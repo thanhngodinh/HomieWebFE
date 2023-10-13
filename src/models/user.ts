@@ -2,15 +2,14 @@ export type User = {
   id: string;
   username: string;
   email?: string;
-  lastName?: string;
-  firstName?: string;
+  name?: string;
   gender?: string;
   phone?: string;
   isVerifiedEmail?: boolean;
   isFindRoommate?: boolean;
   dateOfBirth?: string;
   province?: string;
-  district?: string;
+  district?: string[];
   costFrom?: number;
   costTo?: number;
 };

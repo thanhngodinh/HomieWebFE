@@ -5,11 +5,13 @@ import { setToken } from '../../app/token';
 import { CallBackParam, User } from '../../models';
 import { hostelApi } from '../../api/hostelApi';
 import myApi from '../../api/myApi';
+import userApi from '../../api/userApi';
 
 export interface UserState {
   loading?: boolean;
   profile?: User;
   error?: boolean;
+  roommates?: User;
 }
 
 const initialState: UserState = {
@@ -24,6 +26,19 @@ export const getMyProfile = createAsyncThunk('user/getMyProfile', async () => {
     console.error(error);
   }
 });
+
+export const searchRoommates = createAsyncThunk(
+  'user/searchRoommates',
+  async () => {
+    try {
+      const response = await userApi.searchRoommates({});
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
 export const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -34,6 +49,7 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // myProfile
       .addCase(getMyProfile.pending, (state, action) => {
         state.loading = true;
         state.error = false;
@@ -44,6 +60,20 @@ export const userSlice = createSlice({
         state.error = false;
       })
       .addCase(getMyProfile.rejected, (state, action) => {
+        state.error = true;
+        state.loading = false;
+      })
+      // searchRoommate
+      .addCase(searchRoommates.pending, (state, action) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(searchRoommates.fulfilled, (state, action) => {
+        state.roommates = action.payload?.data;
+        state.loading = false;
+        state.error = false;
+      })
+      .addCase(searchRoommates.rejected, (state, action) => {
         state.error = true;
         state.loading = false;
       });

@@ -74,7 +74,7 @@ const Profile: FC<ProfileProps> = () => {
       .then((res) => res.json())
       .then((data: Province) => {
         setDistrict(data?.districts);
-        setValue('district', data?.districts[0]?.name);
+        // setValue('district', data?.districts[0]?.name);
         // getWard(data?.districts[0]?.code);
       });
   };
@@ -190,20 +190,10 @@ const Profile: FC<ProfileProps> = () => {
                 </Button>
               </div>
               <Row gutter={24}>
-                <Col span={8} key="firstName">
+                <Col span={16} key="name">
                   <FormItem
-                    name="firstName"
-                    label="Tên"
-                    control={control}
-                    required
-                  >
-                    <Input />
-                  </FormItem>
-                </Col>
-                <Col span={8} key="lastName">
-                  <FormItem
-                    name="lastName"
-                    label="Họ"
+                    name="name"
+                    label="Họ tên"
                     control={control}
                     required
                   >
