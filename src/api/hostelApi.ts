@@ -6,15 +6,23 @@ import axiosClient from './axiosClient';
 import { objectToQueryParams } from '../utils/func';
 
 export const hostelApi = {
-  get(query?: HostelFilter): Promise<BaseResponse<Hostel[]>> {
-    const queryParams = objectToQueryParams(query)
-    const queryString  =  queryParams ? `/search?${queryParams}` : ""
-    const url = `/hostels${queryString}`;
+  get(): Promise<BaseResponse<Hostel[]>> {
+    const url = `/hostels`;
     return axiosClient.get(url);
   },
   search({}): Promise<BaseResponse<Hostel[]>> {
     const url = '/hostels';
     return axiosClient.get(url);
+  },
+  searchGet(query?: HostelFilter): Promise<BaseResponse<Hostel[]>> {
+    const queryParams = objectToQueryParams(query)
+    const queryString  =  queryParams ? `/search?${queryParams}` : ""
+    const url = `/hostels${queryString}`;
+    return axiosClient.get(url);
+  },
+  searchPost(params?: HostelFilter): Promise<BaseResponse<Hostel[]>> {
+    const url = '/hostels/search';
+    return axiosClient.post(url, params);
   },
   getSuggest({}): Promise<BaseResponse<Hostel[]>> {
     const url = '/hostels/suggest';

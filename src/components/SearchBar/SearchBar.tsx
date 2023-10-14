@@ -7,7 +7,7 @@ import styles from './SearchBar.module.scss';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { selectSearchQuery, updateQuery, updateResults } from '../../redux/search/slice';
-import { getHostelsWithQuerryParams, selectHostels } from '../../redux/hostel/slice';
+import { postHostelsWithQuerryParams, selectHostels } from '../../redux/hostel/slice';
 import { AppDispatch } from '../../app/store';
 import { objectToQueryParams } from '../../utils/func';
 
@@ -65,7 +65,7 @@ const SearchBar: FC<SearchBarProps> = ({keySearch,navigateTo}) => {
       const query = router.query
       const paramQuery = router.query[keySearch] || '';
       UpdateQuery(paramQuery)
-      GetHostelsWithQuerryParams(query)
+      PostHostelsWithQuerryParams(query)
      
 
     }, [router.query[keySearch], dispatch]);
@@ -78,8 +78,8 @@ const SearchBar: FC<SearchBarProps> = ({keySearch,navigateTo}) => {
       dispatch(updateQuery(value))
     },[dispatch])
 
-    const GetHostelsWithQuerryParams = useCallback((query:any)=>{
-      dispatch(getHostelsWithQuerryParams(query))
+    const PostHostelsWithQuerryParams = useCallback((query:any)=>{
+      dispatch(postHostelsWithQuerryParams(query))
     },[dispatch])
 
 

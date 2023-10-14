@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Input } from 'antd';
 import styles from './SearchResults.module.scss';
+import { useSelector } from 'react-redux';
+import { selectSearchResults } from '../../redux/search/slice';
 
 const cx = classNames.bind(styles);
 
@@ -13,17 +15,15 @@ interface SearchResultsProps  {
   children: React.ReactNode
 }
 
-const SearchResults: FC<SearchResultsProps> = ({query, total ,children}) => {
-  console.log(query)
-  const keys = Object.keys(query)
-  const values = Object.values(query)
+const SearchResults: FC<SearchResultsProps> = ({total ,children}) => {
+  // const keys = Object.keys(query)
+  // const values = Object.values(query)
+
+  
   return (
       <div>
-          {keys.length >0 &&<h2 className="suggest-room mt-8 w-4/5 mx-auto">{total || 0} kết quả cho 
-          “{keys.map((k: string,idx:number)=> (
-            <span>{k}: {values[idx]}  </span>
-          ))}”</h2>
-          }
+          <h2 className="suggest-room mt-8 w-4/5 mx-auto">{total || 0} kết quả đã tìm kiếm được</h2>
+          
           {children}
       </div>
   );

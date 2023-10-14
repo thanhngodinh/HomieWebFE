@@ -53,3 +53,36 @@ export const objectWithoutEmptyFields = (object:any) =>{
   console.log(53,rs)
   return rs
 }
+
+export const convertObjectTypes = (object1: any, object2: any) => {
+  const transformedObject = {} as any;
+  console.log('object1',object1)
+  console.log('object2',object2)
+  for (const key in object1) {
+    console.log(key)
+    
+    if (object1.hasOwnProperty(key)) {
+      const targetType = object2[key]?.type;
+      const value = object1[key];
+      if (targetType === 'number') {
+        transformedObject[key] = Number(value);
+      } else {
+        transformedObject[key] = value;
+      }
+    }
+  }
+  return transformedObject;
+};
+
+export const isSubset = (obj1:any, obj2:any) => {
+  for (const key in obj2) {
+    if (obj2.hasOwnProperty(key) && obj2[key] !== obj1[key]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+export const  formatNumber = (number: number)=> {
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " VNĐ";
+}

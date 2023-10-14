@@ -28,9 +28,18 @@ export const getHostels = createAsyncThunk('hostel/getHostels', async () => {
   }
 });
 
+export const postHostelsWithQuerryParams = createAsyncThunk('hostel/postHostelsWithQuerryParams', async (query?:HostelFilter) => {
+  try {
+    const response = await hostelApi.searchPost(query);
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
+});
+
 export const getHostelsWithQuerryParams = createAsyncThunk('hostel/getHostelsWithQuerryParams', async (query?:HostelFilter) => {
   try {
-    const response = await hostelApi.get(query);
+    const response = await hostelApi.searchGet(query);
     return response;
   } catch (error) {
     console.error(error);
@@ -143,7 +152,22 @@ export const hostelSlice = createSlice({
         state.error = true;
         state.loading = false;
       })
-      //getHostelWithQuerryParams
+      //postHostelWithQuerryParams
+      .addCase(postHostelsWithQuerryParams.pending, (state, action) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(postHostelsWithQuerryParams.fulfilled, (state, action) => {
+        state.list = action.payload?.data || [];
+        state.total = action.payload?.total || 0;
+        console.log(state.list);
+        state.loading = false;
+        state.error = false;
+      })
+      .addCase(postHostelsWithQuerryParams.rejected, (state, action) => {
+        state.error = true;
+        state.loading = false;
+      })
       .addCase(getHostelsWithQuerryParams.pending, (state, action) => {
         state.loading = true;
         state.error = false;
