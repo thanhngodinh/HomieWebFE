@@ -17,21 +17,20 @@ const RoommateList: FC<RoommateListProps> = () => {
   }, [dispatch]);
 
   return (
-    <div className="suggest-room mt-20 w-4/5 mx-auto">
-      <hr />
-      <div className="grid grid-rows-3 mt-6">
+    <div className="suggest-room mt-20 w-4/5 mx-auto rounded">
+      <div className="grid grid-rows-3 gap-4">
         {roommates?.map((item: any, i: number) => {
           return (
             <RoommateItem
               key={i}
-              id={'roommates/' + item.id}
+              id={item.id}
               name={item.name}
               img={item.avatar}
               province={item.province}
               district={item.district}
               costFrom={1500000}
               costTo={2500000}
-              gender="Nam"
+              gender={item.gender}
             />
           );
         })}

@@ -1,7 +1,10 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import Link from 'next/link';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import { GenCurrecy } from '../../utils/func';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../app/store';
+import { likePost } from '../../redux/hostel/slice';
 
 interface HostelItemProps {
   id: string;
@@ -10,38 +13,64 @@ interface HostelItemProps {
   size?: number;
   cost: number;
   address: string;
+  isLiked: boolean;
+  token: string;
 }
 
-const HostelItem: FC<HostelItemProps> = ({
-  id,
-  img,
-  name,
-  size,
-  address,
-  cost,
-}) => {
+const HostelItem: FC<HostelItemProps> = (props) => {
+  const dispatch = useDispatch<AppDispatch>();
+
+  const [isLiked, setIsLiked] = useState(props.isLiked);
+
+  const onLikeChange = () => {
+    setIsLiked(!isLiked);
+    dispatch(likePost(props.id));
+  };
+
   return (
-    <div className="h-full row-span-1 grid grid-cols-12 py-4">
-      <div className="col-span-3 cursor-pointer">
-        <Link href={id}>
-          <img className="w-full rounded-xl" src={img} />
+    <div className="grid grid-cols-12 py-4 bg-slate-100 rounded-2xl px-8">
+      <div className="col-span-3 cursor-pointer m-auto">
+        <Link href={'posts/' + props.id}>
+          <img className="w-full rounded-xl" src={props.img} />
         </Link>
       </div>
-      <div className="col-span-7 px-4 grid grid-rows-6">
-        <Link href={id}>
-          <h2 className="row-span-1 text-3xl text-primary light cursor-pointer">
-            {name}
+      <div className="col-span-8 px-4 grid grid-rows-5 m-auto">
+        <Link href={'posts/' + props.id}>
+          <h2 className="text-3xl text-primary light cursor-pointer">
+            {props.name}
           </h2>
         </Link>
         <div className="row-span-1 flex items-center">
-          <hr className="w-1/5" />
+          <hr className="w-full" />
         </div>
-        <p className="text-base row-span-1">Địa chỉ: {address}</p>
-        <p className="text-base row-span-1">Giá thuê: {GenCurrecy(cost)}</p>
-        <p className="text-base row-span-1">Phòng {size} người</p>
+        <div className="text-base row-span-1">
+          <span className="font-semibold">Địa chỉ: </span>
+          <span>{props.address}</span>
+        </div>
+        <div className="text-base row-span-1">
+          <span className="font-semibold">Giá thuê: </span>
+          <span>{GenCurrecy(props.cost)}</span>
+        </div>
+        <p className="text-base row-span-1">Phòng {props.size} người</p>
       </div>
-      <div className="row-span-2 text-right cursor-pointer">
-        <FavoriteIcon fontSize="medium" />
+      <div className="col-span-1 text-right cursor-pointer m-auto">
+        {props.token ? (
+          isLiked ? (
+            <FontAwesomeIcon
+              icon={'heart'}
+              style={{ color: '#eb0a0a' }}
+              onClick={onLikeChange}
+            />
+          ) : (
+            <FontAwesomeIcon icon={['far', 'heart']} onClick={onLikeChange} />
+          )
+        ) : (
+          <>
+            <Link href={'/login'}>
+              <FontAwesomeIcon icon={['far', 'heart']} />
+            </Link>
+          </>
+        )}
       </div>
     </div>
   );

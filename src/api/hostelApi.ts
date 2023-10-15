@@ -40,6 +40,10 @@ export const hostelApi = {
     const url = '/hostels';
     return axiosClient.put(url);
   },
+  likePost(postId: string): Promise<BaseResponse<string>> {
+    const url = `hostels/like/${postId}`;
+    return axiosClient.post(url);
+  },
 };
 
 export const utilitiesApi = {

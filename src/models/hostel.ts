@@ -1,5 +1,5 @@
-import { extend } from "lodash";
-import { PageFilter } from "./common";
+import { extend } from 'lodash';
+import { PageFilter } from './common';
 
 export type Hostel = {
   id: string;
@@ -8,23 +8,25 @@ export type Hostel = {
   district: string;
   ward: string;
   street: string;
-  postType: string | undefined;
-  status: string | undefined;
+  postType?: string;
+  status: 'A' | 'I' | 'W';
   cost: number;
-  electricityPrice: number | undefined;
-  waterPrice: number | undefined;
-  parkingPrice: number | undefined;
-  serviecPrice: number | undefined;
-  capacity: number | undefined;
-  area: number | undefined;
-  description: string | undefined;
-  phone: string | undefined;
+  electricityPrice?: number;
+  waterPrice?: number;
+  parkingPrice?: number;
+  serviecPrice?: number;
+  capacity: number;
+  area: number;
+  description: string;
+  phone?: string;
+  isLiked: boolean;
   imageUrl: string[];
   utilities: string[];
-  createdAt: string | undefined;
-  createdBy: string | undefined;
-  updatedAt: string | undefined;
-  updatedBy: string | undefined;
+  createdAt?: string;
+  endedAt?: string;
+  createdBy?: string;
+  updatedAt?: string;
+  updatedBy?: string;
 };
 
 export type HostelCreate = {

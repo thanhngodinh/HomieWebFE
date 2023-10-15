@@ -1,9 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import accountApi from '../../api/accountApi';
-import { Account } from '../../models/account';
-import { setToken } from '../../app/token';
-import { CallBackParam, User } from '../../models';
-import { hostelApi } from '../../api/hostelApi';
+import { CallBackParam, Hostel, User } from '../../models';
 import myApi from '../../api/myApi';
 import userApi from '../../api/userApi';
 
@@ -12,6 +8,7 @@ export interface UserState {
   profile?: User;
   error?: boolean;
   roommates?: User;
+  posts?: Hostel[];
 }
 
 const initialState: UserState = {
@@ -21,6 +18,15 @@ const initialState: UserState = {
 export const getMyProfile = createAsyncThunk('user/getMyProfile', async () => {
   try {
     const response = await myApi.getMyProfile();
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+export const getMyPosts = createAsyncThunk('user/getMyPosts', async () => {
+  try {
+    const response = await myApi.getMyPost();
     return response;
   } catch (error) {
     console.error(error);
@@ -60,6 +66,20 @@ export const userSlice = createSlice({
         state.error = false;
       })
       .addCase(getMyProfile.rejected, (state, action) => {
+        state.error = true;
+        state.loading = false;
+      })
+      // myPosts
+      .addCase(getMyPosts.pending, (state, action) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(getMyPosts.fulfilled, (state, action) => {
+        state.posts = action.payload?.data;
+        state.loading = false;
+        state.error = false;
+      })
+      .addCase(getMyPosts.rejected, (state, action) => {
         state.error = true;
         state.loading = false;
       })

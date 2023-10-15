@@ -34,7 +34,7 @@ const Home: FC<HomeProps> = (props) => {
   }, [dispatch]);
 
   return (
-    <div className="home w-screen bg-slate-100">
+    <div className="home w-screen">
       <div className="w-full h-3/5 relative">
         <img className="w-full h-full" src={props.bgImg} />
         <div className="absolute top-1/4 w-full text-center flex justify-center">

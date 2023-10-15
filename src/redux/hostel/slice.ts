@@ -28,23 +28,29 @@ export const getHostels = createAsyncThunk('hostel/getHostels', async () => {
   }
 });
 
-export const postHostelsWithQuerryParams = createAsyncThunk('hostel/postHostelsWithQuerryParams', async (query?:HostelFilter) => {
-  try {
-    const response = await hostelApi.searchPost(query);
-    return response;
-  } catch (error) {
-    console.error(error);
+export const postHostelsWithQuerryParams = createAsyncThunk(
+  'hostel/postHostelsWithQuerryParams',
+  async (query?: HostelFilter) => {
+    try {
+      const response = await hostelApi.searchPost(query);
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
   }
-});
+);
 
-export const getHostelsWithQuerryParams = createAsyncThunk('hostel/getHostelsWithQuerryParams', async (query?:HostelFilter) => {
-  try {
-    const response = await hostelApi.searchGet(query);
-    return response;
-  } catch (error) {
-    console.error(error);
+export const getHostelsWithQuerryParams = createAsyncThunk(
+  'hostel/getHostelsWithQuerryParams',
+  async (query?: HostelFilter) => {
+    try {
+      const response = await hostelApi.searchGet(query);
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
   }
-});
+);
 
 export const getHostelSuggest = createAsyncThunk(
   'hostel/getHostelSuggest',
@@ -76,6 +82,18 @@ export const createHostel = createAsyncThunk(
     try {
       const response = await hostelApi.post(hostel.param);
       hostel.callback && hostel.callback();
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
+export const likePost = createAsyncThunk(
+  'hostel/likePost',
+  async (postId: string) => {
+    try {
+      const response = await hostelApi.likePost(postId);
       return response;
     } catch (error) {
       console.error(error);
@@ -182,7 +200,7 @@ export const hostelSlice = createSlice({
       .addCase(getHostelsWithQuerryParams.rejected, (state, action) => {
         state.error = true;
         state.loading = false;
-      })
+      });
   },
 });
 
@@ -192,6 +210,6 @@ export const selectErrorState = (state: any) => state.hostel.error;
 
 export const hostelAction = hostelSlice.actions;
 
-export const { setHostel  } = hostelSlice.actions;
+export const { setHostel } = hostelSlice.actions;
 
 export default hostelSlice.reducer;

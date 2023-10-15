@@ -1,11 +1,11 @@
 export const POST_STATUS = {
-  SUCCESS: 'success',
-  WARNING: 'warning',
-  ERROR: 'error',
+  Active: 'A',
+  Waiting: 'W',
+  InActive: 'I',
 };
 
 export const PostTitleMapping = new Map<string, string>([
-  ['success', 'Đã duyệt'],
-  ['warning', 'Chờ duyệt'],
-  ['error', 'Không duyệt'],
+  ['A', 'Đã duyệt'],
+  ['W', 'Chờ duyệt'],
+  ['I', 'Không duyệt'],
 ]);

@@ -24,7 +24,9 @@ import {
   faRestroom,
   faCamera,
   faSun,
+  faHeart,
 } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 
 library.add(
   faKitchenSet,
@@ -38,7 +40,9 @@ library.add(
   faSun,
   faMotorcycle,
   faRestroom,
-  faCamera
+  faCamera,
+  faHeart,
+  faHeartRegular
 );
 
 type MyAppProps = AppProps & {

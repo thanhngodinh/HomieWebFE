@@ -9,8 +9,7 @@ const cx = classNames.bind(styles);
 const Header: FC = () => {
   const [token, setToken] = useState('');
   useEffect(() => {
-    let value;
-    value = localStorage.getItem('token') || '';
+    let value = localStorage.getItem('token') || '';
     setToken(value);
   }, []);
   return (
