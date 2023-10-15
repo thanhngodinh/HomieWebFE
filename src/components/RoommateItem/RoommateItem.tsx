@@ -28,7 +28,7 @@ const RoommateItem: FC<RoommateItemProps> = (props) => {
           </Link>
         </div>
         <div className="col-span-7 px-4 grid grid-rows-6">
-          <Link href={'roommates/' + props.id}>
+          <Link href={'/users/' + props.id}>
             <h2 className="row-span-1 text-3xl text-purple light cursor-pointer">
               {props.name}
             </h2>

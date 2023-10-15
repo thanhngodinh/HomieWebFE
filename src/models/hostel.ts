@@ -27,6 +27,8 @@ export type Hostel = {
   createdBy?: string;
   updatedAt?: string;
   updatedBy?: string;
+  author?: string;
+  authorAvatar?: string;
 };
 
 export type HostelCreate = {

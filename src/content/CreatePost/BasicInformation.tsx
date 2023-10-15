@@ -63,7 +63,7 @@ const BasicInformation: FC<BasicInforProps> = () => {
       dispatch(
         createHostel({
           param: { ...data, imageUrl: res },
-          callback: () => router.push('/my'),
+          callback: () => router.push('/my/post'),
         })
       );
     });

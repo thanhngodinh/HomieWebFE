@@ -73,7 +73,7 @@ const Profile: FC<ProfileProps> = () => {
               <div className="">
                 <button
                   type="button"
-                  className=" button button__fill button__fill-large text__normal"
+                  className="button button__fill button__fill-large text__normal"
                 >
                   Thay đổi ảnh đại diện
                 </button>
@@ -82,7 +82,7 @@ const Profile: FC<ProfileProps> = () => {
               <div className="">
                 <button
                   type="button"
-                  className=" button button__border button__border-large text__normal"
+                  className="button button__border button__border-large text__normal"
                   onClick={() => setIsEdit(!isEdit)}
                 >
                   {isEdit ? 'Hủy' : 'Cập nhật thông tin cá nhân'}
