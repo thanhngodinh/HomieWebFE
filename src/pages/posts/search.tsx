@@ -154,7 +154,6 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
                 autoCompleteInputProperties: {
                   options: ward,
                   filterOption: filterProvince,
-                  onSelect: onSelectProvince,
                 },
               },
               { name: 'street', label: 'Đường' },

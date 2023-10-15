@@ -331,7 +331,7 @@ const SearchMultiple: FC<SearchMultipleProps> = ({
                             >
                               {
                                 <>
-                                  <FontAwesomeIcon icon={tag.icon} size="xs" />
+                                  <FontAwesomeIcon icon={tag?.icon as any || ""} size="xs" />
                                   <span>{' ' + tag.name}</span>
                                 </>
                               }
