@@ -168,22 +168,22 @@ const SearchMultiple: FC<SearchMultipleProps> = ({
     const current = params[params.length - 1];
     const newData = objectWithoutEmptyFields(data);
 
-    if (current !== 'search') {
-      router.push(
-        `${navigateTo}?${objectToQueryParams(newData)}` ||
-          `/hostel/search?${objectToQueryParams(newData)}`
-      );
+    // if (current !== 'search') {
+    //   // router.push(
+    //   //   `${navigateTo}?${objectToQueryParams(newData)}` ||
+    //   //     `/hostel/search?${objectToQueryParams(newData)}`
+    //   // );
+    // } else {
+    if (Object.keys(newData).length > 0) {
+      router.replace({
+        query: { ...newData },
+      });
     } else {
-      if (Object.keys(newData).length > 0) {
-        router.replace({
-          query: { ...newData },
-        });
-      } else {
-        router.replace({
-          query: {},
-        });
-      }
+      router.replace({
+        query: {},
+      });
     }
+    // }
   };
 
   useEffect(() => {
@@ -331,7 +331,10 @@ const SearchMultiple: FC<SearchMultipleProps> = ({
                             >
                               {
                                 <>
-                                  <FontAwesomeIcon icon={tag?.icon as any || ""} size="xs" />
+                                  <FontAwesomeIcon
+                                    icon={(tag?.icon as any) || ''}
+                                    size="xs"
+                                  />
                                   <span>{' ' + tag.name}</span>
                                 </>
                               }

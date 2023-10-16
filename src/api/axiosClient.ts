@@ -12,16 +12,14 @@ axiosClient.interceptors.request.use(
     // Do something before request is sent
     const accessToken = getToken();
 
-    if (config.url?.includes('login') || _.isEmpty(accessToken)) {
+    if (_.isEmpty(accessToken)) {
       config.headers = {
-        'Accept': '*/*',
         'Content-Type': 'application/json',
       };
     } else {
       console.log('Access Token: ', accessToken || 'token is null');
       config.headers = {
-        'Authorization': `Bearer ${accessToken}`,
-        'Accept': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       };
     }

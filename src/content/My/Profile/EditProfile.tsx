@@ -21,7 +21,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { schema } from './validate';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../app/store';
-import { getMyProfile, selectUsers } from '../../../redux/user/slice';
+import {
+  getMyProfile,
+  selectUsers,
+  updateMyProfile,
+} from '../../../redux/user/slice';
 
 interface ProfileProps {
   profile: any;
@@ -33,11 +37,11 @@ const EditProfile: FC<ProfileProps> = (props) => {
   const [district, setDistrict] = useState<District[]>([]);
   const [isFindRoommate, setIsFindRoommate] = useState(true);
   const [genderValue, setGenderValue] = useState('M');
-  const [ward, setWard] = useState<Ward[]>([]);
+
+  const dispatch = useDispatch<AppDispatch>();
 
   const {
     control,
-    register,
     reset,
     setValue,
     getValues,
@@ -51,7 +55,7 @@ const EditProfile: FC<ProfileProps> = (props) => {
     resolver: yupResolver(schema),
   });
 
-  console.log(getValues())
+  console.log(getValues());
 
   useEffect(() => {
     if (props.profile) {
@@ -64,7 +68,6 @@ const EditProfile: FC<ProfileProps> = (props) => {
       .then((res) => res.json())
       .then((data: Province[]) => {
         setProvince(data);
-        // setValue('province', data[0].name);
         setValue('province', data[0].name);
       });
   };
@@ -73,52 +76,21 @@ const EditProfile: FC<ProfileProps> = (props) => {
       .then((res) => res.json())
       .then((data: Province) => {
         setDistrict(data?.districts);
-        // setValue('district', data?.districts[0]?.name);
-        // getWard(data?.districts[0]?.code);
       });
   };
 
-  // const getWard = (id: number) => {
-  //   fetch(`https://provinces.open-api.vn/api/d/${id}?depth=2`)
-  //     .then((res) => res.json())
-  //     .then((data: District) => {
-  //       setWard(data?.wards);
-  //       setValue('ward', data?.wards[0]?.name || '');
-  //     });
-  // };
   useEffect(() => {
     getProvince();
     getDistrict(1);
   }, []);
 
-  // const handleFormValueChange = (valueChange: any) => {
-  //   const formFieldName = Object.keys(valueChange)[0];
-  //   // console.log(JSON.parse(valueChange[formFieldName]));
-  //   // console.log(formFieldName);
-  //   if (formFieldName === 'province') {
-  //     getDistrict(JSON.parse(valueChange[formFieldName])?.code);
-  //     form.setFieldsValue({ district: undefined });
-  //   }
-  //   // else if (formFieldName === "district") {
-  //   //   getWard(JSON.parse(valueChange[formFieldName])?.code)
-  //   //   form.setFieldsValue({ward: undefined})
-  //   // }
-  // };
   const onSelectProvince = (valueSelect: string) => {
     const provinceSelected = province.find((p) => p.name === valueSelect);
     if (provinceSelected) {
-      // setCodeProvince(provinceSelected.code)
       getDistrict(provinceSelected.code);
     }
   };
 
-  // const onSelectDistrict = (valueSelect: string) => {
-  //   const provinceSelected = district.find((p) => p.name === valueSelect);
-  //   if (provinceSelected) {
-  //     // setCodeProvince(provinceSelected.code)
-  //     getWar(provinceSelected.code);
-  //   }
-  // };
   const filterOption = (inputValue: string, option: any) => {
     return option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1;
   };
@@ -130,9 +102,13 @@ const EditProfile: FC<ProfileProps> = (props) => {
         name="validateOnly"
         layout="vertical"
         autoComplete="off"
-        onFinish={handleSubmit((data) => {
-          console.log(134,data);
-        },(err) => console.log(134,err))}
+        onFinish={handleSubmit(
+          (data) => {
+            console.log(134, data);
+            dispatch(updateMyProfile(data));
+          },
+          (err) => console.log(134, err)
+        )}
         // onValuesChange={handleFormValueChange}
       >
         <div className="flex justify-end gap-4 mb-4">
@@ -175,12 +151,10 @@ const EditProfile: FC<ProfileProps> = (props) => {
                   required={isFindRoommate}
                 >
                   <Select
-                    
                     showSearch
                     onSelect={onSelectProvince}
                     filterOption={filterOption}
                     options={province?.map((item: any, i) => {
-                      
                       return {
                         ...item,
                         value: item.name,
@@ -198,7 +172,6 @@ const EditProfile: FC<ProfileProps> = (props) => {
                   required={isFindRoommate}
                 >
                   <Select
-                    
                     showSearch
                     mode="multiple"
                     options={district?.map((item: any, i) => {

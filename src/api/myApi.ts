@@ -7,13 +7,20 @@ const myApi = {
     const url = 'my/profile';
     return axiosClient.get(url);
   },
+
   getMyPost(): Promise<BaseResponse<Hostel[]>> {
     const url = 'my/posts';
     return axiosClient.get(url);
   },
+
   updatePassword(data?: ResetUser): Promise<BaseResponse<User>> {
     const url = 'my/password';
     return axiosClient.put(url, { ...data });
+  },
+
+  updateMyProfile(profile: User): Promise<BaseResponse<User>> {
+    const url = 'my/profile';
+    return axiosClient.put(url, profile);
   },
 };
 

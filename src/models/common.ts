@@ -1,7 +1,3 @@
-export interface ListResponse<T> {
-  data: T[];
-}
-
 export interface BaseResponse<T> {
   data?: T;
   total?: number;

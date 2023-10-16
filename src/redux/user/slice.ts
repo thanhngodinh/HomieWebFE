@@ -25,6 +25,18 @@ export const getMyProfile = createAsyncThunk('user/getMyProfile', async () => {
   }
 });
 
+export const updateMyProfile = createAsyncThunk(
+  'user/updateMyProfile',
+  async (profile: User) => {
+    try {
+      const response = await myApi.updateMyProfile(profile);
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
 export const getMyPosts = createAsyncThunk('user/getMyPosts', async () => {
   try {
     const response = await myApi.getMyPost();
@@ -68,7 +80,7 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // myProfile
+      // getMyProfile
       .addCase(getMyProfile.pending, (state, action) => {
         state.loading = true;
         state.error = false;
@@ -79,6 +91,19 @@ export const userSlice = createSlice({
         state.error = false;
       })
       .addCase(getMyProfile.rejected, (state, action) => {
+        state.error = true;
+        state.loading = false;
+      })
+      // updateMyProfile
+      .addCase(updateMyProfile.pending, (state, action) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(updateMyProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+      })
+      .addCase(updateMyProfile.rejected, (state, action) => {
         state.error = true;
         state.loading = false;
       })
