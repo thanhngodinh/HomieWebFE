@@ -90,7 +90,7 @@ const Profile: FC<ProfileProps> = () => {
               </div>
             </div>
           </div>
-          <div className="col-span-2 pl-48">
+          <div className="col-span-2 pl-48 ">
             <h4 className="">Thông tin cá nhân</h4>
 
             {/* <div className="flex justify-end gap-4">

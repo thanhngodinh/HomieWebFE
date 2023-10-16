@@ -1,6 +1,7 @@
 import React, { FC, useState, useEffect, useMemo } from 'react';
 import SubHeader from '../../../components/SubHeader';
 import {
+  AutoComplete,
   Avatar,
   Button,
   Checkbox,
@@ -39,6 +40,7 @@ const EditProfile: FC<ProfileProps> = (props) => {
     register,
     reset,
     setValue,
+    getValues,
     handleSubmit,
     formState: { errors },
   } = useForm<User>({
@@ -48,6 +50,8 @@ const EditProfile: FC<ProfileProps> = (props) => {
     }, [props.profile]),
     resolver: yupResolver(schema),
   });
+
+  console.log(getValues())
 
   useEffect(() => {
     if (props.profile) {
@@ -61,7 +65,7 @@ const EditProfile: FC<ProfileProps> = (props) => {
       .then((data: Province[]) => {
         setProvince(data);
         // setValue('province', data[0].name);
-        setValue('province', '');
+        setValue('province', data[0].name);
       });
   };
   const getDistrict = (id: number) => {
@@ -87,18 +91,36 @@ const EditProfile: FC<ProfileProps> = (props) => {
     getDistrict(1);
   }, []);
 
-  const handleFormValueChange = (valueChange: any) => {
-    const formFieldName = Object.keys(valueChange)[0];
-    // console.log(JSON.parse(valueChange[formFieldName]));
-    // console.log(formFieldName);
-    if (formFieldName === 'province') {
-      getDistrict(JSON.parse(valueChange[formFieldName])?.code);
-      form.setFieldsValue({ district: undefined });
+  // const handleFormValueChange = (valueChange: any) => {
+  //   const formFieldName = Object.keys(valueChange)[0];
+  //   // console.log(JSON.parse(valueChange[formFieldName]));
+  //   // console.log(formFieldName);
+  //   if (formFieldName === 'province') {
+  //     getDistrict(JSON.parse(valueChange[formFieldName])?.code);
+  //     form.setFieldsValue({ district: undefined });
+  //   }
+  //   // else if (formFieldName === "district") {
+  //   //   getWard(JSON.parse(valueChange[formFieldName])?.code)
+  //   //   form.setFieldsValue({ward: undefined})
+  //   // }
+  // };
+  const onSelectProvince = (valueSelect: string) => {
+    const provinceSelected = province.find((p) => p.name === valueSelect);
+    if (provinceSelected) {
+      // setCodeProvince(provinceSelected.code)
+      getDistrict(provinceSelected.code);
     }
-    // else if (formFieldName === "district") {
-    //   getWard(JSON.parse(valueChange[formFieldName])?.code)
-    //   form.setFieldsValue({ward: undefined})
-    // }
+  };
+
+  // const onSelectDistrict = (valueSelect: string) => {
+  //   const provinceSelected = district.find((p) => p.name === valueSelect);
+  //   if (provinceSelected) {
+  //     // setCodeProvince(provinceSelected.code)
+  //     getWar(provinceSelected.code);
+  //   }
+  // };
+  const filterOption = (inputValue: string, option: any) => {
+    return option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1;
   };
 
   return (
@@ -109,9 +131,9 @@ const EditProfile: FC<ProfileProps> = (props) => {
         layout="vertical"
         autoComplete="off"
         onFinish={handleSubmit((data) => {
-          console.log(data);
-        })}
-        onValuesChange={handleFormValueChange}
+          console.log(134,data);
+        },(err) => console.log(134,err))}
+        // onValuesChange={handleFormValueChange}
       >
         <div className="flex justify-end gap-4 mb-4">
           <Button htmlType="reset" className="button button__border">
@@ -153,14 +175,15 @@ const EditProfile: FC<ProfileProps> = (props) => {
                   required={isFindRoommate}
                 >
                   <Select
-                    size="large"
-                    onChange={(value: string) => {
-                      setValue('province', JSON.parse(value).name);
-                    }}
+                    
+                    showSearch
+                    onSelect={onSelectProvince}
+                    filterOption={filterOption}
                     options={province?.map((item: any, i) => {
+                      
                       return {
                         ...item,
-                        value: JSON.stringify(item),
+                        value: item.name,
                         label: item.name,
                       };
                     })}
@@ -175,15 +198,13 @@ const EditProfile: FC<ProfileProps> = (props) => {
                   required={isFindRoommate}
                 >
                   <Select
-                    size="large"
-                    onChange={(value: string) => {
-                      // getWard(JSON.parse(value)?.code);
-                      setValue('district', JSON.parse(value)?.name);
-                    }}
+                    
+                    showSearch
+                    mode="multiple"
                     options={district?.map((item: any, i) => {
                       return {
                         ...item,
-                        value: JSON.stringify(item),
+                        value: item.name,
                         label: item.name,
                       };
                     })}

@@ -40,7 +40,7 @@ const StatusBox: FC<StatusBoxProps> = ({ title, status }) => {
         );
         default:
           return (
-            <div className={`h-full w-full px-2 py-2 bg-[#00c04b] text-base`}>
+            <div className={`h-auto w-auto px-2 py-2 bg-[#00c04b] text-base`}>
               {title}
             </div>
         );

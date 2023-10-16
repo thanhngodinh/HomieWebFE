@@ -8,33 +8,33 @@ interface ProfileProps {
 
 const LoadProfile: FC<ProfileProps> = ({ profile }) => {
   return (
-    <>
-      <p className="text-base row-span-1">Họ tên: {profile?.name}</p>
-      <p className="text-base row-span-1">
-        Email: {profile?.email}{' '}
-        {profile?.isVerifiedEmail ? '(verified)' : '(not verified)'}
+    <div className="h-4/5 flex flex-col justify-start gap-5 mt-4">
+      <p className="text-base font-semibold">Họ tên: <span className="font-normal">{profile?.name}</span></p>
+      <p className="text-base font-semibold">
+        Email: <span className="font-normal">{profile?.email}{' '}
+        {profile?.isVerifiedEmail ? '(verified)' : '(not verified)'}</span>
       </p>
-      <p className="text-base row-span-1">Phone: {profile?.phone}</p>
-      <p className="text-base row-span-1">
+      <p className="text-base font-semibold">Phone: <span className="font-normal">{profile?.phone}</span></p>
+      <p className="text-base font-semibold">
         Đang:{' '}
         {profile?.isFindRoommate
-          ? 'Tìm kiếm bạn ở chung'
-          : 'Không tìm bạn ở chung'}
+          ? <span className="font-normal">Tìm kiếm bạn ở chung</span>
+          : <span className="font-normal">Không tìm bạn ở chung</span>}
       </p>
-      <p className="text-base row-span-1">
-        Tỉnh/Thành phố mong muốn: {profile?.province}
+      <p className="text-base font-semibold">
+        Tỉnh/Thành phố mong muốn: <span className="font-normal">{profile?.province}</span>
       </p>
-      <p className="text-base row-span-1">
-        Quận/Huyện mong muốn: {profile?.district}
+      <p className="text-base font-semibold">
+        Quận/Huyện mong muốn: <span className="font-normal">{profile?.district?.toString()}</span>
       </p>
-      <p className="text-base row-span-1">
-        Giới tính: {profile?.gender == 'M' ? 'Nam' : 'Nữ'}
+      <p className="text-base font-semibold">
+        Giới tính: <span className="font-normal">{profile?.gender == 'M' ? 'Nam' : 'Nữ'}</span>
       </p>
-      <p className="text-base row-span-1">
-        Giá phòng mong muốn: {GenCurrecy(profile?.costFrom)} -{' '}
-        {GenCurrecy(profile?.costTo)}
+      <p className="text-base font-semibold">
+        Giá phòng mong muốn: <span className="font-normal">{GenCurrecy(profile?.costFrom)} -{' '}
+        {GenCurrecy(profile?.costTo)}</span>
       </p>
-    </>
+    </div>
   );
 };
 
