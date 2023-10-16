@@ -21,6 +21,7 @@ export const GenCurrecy = (cost: number | undefined) => {
 };
 
 export const objectToQueryParams = (obj: any) => {
+  if(!obj) return ""
   const queryParams = [];
   for (const key in obj) {
     if (obj.hasOwnProperty(key)) {

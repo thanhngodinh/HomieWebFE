@@ -25,10 +25,11 @@ interface SearchSingleProps  {
   inputProps?: any
   bordered?: boolean
   addonBefore?: React.ReactNode
+  addMoreValueSearch?: { [key: string]: any }
   searchWithAutoComplete?: SearchWithAutoComplete
 }
 
-const SearchSingle: FC<SearchSingleProps> = ({keySearch,navigateTo,inputProps,bordered,addonBefore,searchWithAutoComplete}) => {
+const SearchSingle: FC<SearchSingleProps> = ({keySearch,navigateTo,inputProps,bordered,addonBefore,searchWithAutoComplete, addMoreValueSearch}) => {
     // const param = router.pathname
     // const params = param.split("/")
     // const current = params[params.length-1]
@@ -51,7 +52,11 @@ const SearchSingle: FC<SearchSingleProps> = ({keySearch,navigateTo,inputProps,bo
       console.log(51,value)
 
       if(current !== 'search'){
-        router.push(`${navigateTo}?${[keySearch]}=${value}` || `/posts?${[keySearch]}=${value}`)
+        if(addMoreValueSearch){
+          router.push(`${navigateTo}?${[keySearch]}=${value}&${objectToQueryParams(addMoreValueSearch)}` || `/posts?${[keySearch]}=${value}&${objectToQueryParams(addMoreValueSearch)}`)
+        }else{
+          router.push(`${navigateTo}?${[keySearch]}=${value}` || `/posts?${[keySearch]}=${value}`)
+        }
         
       }else{
         if(value){
@@ -66,12 +71,16 @@ const SearchSingle: FC<SearchSingleProps> = ({keySearch,navigateTo,inputProps,bo
       }
     }
 
+    // const sendDataToParent = (data: any) => {
+    //   if(getValueInput){
+    //     getValueInput(data);
+    //   }
+    // }
+
     const onChange = (e:any) =>{
       const data = e.target?.value || e
-      
         setInputValue(data);
-     
-      
+        // sendDataToParent(data)
     }
   
     useEffect(() => {

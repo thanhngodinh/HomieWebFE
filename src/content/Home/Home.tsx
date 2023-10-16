@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Home.module.scss';
 import SearchIcon from '@mui/icons-material/Search';
@@ -18,6 +18,7 @@ import {
 import { getUtilitiess, selectUtilitiess } from '../../redux/utilities/slice';
 import SearchSingle from '../../components/SearchBar/SearchSingle';
 import { Province } from '../../models';
+import { cond } from 'lodash';
 
 const cx = classNames.bind(styles);
 
@@ -35,6 +36,8 @@ const Home: FC<HomeProps> = (props) => {
   const [district, setDistrict] = useState<
     { value: string; label: string; code: number }[]
   >([]);
+
+  const [provincevValue , setProvinceValue] = useState("")
 
   const getProvince = () => {
     fetch('https://provinces.open-api.vn/api/p')
@@ -75,7 +78,12 @@ const Home: FC<HomeProps> = (props) => {
     dispatch(getHostelSuggest());
     getProvince()
     getDistrict(1)
+    
   }, [dispatch]);
+
+  useEffect(() =>{
+    setProvinceValue(getProvinceByCode(1)?.value || "")
+  },[province])
 
   const onSelectProvince = (valueSelect: string) => {
     const provinceSelected = province.find((p) => p.value === valueSelect);
@@ -87,6 +95,14 @@ const Home: FC<HomeProps> = (props) => {
 
   console.log(87,district)
 
+  const getValueInputSearch = (value: string) =>{
+    console.log(91,value)
+  }
+
+  const getProvinceByCode = (code: number ) =>{
+    return province.find((p) => p.code === code)
+  }
+
   return (
     <div className="home w-screen">
       <div className="w-full h-3/5 relative">
@@ -95,7 +111,7 @@ const Home: FC<HomeProps> = (props) => {
           <div className="bg-white rounded-full w-3/6	 p-5 light">
             
             {/* <SearchSingle inputProps={{ className: "text-white light " , bordered: false}} keySearch={"name"}  /> */}
-            <SearchSingle addonBefore={<Select showSearch size="large" className="w-2/6	 border-b" options={province} onSelect={onSelectProvince} filterOption={filterOption}  bordered={false}/>} 
+            <SearchSingle addonBefore={<Select showSearch size="large" className="w-2/6	 border-b text-left"   value={provincevValue} onChange={(value) => setProvinceValue(value)}  options={province} onSelect={onSelectProvince} filterOption={filterOption}  bordered={false}/>} 
               bordered={false}         
               inputProps={{className: "w-full text-left", size: "large" ,placeholder: "Tìm..." }}
               searchWithAutoComplete={{options: district, autoCompleteProps: {
@@ -103,6 +119,7 @@ const Home: FC<HomeProps> = (props) => {
               }}}
               navigateTo="/posts"
               keySearch={"district"}
+              addMoreValueSearch={{province: provincevValue}}
             />
 
             
