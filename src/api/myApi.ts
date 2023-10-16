@@ -1,6 +1,6 @@
 import { BaseResponse } from './../models/common';
 import axiosClient from './axiosClient';
-import { Hostel, User } from '../models';
+import { Hostel, User, ResetUser } from '../models';
 
 const myApi = {
   getMyProfile(): Promise<BaseResponse<User>> {
@@ -10,6 +10,10 @@ const myApi = {
   getMyPost(): Promise<BaseResponse<Hostel[]>> {
     const url = 'my/posts';
     return axiosClient.get(url);
+  },
+  updatePassword(data?: ResetUser): Promise<BaseResponse<User>> {
+    const url = 'my/password';
+    return axiosClient.put(url, { ...data });
   },
 };
 

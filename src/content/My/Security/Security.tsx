@@ -9,6 +9,9 @@ import { useForm } from 'react-hook-form';
 import { FormItem } from "react-hook-form-antd";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from './validate';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../../app/store';
+import { selectStatusState, updatePassword } from '../../../redux/user/slice';
 
 
 
@@ -21,6 +24,12 @@ const Security: FC<SecurityProps> = () => {
   const [province, setProvince] = useState<Province[]>([]);
   const [district, setDistrict] = useState<District[]>([]);
   const [ward, setWard] = useState<Ward[]>([]);
+
+  const status = useSelector(selectStatusState);
+ 
+
+  const dispatch = useDispatch<AppDispatch>();
+
 
   const {
     control,
@@ -37,6 +46,10 @@ const Security: FC<SecurityProps> = () => {
 
     resolver: yupResolver(schema)
   });
+
+  const onSubmit = (data:any) => {
+    dispatch(updatePassword(data)).finally(() => alert(status));
+  }
 
   return (
     <>
@@ -59,9 +72,7 @@ const Security: FC<SecurityProps> = () => {
               name="validateOnly"
               layout="vertical"
               autoComplete="off"
-              onFinish={handleSubmit((data)=>{
-                console.log(data);
-              })}
+              onFinish={handleSubmit(onSubmit)}
            
             >
               

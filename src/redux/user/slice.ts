@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { CallBackParam, Hostel, User } from '../../models';
+import { BaseResponse, CallBackParam, Hostel, ResetUser, User } from '../../models';
 import myApi from '../../api/myApi';
 import userApi from '../../api/userApi';
 
@@ -9,6 +9,7 @@ export interface UserState {
   error?: boolean;
   roommates?: User;
   posts?: Hostel[];
+  status?: string;
 }
 
 const initialState: UserState = {
@@ -38,6 +39,18 @@ export const searchRoommates = createAsyncThunk(
   async () => {
     try {
       const response = await userApi.searchRoommates({});
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
+export const updatePassword = createAsyncThunk(
+  'user/updatePassword',
+  async (data?: ResetUser) => {
+    try {
+      const response = await myApi.updatePassword(data);
       return response;
     } catch (error) {
       console.error(error);
@@ -96,6 +109,20 @@ export const userSlice = createSlice({
       .addCase(searchRoommates.rejected, (state, action) => {
         state.error = true;
         state.loading = false;
+      })
+      // updatePassword
+      .addCase(updatePassword.pending, (state, action) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(updatePassword.fulfilled, (state, action) => {
+        state.status = action.payload?.status;
+        state.loading = false;
+        state.error = false;
+      })
+      .addCase(updatePassword.rejected, (state, action) => {
+        state.error = true;
+        state.loading = false;
       });
   },
 });
@@ -103,6 +130,7 @@ export const userSlice = createSlice({
 export const selectUsers = (state: any) => state.user;
 export const selectLoadingState = (state: any) => state.user.loading;
 export const selectErrorState = (state: any) => state.user.error;
+export const selectStatusState = (state: any) => state.user.status;
 
 export const userAction = userSlice.actions;
 
