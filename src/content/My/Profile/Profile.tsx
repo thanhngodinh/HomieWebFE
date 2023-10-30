@@ -44,6 +44,7 @@ const Profile: FC<ProfileProps> = () => {
           { id: 'profile', name: 'Hồ Sơ' },
           { id: 'security', name: 'Bảo mật' },
           { id: 'post', name: 'Quản lý tin đăng' },
+          { id: 'liked-post', name: 'Tin đã thích' },
         ]}
       ></SubHeader>
       <div className="container mx-auto my-12">
@@ -90,7 +91,7 @@ const Profile: FC<ProfileProps> = () => {
               </div>
             </div>
           </div>
-          <div className="col-span-2 pl-48 ">
+          <div className="col-span-2 px-20 ">
             <h4 className="">Thông tin cá nhân</h4>
 
             {/* <div className="flex justify-end gap-4">
@@ -102,7 +103,7 @@ const Profile: FC<ProfileProps> = () => {
               </Button>
             </div> */}
             {isEdit ? (
-              <EditProfile profile={profile} />
+              <EditProfile profile={profile} setIsEdit={setIsEdit} />
             ) : (
               <LoadProfile profile={profile} />
             )}

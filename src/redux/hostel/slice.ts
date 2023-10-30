@@ -80,7 +80,7 @@ export const createHostel = createAsyncThunk(
   'hostel/createHostel',
   async (hostel: CallBackParam<HostelCreate>) => {
     try {
-      const response = await hostelApi.post(hostel.param);
+      const response = await hostelApi.post(hostel.data);
       hostel.callback && hostel.callback();
       return response;
     } catch (error) {

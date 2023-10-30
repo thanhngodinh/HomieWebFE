@@ -20,8 +20,8 @@ export const loginAccount = createAsyncThunk(
   async (params: CallBackParam<Account>) => {
     try {
       const response = await accountApi.login({
-        username: params.param.username,
-        password: params.param.password,
+        username: params.data.username,
+        password: params.data.password,
       });
       setToken(response.token);
       params.callback && params.callback();

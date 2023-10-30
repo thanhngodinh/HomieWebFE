@@ -25,14 +25,12 @@ const LoginPage: React.FC = () => {
   const router = useRouter();
 
   const dispatch = useDispatch<AppDispatch>();
-  const { token, loading, error } = useSelector(selectAuths);
-
   const { register, handleSubmit } = useForm<FormValues>();
 
   const onSubmit = handleSubmit((data) => {
     dispatch(
       loginAccount({
-        param: { ...data },
+        data: { ...data },
         callback: () => router.push('/'),
       })
     );

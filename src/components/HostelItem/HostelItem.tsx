@@ -36,7 +36,7 @@ const HostelItem: FC<HostelItemProps> = (props) => {
       </div>
       <div className="col-span-8 px-4 grid grid-rows-5 m-auto">
         <Link href={'posts/' + props.id}>
-          <h2 className="text-3xl text-primary light cursor-pointer">
+          <h2 className="text-3xl text-primary light cursor-pointer my-auto">
             {props.name}
           </h2>
         </Link>

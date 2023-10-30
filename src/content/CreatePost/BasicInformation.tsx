@@ -62,7 +62,7 @@ const BasicInformation: FC<BasicInforProps> = () => {
     handleSelectedFile(imagesFile).then((res) => {
       dispatch(
         createHostel({
-          param: { ...data, imageUrl: res },
+          data: { ...data, imageUrl: res },
           callback: () => router.push('/my/post'),
         })
       );

@@ -1,26 +1,31 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
-import styles from './MyPost.module.scss';
+import styles from './LikedPost.module.scss';
 import PostItem from '../../../components/PostItem';
 import SubHeader from '../../../components/SubHeader';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../app/store';
-import { getMyPosts, selectUsers } from '../../../redux/user/slice';
-import { Hostel } from '../../../models';
+import { getMyLikedPosts, selectUsers } from '../../../redux/user/slice';
+import HostelItem from '../../../components/HostelItem';
+import { GenAddress } from '../../../utils/func';
 
 const cx = classNames.bind(styles);
 
 interface MyPostProps {}
 
-const MyPost: FC<MyPostProps> = () => {
+const LikedPost: FC<MyPostProps> = () => {
+  const [token, setToken] = useState('');
+  useEffect(() => {
+    let value = localStorage.getItem('token') || '';
+    setToken(value);
+  }, []);
+
   const dispatch = useDispatch<AppDispatch>();
   const { posts, loading, error } = useSelector(selectUsers);
 
   useEffect(() => {
-    dispatch(getMyPosts());
+    dispatch(getMyLikedPosts());
   }, [dispatch]);
-
-  console.log(posts);
 
   return (
     <>
@@ -33,21 +38,26 @@ const MyPost: FC<MyPostProps> = () => {
           { id: 'liked-post', name: 'Tin đã thích' },
         ]}
       ></SubHeader>
-      <div className="container mx-auto  my-12">
+      <div className="container mx-auto my-12">
         <div className={cx('mypost')}>
           {posts?.map((post: any) => {
             return (
               <>
-                <div className="py-4 border-t-4  border-b-4">
-                  <PostItem
-                    key={post.id}
+                <div className="py-4">
+                  <HostelItem
                     id={post.id}
-                    img={post?.imageUrl[0]}
                     name={post.name}
-                    code={post.id}
-                    startDate={post.createdAt}
-                    endDate={post.endedAt}
-                    status={post.status}
+                    img={post.imageUrl[0]}
+                    size={post.capacity}
+                    address={GenAddress(
+                      post.street,
+                      post.ward,
+                      post.district,
+                      post.province
+                    )}
+                    cost={post.cost}
+                    isLiked={post.isLiked}
+                    token={token}
                   />
                 </div>
               </>
@@ -59,4 +69,4 @@ const MyPost: FC<MyPostProps> = () => {
   );
 };
 
-export default MyPost;
+export default LikedPost;

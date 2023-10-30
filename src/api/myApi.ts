@@ -13,6 +13,11 @@ const myApi = {
     return axiosClient.get(url);
   },
 
+  getMyLikedPost(): Promise<BaseResponse<Hostel[]>> {
+    const url = 'my/liked-posts';
+    return axiosClient.get(url);
+  },
+
   updatePassword(data?: ResetUser): Promise<BaseResponse<User>> {
     const url = 'my/password';
     return axiosClient.put(url, { ...data });

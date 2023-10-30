@@ -1,5 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { BaseResponse, CallBackParam, Hostel, ResetUser, User } from '../../models';
+import {
+  BaseResponse,
+  CallBackParam,
+  Hostel,
+  ResetUser,
+  User,
+} from '../../models';
 import myApi from '../../api/myApi';
 import userApi from '../../api/userApi';
 
@@ -27,9 +33,10 @@ export const getMyProfile = createAsyncThunk('user/getMyProfile', async () => {
 
 export const updateMyProfile = createAsyncThunk(
   'user/updateMyProfile',
-  async (profile: User) => {
+  async (params: CallBackParam<User>) => {
     try {
-      const response = await myApi.updateMyProfile(profile);
+      const response = await myApi.updateMyProfile(params.data);
+      params.callback && params.callback();
       return response;
     } catch (error) {
       console.error(error);
@@ -45,6 +52,18 @@ export const getMyPosts = createAsyncThunk('user/getMyPosts', async () => {
     console.error(error);
   }
 });
+
+export const getMyLikedPosts = createAsyncThunk(
+  'user/getMyLikedPosts',
+  async () => {
+    try {
+      const response = await myApi.getMyLikedPost();
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
 
 export const searchRoommates = createAsyncThunk(
   'user/searchRoommates',
@@ -118,6 +137,20 @@ export const userSlice = createSlice({
         state.error = false;
       })
       .addCase(getMyPosts.rejected, (state, action) => {
+        state.error = true;
+        state.loading = false;
+      })
+      // myLikedPosts
+      .addCase(getMyLikedPosts.pending, (state, action) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(getMyLikedPosts.fulfilled, (state, action) => {
+        state.posts = action.payload?.data;
+        state.loading = false;
+        state.error = false;
+      })
+      .addCase(getMyLikedPosts.rejected, (state, action) => {
         state.error = true;
         state.loading = false;
       })

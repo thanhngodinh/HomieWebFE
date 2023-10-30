@@ -29,13 +29,13 @@ import {
 
 interface ProfileProps {
   profile: any;
+  setIsEdit: any;
 }
 
 const EditProfile: FC<ProfileProps> = (props) => {
   const [form] = Form.useForm();
   const [province, setProvince] = useState<Province[]>([]);
   const [district, setDistrict] = useState<District[]>([]);
-  const [isFindRoommate, setIsFindRoommate] = useState(true);
   const [genderValue, setGenderValue] = useState('M');
 
   const dispatch = useDispatch<AppDispatch>();
@@ -55,11 +55,12 @@ const EditProfile: FC<ProfileProps> = (props) => {
     resolver: yupResolver(schema),
   });
 
-  console.log(getValues());
+  const [isFindRoommate, setIsFindRoommate] = useState(false);
 
   useEffect(() => {
     if (props.profile) {
       reset(props.profile);
+      setIsFindRoommate(getValues('isFindRoommate') || false);
     }
   }, [props.profile]);
 
@@ -104,15 +105,25 @@ const EditProfile: FC<ProfileProps> = (props) => {
         autoComplete="off"
         onFinish={handleSubmit(
           (data) => {
-            console.log(134, data);
-            dispatch(updateMyProfile(data));
+            props.setIsEdit(false);
+            data.isFindRoommate = isFindRoommate;
+            dispatch(
+              updateMyProfile({
+                data: { ...data },
+                callback: () => dispatch(getMyProfile()),
+              })
+            );
           },
           (err) => console.log(134, err)
         )}
         // onValuesChange={handleFormValueChange}
       >
         <div className="flex justify-end gap-4 mb-4">
-          <Button htmlType="reset" className="button button__border">
+          <Button
+            htmlType="reset"
+            className="button button__border"
+            onClick={() => props.setIsEdit(false)}
+          >
             Hủy
           </Button>
           <Button htmlType="submit" className="button button__fill">
@@ -227,39 +238,6 @@ const EditProfile: FC<ProfileProps> = (props) => {
             </Row>
           </>
         )}
-
-        {/* <Row gutter={24}>
-                <Col span={8} key="street">
-                  <FormItem
-                    name="street"
-                    label="Đường"
-                    control={control}
-                  >
-                    <Input />
-                  </FormItem>
-                </Col>
-                <Col span={16} key="displayAddress">
-                  <FormItem
-                    name="displayAddress"
-                    label="Địa chỉ hiển thị"
-                    control={control}
-                  >
-                    <Input />
-                  </FormItem>
-                </Col>
-              </Row>
-
-              <FormItem name="cmnd" label="CMND/CCCD" control={control}>
-                <Input />
-              </FormItem>
-
-              <FormItem name="cmndDate" label="Ngày cấp" control={control}>
-                <Input />
-              </FormItem>
-
-              <FormItem name="cmndAddress" label="Nơi cấp" control={control}>
-                <Input />
-              </FormItem> */}
       </Form>
     </>
   );

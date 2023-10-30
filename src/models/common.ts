@@ -6,12 +6,12 @@ export interface BaseResponse<T> {
 }
 
 export type CallBackParam<T> = {
-  param: T;
+  data: T;
   callback?: any;
 };
 
 export type PageFilter = {
-  pageSize?:number;
-  pageIdx?:number;
-  sort?:string;
-}
+  pageSize?: number;
+  pageIdx?: number;
+  sort?: string;
+};
