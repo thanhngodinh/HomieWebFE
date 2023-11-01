@@ -28,15 +28,15 @@ const HostelItem: FC<HostelItemProps> = (props) => {
   };
 
   return (
-    <div className="grid grid-cols-12 py-4 bg-slate-100 rounded-2xl px-8">
+    <div className="grid grid-cols-12 py-4 bg-slate-100 rounded-2xl px-8 h-72">
       <div className="col-span-3 cursor-pointer m-auto">
         <Link href={'posts/' + props.id}>
           <img className="w-full rounded-xl" src={props.img} />
         </Link>
       </div>
-      <div className="col-span-8 px-4 grid grid-rows-5 m-auto">
+      <div className="col-span-8 px-16 grid grid-rows-5 my-auto">
         <Link href={'posts/' + props.id}>
-          <h2 className="text-3xl text-primary light cursor-pointer my-auto">
+          <h2 className="text-2xl text-primary light cursor-pointer my-auto">
             {props.name}
           </h2>
         </Link>

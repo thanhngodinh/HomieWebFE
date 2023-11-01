@@ -142,7 +142,9 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
           {hostel?.description && (
             <div className="my-5 border-top divide-gray-200">
               <p className="text-xl font-semibold">Mô tả</p>
-              <p className="text-sm mt-4">{hostel?.description}</p>
+              <p className="text-sm mt-4 whitespace-pre-wrap">
+                {hostel?.description}
+              </p>
             </div>
           )}
 

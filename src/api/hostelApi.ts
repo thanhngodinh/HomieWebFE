@@ -7,37 +7,37 @@ import { objectToQueryParams } from '../utils/func';
 
 export const hostelApi = {
   get(): Promise<BaseResponse<Hostel[]>> {
-    const url = `/hostels`;
+    const url = `/posts`;
     return axiosClient.get(url);
   },
   search({}): Promise<BaseResponse<Hostel[]>> {
-    const url = '/hostels';
+    const url = '/posts';
     return axiosClient.get(url);
   },
   searchGet(query?: HostelFilter): Promise<BaseResponse<Hostel[]>> {
     const queryParams = objectToQueryParams(query)
     const queryString  =  queryParams ? `/search?${queryParams}` : ""
-    const url = `/hostels${queryString}`;
+    const url = `/posts${queryString}`;
     return axiosClient.get(url);
   },
   searchPost(params?: HostelFilter): Promise<BaseResponse<Hostel[]>> {
-    const url = '/hostels/search';
+    const url = '/posts/search';
     return axiosClient.post(url, params);
   },
   getSuggest({}): Promise<BaseResponse<Hostel[]>> {
-    const url = '/hostels/suggest';
+    const url = '/posts/suggest';
     return axiosClient.get(url);
   },
   getById(id: string): Promise<Hostel> {
-    const url = `/hostels/${id}`;
+    const url = `/posts/${id}`;
     return axiosClient.get(url);
   },
   post(params: HostelCreate): Promise<BaseResponse<Hostel>> {
-    const url = '/hostels';
+    const url = '/posts';
     return axiosClient.post(url, params);
   },
   put({}): Promise<BaseResponse<Hostel[]>> {
-    const url = '/hostels';
+    const url = '/posts';
     return axiosClient.put(url);
   },
   likePost(postId: string): Promise<BaseResponse<string>> {

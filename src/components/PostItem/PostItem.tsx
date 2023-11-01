@@ -29,7 +29,7 @@ const PostItem: FC<PostItemProps> = ({
     <div className="h-full w-full grid grid-cols-4 gap-4 text-base">
       <div className="w-full h-[200px]">
         <img
-          className="w-full h-full object-fit rounded-lg"
+          className="w-full h-full object-cover rounded-lg"
           src={img}
           alt="postitem"
         />
