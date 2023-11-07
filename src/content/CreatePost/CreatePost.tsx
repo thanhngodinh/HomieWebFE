@@ -4,6 +4,7 @@ import styles from './CreatePost.module.scss';
 import { useForm } from "react-hook-form";
 import React, { useState } from 'react';
 import BasicInformation from './BasicInformation';
+import Map from '../../components/Map';
 
 const cx = classNames.bind(styles);
 
@@ -149,6 +150,7 @@ const CreatePost: FC<CreatePostProps> = () => {
   return (
     <div>
       <BasicInformation/>
+      <Map></Map>
       {/* <BasicInformation/>
       <BasicInformation/> */}
     </div>
