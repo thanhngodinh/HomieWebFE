@@ -1,14 +1,36 @@
 import { FC, useEffect, useState, useRef } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
+import { getGeocode, getLatLng } from 'use-places-autocomplete';
 
 interface MapProps {
-  
+  address?: string
+  lat?: number
+  lng?: number
 }
 
 
-const Map: FC<MapProps> = () => {
+const Map: FC<MapProps> = ({address, lat,lng}) => {
+  const [map, setMap] = useState<any>(null);
+  const [marker, setMarker] = useState<any>(null);
 
   const mapRef = useRef<HTMLDivElement>(null);
+
+  const changeMapCenter = (lat: number, lng: number) => {
+    if (map && marker) {
+     
+      marker.setAnimation(google.maps.Animation.BOUNCE);
+
+      // Đặt thời gian animation (milliseconds)
+      setTimeout(() => {
+        marker.setAnimation(null); // Loại bỏ animation
+      }, 2000); // Ví dụ: Animation trong 2 giây
+
+      map.setCenter({ lat, lng });
+
+      // Cập nhật vị trí của marker
+      marker.setPosition({ lat, lng });
+    }
+  };
 
   useEffect(()=> {
     const initMap = async () => {
@@ -35,21 +57,40 @@ const Map: FC<MapProps> = () => {
         clickableIcons: true
       }
 
-      const map = new Map(mapRef.current as HTMLDivElement, mapOptions )
+      const mapObject = new Map(mapRef.current as HTMLDivElement, mapOptions )
+      setMap(map as any)
 
       const marker = new Marker({
-        map: map,
-        position: position
+        map: mapObject,
+        position: position,
       })
+      setMarker(marker)
 
-      const place = new Place({
+      // const place = new Place({
         
-      })
-      place.
+      // })
+      // place.
     }
     
     initMap()
   },[])
+
+  useEffect(()=> {
+    console.log(address)
+    if(lat && lng){
+      changeMapCenter(lat,lng)
+    }else if(map && address){
+      getGeocode({ address: address }).then((results) => {
+        const coordinates = getLatLng(results[0]);
+        changeMapCenter(coordinates.lat, coordinates.lng)
+        console.log("📍 Coordinates: ",  coordinates.lat, coordinates.lng );
+      });
+    }
+    
+  },[address])
+
+
+  
 
   return (
     <div style={{height: '600px'}} ref={mapRef}></div>

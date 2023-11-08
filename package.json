@@ -63,6 +63,7 @@
         "semantic-ui-less": "^2.5.0",
         "socket.io-client": "^4.7.2",
         "styled-components": "^5.3.5",
+        "use-places-autocomplete": "^4.0.1",
         "yup": "^0.32.11"
     },
     "devDependencies": {
