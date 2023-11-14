@@ -15,15 +15,16 @@ import { useRouter } from 'next/router';
 import { Select } from 'antd';
 import type { SelectProps } from 'antd';
 import { getUtilitiess, selectUtilitiess } from '../../redux/utilities/slice';
-import { Address } from './CreatePost';
+import { Address, Coord } from './CreatePost';
 
 const cx = classNames.bind(styles);
 
-interface BasicInforProps { 
+interface BasicInforProps {
+  coord?: Coord
   getAddress?: (address: Address) => void
 }
 
-const BasicInformation: FC<BasicInforProps> = ({getAddress}) => {
+const BasicInformation: FC<BasicInforProps> = ({getAddress, coord}) => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   // const { loading, error } = useSelector(createHostel);
@@ -66,10 +67,11 @@ const BasicInformation: FC<BasicInforProps> = ({getAddress}) => {
   const watchAddress = watch(['province','district','ward','street'])
 
   const onSubmit = (data: HostelCreate) => {
+    console.log( coord?.longitude,  coord?.latitude)
     handleSelectedFile(imagesFile).then((res) => {
       dispatch(
         createHostel({
-          data: { ...data, imageUrl: res },
+          data: { ...data, imageUrl: res, longitude: coord?.longitude,latitude:  coord?.latitude},
           callback: () => router.push('/my/post'),
         })
       );

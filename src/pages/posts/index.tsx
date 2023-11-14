@@ -43,6 +43,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouseUser } from '@fortawesome/free-solid-svg-icons';
 import { District, Province, Ward } from '../../models';
 import { getUtilitiess, selectUtilitiess } from '../../redux/utilities/slice';
+import MapBox from '../../components/MapBox';
 
 const HostelSearchPage: NextPage & { Layout?: FC } = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -230,6 +231,11 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
           ></SearchMultiple>
         </div>
       </header>
+      {/* Bắt đầu Map */}
+      <div className="mt-8 w-4/5 mx-auto">
+        <MapBox markers={list && Array.isArray(list) ? list.map((item)=> {return {latitude: item.latitude,longitude: item.longitude}}): []}/>
+      </div>
+      {/* Kết thúc Map */}
       <SearchResults total={Array.isArray(list) ? list.length : 0}>
         <HostelList hostels={list} />
       </SearchResults>

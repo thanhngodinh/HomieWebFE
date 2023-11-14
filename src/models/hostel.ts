@@ -50,6 +50,9 @@ export type HostelCreate = {
   description: string;
   imageUrl: string[];
   utilities: string[];
+  longitude?: number;
+  latitude?:number;
+
 };
 
 export type Utilities = {

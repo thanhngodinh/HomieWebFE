@@ -1,10 +1,12 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './CreatePost.module.scss';
 import { useForm } from "react-hook-form";
 
 import BasicInformation from './BasicInformation';
 import Map from '../../components/Map';
+import axiosClient from '../../api/axiosClient';
+import { formatGoogleAddress } from '../../utils/func';
 
 const cx = classNames.bind(styles);
 
@@ -17,39 +19,45 @@ export type Address = {
   street: string;
 }
 
+export type Coord = {
+  address: string, 
+  placeId: string, 
+  longitude: number, 
+  latitude: number
+}
+
 const CreatePost: FC<CreatePostProps> = () => {
   const [address,setAddress] = useState({province: '', district: '', ward: '', street: ''})
+  const [coord, setCoord] = useState<Coord>()
   const getAddress = (value: Address) => {
     setAddress((prev) => {return {...prev, ...value}})
   }
-  const formatGoogleAddress = (addressObject: Address) => {
-    // Tạo một mảng chứa các phần của địa chỉ
-    const addressParts = [];
-    // Thêm phần tỉnh/thành phố nếu có
-    if (addressObject.province) {
-      addressParts.push(addressObject.province);
-    }
   
-    // Thêm phần quận/huyện nếu có
-    if (addressObject.district) {
-      addressParts.push(addressObject.district);
-    }
-  
-    // Thêm phần phường/xã nếu có
-    if (addressObject.ward) {
-      addressParts.push(addressObject.ward);
-    }
-  
-    // Thêm phần đường/địa chỉ cụ thể nếu có
-    if (addressObject.street) {
-      addressParts.push(addressObject.street);
-    }
-  
-    // Kết hợp các phần thành một chuỗi bằng dấu phân cách ", "
-    const formattedAddress = addressParts.join(', ');
-  
-    return formattedAddress;
-  }
+
+  useEffect(()=>{
+    (async ()=> {
+      const getCoord = (address: string): Promise<any> => {
+        const url = `https://rsapi.goong.io/geocode?address=${encodeURIComponent(
+          address
+        )}&api_key=${process.env.NEXT_PUBLIC_GOONG_API_TOKEN}`;
+        return axiosClient.get(url);
+      };
+      try {
+        const coord = await getCoord(formatGoogleAddress(address));
+        console.log('coord', address);
+        const position = {
+          address: coord.results[0].formatted_address,
+          placeId: coord.results[0].place_id,
+          longitude: coord.results[0].geometry.location.lng,
+          latitude: coord.results[0].geometry.location.lat,
+        };
+      
+        setCoord(position) 
+      }
+      
+      catch (error) {}
+    })()
+  },[address])
 
   return (
     <div className="relative flex flex-col justify-center min-h-screen overflow-hidden ">
@@ -60,12 +68,15 @@ const CreatePost: FC<CreatePostProps> = () => {
       </div>
       <div className="container mx-auto grid grid-cols-2 my-8 gap-4">
         <div className="lg:col-span-1  col-span-2">
-          <BasicInformation getAddress={getAddress}/>
+          <BasicInformation getAddress={getAddress} coord={coord}/>
         </div>
         <div className="lg:col-span-1  col-span-2">
           <div className="text-base py-4 px-6 rounded mb-4" style={{boxShadow: 'rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset'}}>
-            {address.province && address.province}  {address.district && ' - ' + address.district} {address.ward && ' - ' + address.ward} {address.street && ' - ' + address.street}</div>
-          <Map address={formatGoogleAddress(address)}></Map>
+          {formatGoogleAddress(address)}</div>
+          <div className="h-[600px]">
+            <Map address={coord?.address || ""}></Map>
+
+          </div>
         </div>
         
       </div>

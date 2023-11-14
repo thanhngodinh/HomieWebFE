@@ -1,104 +1,95 @@
-import { FC, useEffect, useState, useRef } from 'react';
-import { Loader } from '@googlemaps/js-api-loader';
-import { getGeocode, getLatLng } from 'use-places-autocomplete';
+import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
+import ReactMapGL, {
+  GeolocateControl,
+  Marker,
+  Popup,
+  ViewState,
+} from 'react-map-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
+// import { HousesQuery_houses } from "src/generated/HousesQuery";
+import axiosClient from '../../api/axiosClient';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 
-interface MapProps {
-  address?: string
-  lat?: number
-  lng?: number
+interface IProps {
+  address: string;
 }
 
+type Address = {
+  address?: string;
+  latitude?: number;
+  longitude?: number;
+  zoom?: number;
+  placeId?: string
+};
 
-const Map: FC<MapProps> = ({address, lat,lng}) => {
-  const [map, setMap] = useState<any>(null);
-  const [marker, setMarker] = useState<any>(null);
+export default function Map({ address }: IProps) {
+  // const [selected, setSelected] = useState<any | null>(null);
+  // const mapRef = useRef<any | null>(null);
+  // const [currentAddress, setCurrentAddress] = useState<Address>({
+  //   address: 'Ho Chi Minh City, Vietnam',
+  //   latitude: 10.7758439,
+  //   longitude: 106.7017555,
+  //   zoom: 15,
+  // });
 
-  const mapRef = useRef<HTMLDivElement>(null);
-
-  const changeMapCenter = (lat: number, lng: number) => {
-    if (map && marker) {
-     
-      marker.setAnimation(google.maps.Animation.BOUNCE);
-
-      // Đặt thời gian animation (milliseconds)
-      setTimeout(() => {
-        marker.setAnimation(null); // Loại bỏ animation
-      }, 2000); // Ví dụ: Animation trong 2 giây
-
-      map.setCenter({ lat, lng });
-
-      // Cập nhật vị trí của marker
-      marker.setPosition({ lat, lng });
-    }
-  };
-
-  useEffect(()=> {
-    const initMap = async () => {
-      const loader = new Loader({
-        apiKey: process.env.NEXT_PUBLIC_MAPS_API_KEY || "",
-        version: 'weekly',
-      })
-
-      const { Map } = await loader.importLibrary('maps')
-
-      const {Place} = await loader.importLibrary('places') as google.maps.PlacesLibrary
-
-      //init marker
-      const { Marker } = await loader.importLibrary('marker') as google.maps.MarkerLibrary
-
-      const position = {
-        lat: 10.783291,
-        lng: 106.668164
-      }
-      const mapOptions: google.maps.MapOptions = {
-        center: position,
-        zoom: 17,
-        mapId: 'Homie_Map_Id',
-        clickableIcons: true
-      }
-
-      const mapObject = new Map(mapRef.current as HTMLDivElement, mapOptions )
-      setMap(map as any)
-
-      const marker = new Marker({
-        map: mapObject,
-        position: position,
-      })
-      setMarker(marker)
-
-      // const place = new Place({
-        
-      // })
-      // place.
-    }
-    
-    initMap()
-  },[])
-
-  useEffect(()=> {
-    console.log(address)
-    if(lat && lng){
-      changeMapCenter(lat,lng)
-    }else if(map && address){
-      getGeocode({ address: address }).then((results) => {
-        const coordinates = getLatLng(results[0]);
-        changeMapCenter(coordinates.lat, coordinates.lng)
-        console.log("📍 Coordinates: ",  coordinates.lat, coordinates.lng );
-      });
-    }
-    
-  },[address])
-
-
-  
+  // useEffect(() => {
+  //   (async () => {
+  //     const getCoord = (address: string): Promise<any> => {
+  //       const url = `https://rsapi.goong.io/geocode?address=${encodeURIComponent(
+  //         address
+  //       )}&api_key=${process.env.NEXT_PUBLIC_MAPBOX_API_TOKEN}`;
+  //       return axiosClient.get(url);
+  //     };
+  //     try {
+  //       const coord = await getCoord(address);
+  //       console.log('coord', address);
+  //       const position = {
+  //         address: coord.results[0].formatted_address,
+  //         placeId: coord.results[0].place_id,
+  //         longitude: coord.results[0].geometry.location.lng,
+  //         latitude: coord.results[0].geometry.location.lng,
+  //       };
+  //       setCurrentAddress(position);
+  //       setMarkerAddress(position);
+  //     } catch (error) {}
+  //   })();
+  // }, [address]);
 
   return (
-    <div style={{height: '600px'}} ref={mapRef}></div>
-  )
-};
+    <div className="text-black relative">
+      {/* <ReactMapGL
+        {...currentAddress}
+        mapLib={import('mapbox-gl')}
+        mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_TOKEN}
+        initialViewState={{
+          longitude: -100,
+          latitude: 40,
+          zoom: 17
+        }}
+        onMove={evt => setCurrentAddress(evt.viewState)}
+        style={{width: '100%', height: '600px'}}
+        // mapStyle="mapbox://styles/mapbox/satellite-streets-v12"
+        mapStyle="mapbox://styles/mapbox/streets-v12"
 
-Map.defaultProps = {
-  
-};
-
-export default Map;
+      >
+        <GeolocateControl />
+        {markerAddress && 
+        <Marker longitude={markerAddress.longitude || 0} latitude={markerAddress.latitude || 0} anchor="bottom" >
+          <FontAwesomeIcon icon={faLocationDot} style={{"--fa-primary-color": "#ff0000", "--fa-primary-opacity": "0.4", "--fa-secondary-color": "#ff0000", "--fa-secondary-opacity": "1",} as any} />
+        </Marker>
+        }
+        
+      </ReactMapGL> */}
+      <iframe
+        width="100%"
+        height="600"
+        loading="lazy"
+        
+        src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_MAPS_API_KEY}
+        &q=${address}`}
+      ></iframe>
+    </div>
+  );
+}

@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 export const GetUtility = (utility: string, utilities: any) => {
   for (let u of utilities) {
     if (utility == u?.id) return u;
@@ -94,3 +96,32 @@ export const isSubset = (obj1: any, obj2: any) => {
 export const formatNumber = (number: number) => {
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' VNĐ';
 };
+
+export const formatGoogleAddress = (addressObject: {province?: string;district: string;ward: string;street: string}) => {
+  // Tạo một mảng chứa các phần của địa chỉ
+  const addressParts = [];
+  // Thêm phần tỉnh/thành phố nếu có
+  if (addressObject.street) {
+    addressParts.push(addressObject.street);
+  }
+
+  // Thêm phần quận/huyện nếu có
+  if (addressObject.ward) {
+    addressParts.push(addressObject.ward);
+  }
+
+  // Thêm phần phường/xã nếu có
+  if (addressObject.district) {
+    addressParts.push(addressObject.district);
+  }
+
+  // Thêm phần đường/địa chỉ cụ thể nếu có
+  if (addressObject.province) {
+    addressParts.push(addressObject.province);
+  }
+
+  // Kết hợp các phần thành một chuỗi bằng dấu phân cách ", "
+  const formattedAddress = addressParts.join(', ');
+
+  return formattedAddress;
+}
