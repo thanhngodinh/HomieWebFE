@@ -1,5 +1,6 @@
 import { extend } from 'lodash';
 import { PageFilter } from './common';
+import { PostRateInfo } from './rate';
 
 export type Hostel = {
   id: string;
@@ -29,6 +30,7 @@ export type Hostel = {
   updatedBy?: string;
   author?: string;
   authorAvatar?: string;
+  rateInfo: PostRateInfo;
 };
 
 export type HostelCreate = {
@@ -51,8 +53,7 @@ export type HostelCreate = {
   imageUrl: string[];
   utilities: string[];
   longitude?: number;
-  latitude?:number;
-
+  latitude?: number;
 };
 
 export type Utilities = {
@@ -73,4 +74,14 @@ export interface HostelFilter extends PageFilter {
   depositFrom?: number;
   depositTo?: number;
   capacity?: number;
+}
+
+export interface Compare {
+  post1: string;
+  post2: string;
+}
+
+export interface CompareRes {
+  post1: Hostel;
+  post2: Hostel;
 }

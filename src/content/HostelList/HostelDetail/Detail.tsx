@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Detail.module.scss';
 import Carousel from 'react-material-ui-carousel';
-import { Carousel as Carousel2 } from 'antd';
+import { Carousel as Carousel2, Rate as AntdRate } from 'antd';
 import React from 'react';
 import SuggestItemBasic from '../../../components/SuggestItemBasic';
 import Link from 'next/link';
@@ -12,6 +12,7 @@ import { AppDispatch } from '../../../app/store';
 import {
   getHostelById,
   getHostelSuggest,
+  ratePost,
   selectHostels,
 } from '../../../redux/hostel/slice';
 import {
@@ -21,9 +22,15 @@ import {
 import { useRouter } from 'next/router';
 // import { useParams } from 'next/navigation';
 import { GenAddress, GenCurrecy, GetUtility } from '../../../utils/func';
+import { Input } from 'antd';
+import Review from '../../../components/Review';
+import { Rate } from '../../../models/rate';
+
 const cx = classNames.bind(styles);
 
 interface HostelDetailProps {}
+
+const { TextArea } = Input;
 
 const HostelDetail: FC<HostelDetailProps> = (props) => {
   const router = useRouter();
@@ -43,33 +50,37 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
     }
   }, [dispatch, id]);
 
+  const onRatechange = () => {
+    dispatch(ratePost({ postId: hostel.id as string, star: 2, comment: 'OK' }));
+  };
+
   return (
     <div className="hostel-detail w-4/5 mx-auto">
-      <div className="bg-slate-50 rounded-lg">
-        {hostel?.imageUrl && (
-          <Carousel
-            autoPlay={true}
-            stopAutoPlayOnHover={true}
-            animation={'slide'}
-          >
-            {[
-              ...hostel?.imageUrl?.map((image: string, i: number) => {
-                return (
-                  <img
-                    className="h-96 object-cover mx-auto"
-                    src={image}
-                    key={i}
-                  />
-                );
-              }),
-            ]}
-          </Carousel>
-        )}
-      </div>
-      <div className="my-5 text-lg font-semibold">{hostel?.name}</div>
-      <hr />
-      <div className="h-auto w-full grid grid-cols-3 gap-4 divide-y divide-gray-200">
-        <div className="col-span-2">
+      <div className="grid grid-cols-2 gap-4 mb-4">
+        <div className="bg-slate-50 rounded-lg">
+          {hostel?.imageUrl && (
+            <Carousel
+              autoPlay={true}
+              stopAutoPlayOnHover={true}
+              animation={'slide'}
+            >
+              {[
+                ...hostel?.imageUrl?.map((image: string, i: number) => {
+                  return (
+                    <img
+                      className="h-96 object-cover mx-auto"
+                      src={image}
+                      key={i}
+                    />
+                  );
+                }),
+              ]}
+            </Carousel>
+          )}
+        </div>
+        <div className="px-6 text-black">
+          <div className="text-4xl font-bold mb-4">{hostel?.name}</div>
+
           <div className="my-5">
             <p className="text-xl font-semibold mb-5">Thông tin cơ bản</p>
             <div>
@@ -138,17 +149,127 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
               )}
             </div>
           </div>
-          <hr />
-          {hostel?.description && (
-            <div className="my-5 border-top divide-gray-200">
-              <p className="text-xl font-semibold">Mô tả</p>
-              <p className="text-sm mt-4 whitespace-pre-wrap">
-                {hostel?.description}
-              </p>
-            </div>
-          )}
 
+          {/* rating */}
+          <div className="py-4">
+            <div className="flex flex-row">
+              <div className="flex-1 mr-6">
+                <table className="w-full border-collapse border-spacing-0">
+                  <tbody>
+                    <tr>
+                      <td className="w-[20px] text-[#70757a] text-sm">5</td>
+                      <td className="pl-1">
+                        <div className="h-[8px] rounded bg-[#f1f3f4] overflow-hidden">
+                          <div
+                            style={{
+                              paddingLeft:
+                                (hostel?.rateInfo?.star5 * 100) /
+                                  hostel?.rateInfo?.total +
+                                '%',
+                            }}
+                            className="bg-[#786fa6] border-[#786fa6] border-4 rounded w-0"
+                          ></div>
+                        </div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td className="w-[20px] text-[#70757a] text-sm">4</td>
+                      <td className="pl-1">
+                        <div className="h-[8px] rounded bg-[#f1f3f4] overflow-hidden">
+                          <div
+                            style={{
+                              paddingLeft:
+                                hostel?.rateInfo?.star4 /
+                                  hostel?.rateInfo?.total +
+                                '%',
+                            }}
+                            className="bg-[#786fa6] border-[#786fa6] border-4 rounded w-0"
+                          ></div>
+                        </div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td className="w-[20px] text-[#70757a] text-sm">3</td>
+                      <td className="pl-1">
+                        <div className="h-[8px] rounded bg-[#f1f3f4] overflow-hidden">
+                          <div
+                            style={{
+                              paddingLeft:
+                                hostel?.rateInfo?.star3 /
+                                  hostel?.rateInfo?.total +
+                                '%',
+                            }}
+                            className="bg-[#786fa6] border-[#786fa6] border-4 rounded w-0"
+                          ></div>
+                        </div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td className="w-[20px] text-[#70757a] text-sm">2</td>
+                      <td className="pl-1">
+                        <div className="h-[8px] rounded bg-[#f1f3f4] overflow-hidden">
+                          <div
+                            style={{
+                              paddingLeft:
+                                hostel?.rateInfo?.star2 /
+                                  hostel?.rateInfo?.total +
+                                '%',
+                            }}
+                            className="bg-[#786fa6] border-[#786fa6] border-4 rounded w-0"
+                          ></div>
+                        </div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td className="w-[20px] text-[#70757a] text-sm">1</td>
+                      <td className="pl-1">
+                        <div className="h-[8px] rounded bg-[#f1f3f4] overflow-hidden">
+                          <div
+                            style={{
+                              paddingLeft:
+                                hostel?.rateInfo?.star1 /
+                                  hostel?.rateInfo?.total +
+                                '%',
+                            }}
+                            className="bg-[#786fa6] border-[#786fa6] border-4 rounded w-0"
+                          ></div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div className="p-0 text-center align-top">
+                <div className="text-6xl bold">{hostel?.rateInfo?.avgRate}</div>
+                <div className="text-[#70757a] text-xs">
+                  {hostel?.rateInfo?.total +
+                    (hostel?.rateInfo?.total > 1 ? ' reviews' : ' review')}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr />
+      <div className="h-auto w-full grid grid-cols-3 gap-4 divide-y divide-gray-200">
+        <div className="col-span-2">
+          <div className="my-5">
+            {hostel?.description && (
+              <div className="my-5 border-top divide-gray-200">
+                <p className="text-xl font-semibold">Mô tả</p>
+                <p className="text-sm mt-4 whitespace-pre-wrap">
+                  {hostel?.description}
+                </p>
+              </div>
+            )}
+          </div>
           <hr />
+
           <div className="my-5 border-top divide-gray-200">
             <p className="text-xl font-semibold">Các tiện ích khác</p>
 
@@ -171,7 +292,7 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
           <hr />
         </div>
         {/* Author card */}
-        <div className="grid grid-rows-6 w-full h-2/5 border border-solid border-gray-200 content-center py-2">
+        <div className="grid grid-rows-6 w-full h-3/5 border border-solid border-gray-200 content-center py-2">
           <img
             height={64}
             width={64}
@@ -211,6 +332,38 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
           </div>
         </div>
       </div>
+
+      {/* rating form  */}
+      <div className="p-4  border-t border-solid border-[#70757a] grid grid-cols-2 gap-4">
+        <form action="">
+          <div className="text-2xl font-bold mb-4 text-center">
+            Nói với mọi người về đánh giá của bạn
+          </div>
+          <div className="text-center">
+            <AntdRate style={{ fontSize: 40 }} />
+          </div>
+          <div className="py-4">
+            <TextArea rows={8} />
+          </div>
+          <div className="text-center">
+            <button
+              type="button"
+              className="button button__fill button__fill-large text__normal"
+              onClick={onRatechange}
+            >
+              Đăng
+            </button>
+          </div>
+        </form>
+        <div className="p-6 ">
+          {hostel?.rateInfo?.rateList?.map((r: Rate) => {
+            return <Review rate={r} />;
+          })}
+        </div>
+      </div>
+
+      {/* reviews */}
+
       {/* Suggest */}
       {listSuggest && (
         <div className="mt-10">

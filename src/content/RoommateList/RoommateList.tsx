@@ -18,7 +18,7 @@ const RoommateList: FC<RoommateListProps> = () => {
 
   return (
     <div className="suggest-room mt-20 w-4/5 mx-auto rounded">
-      <div className="grid grid-rows-3 gap-4">
+      <div className="mt-6 relative">
         {roommates?.map((item: any, i: number) => {
           return (
             <RoommateItem

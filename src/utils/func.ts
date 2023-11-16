@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 export const GetUtility = (utility: string, utilities: any) => {
   for (let u of utilities) {
@@ -8,10 +8,10 @@ export const GetUtility = (utility: string, utilities: any) => {
 };
 
 export const GenAddress = (
-  street: string,
-  ward: string,
-  district: string,
-  province: string
+  street?: string,
+  ward?: string,
+  district?: string,
+  province?: string
 ) => {
   return `${street ? street + ', ' : ''}${ward ? ward + ', ' : ''}${
     district ? district + ', ' : ''
@@ -23,7 +23,7 @@ export const GenCurrecy = (cost: number | undefined) => {
 };
 
 export const objectToQueryParams = (obj: any) => {
-  if(!obj) return ""
+  if (!obj) return '';
   const queryParams = [];
   for (const key in obj) {
     if (obj.hasOwnProperty(key)) {
@@ -97,7 +97,12 @@ export const formatNumber = (number: number) => {
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' VNĐ';
 };
 
-export const formatGoogleAddress = (addressObject: {province?: string;district: string;ward: string;street: string}) => {
+export const formatGoogleAddress = (addressObject: {
+  province?: string;
+  district: string;
+  ward: string;
+  street: string;
+}) => {
   // Tạo một mảng chứa các phần của địa chỉ
   const addressParts = [];
   // Thêm phần tỉnh/thành phố nếu có
@@ -124,4 +129,4 @@ export const formatGoogleAddress = (addressObject: {province?: string;district: 
   const formattedAddress = addressParts.join(', ');
 
   return formattedAddress;
-}
+};

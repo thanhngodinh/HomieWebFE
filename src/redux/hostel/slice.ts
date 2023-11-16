@@ -1,11 +1,19 @@
 import { CallBackParam } from './../../models/common';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { Hostel, HostelCreate, HostelFilter } from '../../models/hostel';
+import {
+  Compare,
+  Hostel,
+  HostelCreate,
+  HostelFilter,
+} from '../../models/hostel';
 import { hostelApi } from '../../api/hostelApi';
+import { Rate } from '../../models/rate';
 
 export interface HostelState {
   loading?: boolean;
   list: Hostel[];
+  compareHostel1?: Hostel;
+  compareHostel2?: Hostel;
   listSuggest?: Hostel[];
   totalSuggest?: number;
   total: number;
@@ -76,6 +84,18 @@ export const getHostelById = createAsyncThunk(
   }
 );
 
+export const getCompare = createAsyncThunk(
+  'hostel/getCompare',
+  async (compare: Compare) => {
+    try {
+      const response = await hostelApi.getCompare(compare);
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
 export const createHostel = createAsyncThunk(
   'hostel/createHostel',
   async (hostel: CallBackParam<HostelCreate>) => {
@@ -94,6 +114,18 @@ export const likePost = createAsyncThunk(
   async (postId: string) => {
     try {
       const response = await hostelApi.likePost(postId);
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
+export const ratePost = createAsyncThunk(
+  'hostel/ratePost',
+  async (rate: Rate) => {
+    try {
+      const response = await hostelApi.ratePost(rate);
       return response;
     } catch (error) {
       console.error(error);
@@ -155,6 +187,19 @@ export const hostelSlice = createSlice({
         state.error = true;
         state.loading = false;
       })
+      // ratePost
+      .addCase(ratePost.pending, (state, action) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(ratePost.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+      })
+      .addCase(ratePost.rejected, (state, action) => {
+        state.error = true;
+        state.loading = false;
+      })
       //getHostelById
       .addCase(getHostelById.pending, (state, action) => {
         state.loading = true;
@@ -167,6 +212,21 @@ export const hostelSlice = createSlice({
         state.error = false;
       })
       .addCase(getHostelById.rejected, (state, action) => {
+        state.error = true;
+        state.loading = false;
+      })
+      //getCompare
+      .addCase(getCompare.pending, (state, action) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(getCompare.fulfilled, (state, action) => {
+        state.compareHostel1 = action.payload?.post1 || undefined;
+        state.compareHostel2 = action.payload?.post2 || undefined;
+        state.loading = false;
+        state.error = false;
+      })
+      .addCase(getCompare.rejected, (state, action) => {
         state.error = true;
         state.loading = false;
       })

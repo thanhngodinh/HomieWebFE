@@ -1,9 +1,16 @@
 import { utilitiesAction } from './../redux/utilities/slice';
-import { HostelCreate, HostelFilter, Utilities } from './../models/hostel';
+import {
+  Compare,
+  CompareRes,
+  HostelCreate,
+  HostelFilter,
+  Utilities,
+} from './../models/hostel';
 import { BaseResponse } from '../models';
 import { Hostel } from '../models/hostel';
 import axiosClient from './axiosClient';
 import { objectToQueryParams } from '../utils/func';
+import { Rate } from '../models/rate';
 
 export const hostelApi = {
   get(): Promise<BaseResponse<Hostel[]>> {
@@ -15,8 +22,8 @@ export const hostelApi = {
     return axiosClient.get(url);
   },
   searchGet(query?: HostelFilter): Promise<BaseResponse<Hostel[]>> {
-    const queryParams = objectToQueryParams(query)
-    const queryString  =  queryParams ? `/search?${queryParams}` : ""
+    const queryParams = objectToQueryParams(query);
+    const queryString = queryParams ? `/search?${queryParams}` : '';
     const url = `/posts${queryString}`;
     return axiosClient.get(url);
   },
@@ -32,6 +39,10 @@ export const hostelApi = {
     const url = `/posts/${id}`;
     return axiosClient.get(url);
   },
+  getCompare(compare: Compare): Promise<CompareRes> {
+    const url = `/posts/compare/${compare.post1}/${compare.post2}`;
+    return axiosClient.get(url);
+  },
   post(params: HostelCreate): Promise<BaseResponse<Hostel>> {
     const url = '/posts';
     return axiosClient.post(url, params);
@@ -41,8 +52,12 @@ export const hostelApi = {
     return axiosClient.put(url);
   },
   likePost(postId: string): Promise<BaseResponse<string>> {
-    const url = `hostels/like/${postId}`;
+    const url = `posts/like/${postId}`;
     return axiosClient.post(url);
+  },
+  ratePost(params: Rate): Promise<BaseResponse<string>> {
+    const url = `posts/rates`;
+    return axiosClient.post(url, params);
   },
 };
 
