@@ -40,10 +40,11 @@ import SearchMultiple from '../../components/SearchMultiple';
 import type { SliderMarks } from 'antd/es/slider';
 import { formatNumber } from '../../utils/func';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouseUser } from '@fortawesome/free-solid-svg-icons';
+import { faBookAtlas, faHouseUser, faMapLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { District, Province, Ward } from '../../models';
 import { getUtilitiess, selectUtilitiess } from '../../redux/utilities/slice';
 import MapBox from '../../components/MapBox';
+import { Button } from 'antd';
 
 const HostelSearchPage: NextPage & { Layout?: FC } = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -64,6 +65,8 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
   const [ward, setWard] = useState<
     { value: string; label: string; code: number }[]
   >([]);
+
+  const [showMap, setShowMap] = useState<boolean>(false)
 
   // const [codeProvince,setCodeProvince] = useState(1)
 
@@ -93,8 +96,8 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
         const districtMap =
           data && data.districts
             ? data.districts.map((d) => {
-                return { label: d.name, value: d.name, code: d.code };
-              })
+              return { label: d.name, value: d.name, code: d.code };
+            })
             : [];
         setDistrict(districtMap);
         // setValue('district', data?.districts[0]?.name);
@@ -108,8 +111,8 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
         const wardMap =
           data && data.wards
             ? data.wards.map((d) => {
-                return { label: d.name, value: d.name, code: d.code };
-              })
+              return { label: d.name, value: d.name, code: d.code };
+            })
             : [];
         setWard(wardMap);
       });
@@ -228,13 +231,29 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
               },
             ]}
             actionSearch={postHostelsWithQuerryParams}
+            footerSearch={
+              <Button
+                htmlType="button"
+                className="buttonIcon buttonIcon__border"
+                onClick={() => setShowMap(!showMap)}
+              >
+                {!showMap ? (
+                  <FontAwesomeIcon icon={faBookAtlas}  size="xs"/>
+                ) : (
+                  <FontAwesomeIcon icon={faMapLocationDot}  size="xs"/>                
+                )}
+              </Button>
+            }
           ></SearchMultiple>
         </div>
       </header>
       {/* Bắt đầu Map */}
-      <div className="mt-8 w-4/5 mx-auto">
-        <MapBox markers={list && Array.isArray(list) ? list.map((item)=> {return {latitude: item.latitude,longitude: item.longitude}}): []}/>
+
+      <div id="map-box" className="mt-8 w-4/5 mx-auto h-[400px]" style={!showMap ? {display: 'none'}: {display: 'block'}}>
+        <MapBox markers={list && Array.isArray(list) ? list.map((item) => { return { latitude: item.latitude, longitude: item.longitude } }) : []} />
       </div>
+      
+      
       {/* Kết thúc Map */}
       <SearchResults total={Array.isArray(list) ? list.length : 0}>
         <HostelList hostels={list} />

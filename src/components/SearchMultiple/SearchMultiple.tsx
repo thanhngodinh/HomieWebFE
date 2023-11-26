@@ -64,6 +64,7 @@ interface SearchMultipleProps {
   navigateTo?: string;
   options?: SearchOptions[];
   actionSearch?: any;
+  footerSearch?: React.ReactNode
 }
 
 const { CheckableTag } = Tag;
@@ -72,6 +73,7 @@ const SearchMultiple: FC<SearchMultipleProps> = ({
   options,
   navigateTo,
   actionSearch,
+  footerSearch,
 }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch<AppDispatch>();
@@ -381,6 +383,7 @@ const SearchMultiple: FC<SearchMultipleProps> = ({
         <Button htmlType="submit" className="button button__fill">
           Tìm kiếm
         </Button>
+        {footerSearch}
       </Space>
       {/* <ArrowUpOutlined /> */}
     </Form>
