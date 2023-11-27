@@ -1,3 +1,25 @@
 .wrapper {
     
 }
+
+.button{
+    width: auto;
+    min-width: 125px;
+    padding: 0.25rem 0.35rem;
+    height: auto;
+   
+}
+
+.button__fill{
+    border: none;
+    outline: none;
+    border-radius: 0.5rem;
+    background-color: #786fa6;
+    color: white;
+
+}
+
+.button__fill-large{
+    min-width: 300px;
+    padding: 0.5rem 1rem;
+}

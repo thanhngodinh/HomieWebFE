@@ -15,32 +15,29 @@
     font-size: 1rem;
 
     h3 {
-        color: #484848;
         font-size: 2rem;
         font-weight: 600;
         margin-bottom: 20px;
     }
 
-    label {
-        color: #484848;
-    }
-
     input {
         width: 100%;
-        padding: 8px 12px;
-        margin: 12px 0 16px;
+        padding: 4px 12px;
         border: 1px solid #e3e3e3;
-        border-radius: 2px;
+        border-radius: 4px;
     }
 }
 
-.register-btn {
-    color: #fff;
+.button__register {
+    padding: 0.5rem 1rem;
+    border: none;
+    outline: none;
+    border-radius: 0.5rem;
+    color: white;
     background-color: #786fa6;
     width: 100%;
-    padding: 8px 0;
-    border-radius: 4px;
-    margin-top: 12px;
+    height: 40px;
+    margin: 12px 0;
     font-weight: 600;
 }
 

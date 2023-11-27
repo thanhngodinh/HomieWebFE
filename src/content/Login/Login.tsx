@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Account } from '../../models/account';
+import { Login, LoginRes } from '../../models/auth';
 import User from '../../models/user';
 import classNames from 'classnames/bind';
 import styles from './Login.module.scss';
@@ -13,6 +13,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../app/store';
 import { loginAccount, selectAuths } from '../../redux/auth/slice';
 import { useRouter } from 'next/router';
+import { FormItem } from 'react-hook-form-antd';
+import { Form, Input } from 'antd';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { schema } from './validate';
 
 const cx = classNames.bind(styles);
 
@@ -23,18 +27,17 @@ type FormValues = {
 
 const LoginPage: React.FC = () => {
   const router = useRouter();
+  const [form] = Form.useForm();
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Login>({
+    resolver: yupResolver(schema),
+  });
 
   const dispatch = useDispatch<AppDispatch>();
-  const { register, handleSubmit } = useForm<FormValues>();
-
-  const onSubmit = handleSubmit((data) => {
-    dispatch(
-      loginAccount({
-        data: { ...data },
-        callback: () => router.push('/'),
-      })
-    );
-  });
 
   return (
     <div className={cx('wrapper')}>
@@ -43,18 +46,41 @@ const LoginPage: React.FC = () => {
       </div>
       <div className={cx('right-side')}>
         <h3>Đăng nhập</h3>
-        <form onSubmit={onSubmit}>
-          <label htmlFor="username">Email hoặc số điện thoại</label>
-          <input
-            type="text"
-            placeholder="Email hoặc số điện thoại"
-            {...register('username')}
-          />
-          <label htmlFor="password">Mật khẩu</label>
-          <input type="text" placeholder="Mật khẩu" {...register('password')} />
+        <Form
+          form={form}
+          name="validateOnly"
+          layout="vertical"
+          onFinish={handleSubmit((data) => {
+            dispatch(
+              loginAccount({
+                data: { ...data },
+                callback: (res: LoginRes) => {
+                  console.log(res);
+                  if (res.isResetPass) {
+                    router.push('/update-password');
+                  } else {
+                    router.push('/');
+                  }
+                },
+              })
+            );
+          })}
+        >
+          <FormItem
+            name="username"
+            label="Username hoặc email"
+            control={control}
+            required
+          >
+            <Input />
+          </FormItem>
+          <FormItem name="password" label="Mật khẩu" control={control} required>
+            <Input.Password />
+          </FormItem>
 
           <button className={cx('login-btn')}>Đăng nhập</button>
-        </form>
+        </Form>
+
         <div className="flex w-full text-sm">
           <div className="flex w-full flex-1">
             <input type="checkbox" className="w-4 w-1/6 mr-1" />
@@ -64,7 +90,8 @@ const LoginPage: React.FC = () => {
             Quên mật khẩu?
           </span>
         </div>
-        <div className={cx('other-login')}>
+
+        {/* <div className={cx('other-login')}>
           <p>
             <span>Hoặc đăng nhập với</span>
           </p>
@@ -90,7 +117,8 @@ const LoginPage: React.FC = () => {
             </div>
             <span>Tiếp tục với Facebook</span>
           </button>
-        </div>
+        </div> */}
+
         <div className={cx('footer')}>
           <span>Chưa có tài khoản? </span>
           <Link href="/register">

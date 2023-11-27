@@ -20,8 +20,6 @@ const MyPost: FC<MyPostProps> = () => {
     dispatch(getMyPosts());
   }, [dispatch]);
 
-  console.log(posts);
-
   return (
     <>
       <SubHeader

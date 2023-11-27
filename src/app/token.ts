@@ -1,7 +1,7 @@
 export const getToken = () => {
-  return localStorage.getItem('token') || undefined;
+  return sessionStorage.getItem('token') || undefined;
 };
 
 export const setToken = (token: string) => {
-  return localStorage?.setItem('token', token);
+  return sessionStorage?.setItem('token', token);
 };

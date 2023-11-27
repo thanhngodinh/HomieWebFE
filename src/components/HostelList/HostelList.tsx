@@ -14,7 +14,7 @@ const HostelList: FC<HostelListProps> = ({ title, hostels }) => {
   const [compare, setCompare] = useState(['', '']);
   const [open, setOpen] = useState(false);
   useEffect(() => {
-    let value = localStorage.getItem('token') || '';
+    let value = sessionStorage.getItem('token') || '';
     setToken(value);
   }, []);
 

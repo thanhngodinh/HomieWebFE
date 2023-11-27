@@ -16,7 +16,7 @@ interface MyPostProps {}
 const LikedPost: FC<MyPostProps> = () => {
   const [token, setToken] = useState('');
   useEffect(() => {
-    let value = localStorage.getItem('token') || '';
+    let value = sessionStorage.getItem('token') || '';
     setToken(value);
   }, []);
 

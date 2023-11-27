@@ -20,12 +20,12 @@ const myApi = {
 
   updatePassword(data?: ResetUser): Promise<BaseResponse<User>> {
     const url = 'my/password';
-    return axiosClient.put(url, { ...data });
+    return axiosClient.patch(url, { ...data });
   },
 
   updateMyProfile(profile: User): Promise<BaseResponse<User>> {
     const url = 'my/profile';
-    return axiosClient.put(url, profile);
+    return axiosClient.patch(url, profile);
   },
 };
 

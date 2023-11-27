@@ -9,7 +9,7 @@ const cx = classNames.bind(styles);
 const Header: FC = () => {
   const [token, setToken] = useState('');
   useEffect(() => {
-    let value = localStorage.getItem('token') || '';
+    let value = sessionStorage.getItem('token') || '';
     setToken(value);
   }, []);
   return (
@@ -74,7 +74,7 @@ const Header: FC = () => {
                 <li className="flex">
                   <a href="/">
                     <span
-                      onClick={() => localStorage?.setItem('token', '')}
+                      onClick={() => sessionStorage?.setItem('token', '')}
                       className="block py-2 pl-3 pr-4 text-purple font-medium light text-base hover:underline cursor-pointer"
                     >
                       Logout

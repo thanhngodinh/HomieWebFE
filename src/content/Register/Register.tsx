@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { login, usersSelector } from '../../features/account';
-import { Account } from '../../models/account';
+import { Login, Register } from '../../models/auth';
 import User from '../../models/user';
 import classNames from 'classnames/bind';
 import styles from './Register.module.scss';
@@ -11,6 +9,14 @@ import bg from '../../assets/img/bg-login.png';
 import google from '../../assets/img/icons8-google-48.png';
 import facebook from '../../assets/img/icons8-facebook-48.png';
 import Image from 'next/image';
+import { Button, Form, Input } from 'antd';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { schema } from './validate';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../app/store';
+import { registerAccount } from '../../redux/auth/slice';
+import { FormItem } from 'react-hook-form-antd';
+import { useRouter } from 'next/router';
 
 const cx = classNames.bind(styles);
 
@@ -20,78 +26,90 @@ type FormValues = {
 };
 
 const RegisterPage: React.FC = () => {
-  // const dispatch = useAppDispatch();
-  // const users: User[] = useAppSelector(usersSelector) || [];
+  const router = useRouter();
+  const [form] = Form.useForm();
 
-  // const { register, handleSubmit } = useForm<FormValues>();
+  const dispatch = useDispatch<AppDispatch>();
 
-  // const onSubmit = handleSubmit((data) => {
-  //   const acc: Account = { ...data };
-  //   dispatch(login(acc));
-  // });
+  const {
+    control,
+    reset,
+    setValue,
+    getValues,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Register>({
+    resolver: yupResolver(schema),
+  });
 
   return (
     <div className={cx('wrapper')}>
       <Image src={bg} alt="left-side-img" width="300px" height="100vh"></Image>
-      <div className={cx('right-side')}>
-        <h3>Tạo tên riêng cho bạn</h3>
-        <div>
-          <label htmlFor="email">Email hoặc số điện thoại</label>
-          <input
-            type="text"
-            name="email"
-            placeholder="Email hoặc số điện thoại"
-          />
-          <label htmlFor="password">Mật khẩu</label>
-          <input type="text" name="password" placeholder="Mật khẩu" />
-          <div className={cx('name')}>
-            <div className={cx('lastname')}>
-              <label htmlFor="lastname">Họ</label>
-              <input type="text" name="lastname" placeholder="Họ" />
-            </div>
-            <div className={cx('firstname')}>
-              <label htmlFor="firstname">Tên</label>
-              <input type="text" name="firstname" placeholder="Tên" />
-            </div>
+      <Form
+        form={form}
+        name="validateOnly"
+        layout="vertical"
+        onFinish={handleSubmit((data) => {
+          dispatch(
+            registerAccount({
+              data: { ...data },
+              callback: () => router.push('/login'),
+            })
+          );
+        })}
+      >
+        <div className={cx('right-side')}>
+          <h3>Tạo tài khoản cho bạn</h3>
+          <FormItem name="username" label="Email" control={control} required>
+            <Input />
+          </FormItem>
+          <FormItem name="phone" label="Số điện thoại" control={control}>
+            <Input />
+          </FormItem>
+          <FormItem name="name" label="Họ tên" control={control}>
+            <Input />
+          </FormItem>
+
+          <Button htmlType="submit" className={cx('button__register')}>
+            Đăng ký
+          </Button>
+
+          {/* <div className={cx('other-login')}>
+            <p>
+              <span>Hoặc đăng nhập với</span>
+            </p>
+            <button className="relative text-center">
+              <div className="absolute left-2">
+                <Image
+                  src={google}
+                  alt="google-icon"
+                  width="20px"
+                  height="20px"
+                />
+              </div>
+              <span>Tiếp tục với Google</span>
+            </button>
+            <button className="relative text-center">
+              <div className="absolute left-2">
+                <Image
+                  src={facebook}
+                  alt="facebook-icon"
+                  width="20px"
+                  height="20px"
+                />
+              </div>
+              <span>Tiếp tục với Facebook</span>
+            </button>
+          </div> */}
+
+          <div className={cx('footer')}>
+            <span>Đã có tài khoản? </span>
+            <Link href="/login">
+              <button className={cx('login-btn')}>Đăng nhập</button>
+            </Link>
           </div>
-          <label htmlFor="address">Địa chỉ</label>
-          <input type="text" name="address" placeholder="Địa chỉ" />
         </div>
-        <button className={cx('register-btn')}>Đăng ký</button>
-        <div className={cx('other-login')}>
-          <p>
-            <span>Hoặc đăng nhập với</span>
-          </p>
-          <button className="relative text-center">
-            <div className="absolute left-2">
-              <Image
-                src={google}
-                alt="google-icon"
-                width="20px"
-                height="20px"
-              />
-            </div>
-            <span>Tiếp tục với Google</span>
-          </button>
-          <button className="relative text-center">
-            <div className="absolute left-2">
-              <Image
-                src={facebook}
-                alt="facebook-icon"
-                width="20px"
-                height="20px"
-              />
-            </div>
-            <span>Tiếp tục với Facebook</span>
-          </button>
-        </div>
-        <div className={cx('footer')}>
-          <span>Đã có tài khoản? </span>
-          <Link href="/login">
-            <button className={cx('login-btn')}>Đăng nhập</button>
-          </Link>
-        </div>
-      </div>
+      </Form>
     </div>
   );
 };

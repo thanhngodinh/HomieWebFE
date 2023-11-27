@@ -25,6 +25,7 @@ import { GenAddress, GenCurrecy, GetUtility } from '../../../utils/func';
 import { Input } from 'antd';
 import Review from '../../../components/Review';
 import { Rate } from '../../../models/rate';
+import { flatMap } from 'lodash';
 
 const cx = classNames.bind(styles);
 
@@ -37,7 +38,8 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
   const id = router.query.id as string;
 
   const [isShowPhone, setIsShowPhone] = useState(false);
-
+  const [comment, setComment] = useState('');
+  const [star, setStar] = useState<number>();
   const dispatch = useDispatch<AppDispatch>();
   const { hostel, listSuggest, loading, error } = useSelector(selectHostels);
   const { listUtilities } = useSelector(selectUtilitiess);
@@ -51,13 +53,21 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
   }, [dispatch, id]);
 
   const onRatechange = () => {
-    dispatch(ratePost({ postId: hostel.id as string, star: 2, comment: 'OK' }));
+    if (star) {
+      dispatch(
+        ratePost({ postId: hostel.id as string, star: star, comment: comment })
+      );
+    }
+  };
+
+  const onSubmit = (data: Rate) => {
+    dispatch(ratePost(data));
   };
 
   return (
-    <div className="hostel-detail w-4/5 mx-auto">
+    <div className=" container mx-auto phone:mx-4 phonel:mx-auto sm:mx-auto md:mx-auto">
       <div className="grid grid-cols-2 gap-4 mb-4">
-        <div className="bg-slate-50 rounded-lg">
+        <div className="bg-slate-50 rounded-lg phone:col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-1 ">
           {hostel?.imageUrl && (
             <Carousel
               autoPlay={true}
@@ -78,7 +88,7 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
             </Carousel>
           )}
         </div>
-        <div className="px-6 text-black">
+        <div className="px-6 text-black phone:col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-1">
           <div className="text-4xl font-bold mb-4">{hostel?.name}</div>
 
           <div className="my-5">
@@ -96,7 +106,7 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
             </div>
             <div className="mt-2 grid grid-cols-4">
               {hostel?.capacity && (
-                <div className="mt-2">
+                <div className="mt-2 phone:col-span-2 sm:col-span-1">
                   <p className="text-gray-500 text-sm">Sức chứa</p>
                   <p className="text-sm">{`${hostel?.capacity} người`}</p>
                 </div>
@@ -109,7 +119,7 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
               )}
             </div>
             <div className="mt-2 grid grid-cols-4">
-              <div className="mt-2">
+              <div className="mt-2 phone:col-span-2 sm:col-span-1">
                 <p className="text-gray-500 text-sm">Giá phòng</p>
                 <p className="text-sm">{GenCurrecy(hostel?.cost)}</p>
               </div>
@@ -119,7 +129,7 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
               </div>
             </div>
 
-            <div className="mt-2 grid grid-cols-4">
+            <div className="mt-2 grid grid-cols-4 phone:gap-5 sm:gap-0">
               {hostel?.electricityPrice && (
                 <div>
                   <p className="text-gray-500 text-sm">Tiền điện</p>
@@ -129,13 +139,13 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
                 </div>
               )}
               {hostel?.waterPrice && (
-                <div>
+                <div className="">
                   <p className="text-gray-500 text-sm">Tiền nước</p>
                   <p className="text-sm">{GenCurrecy(hostel?.waterPrice)}</p>
                 </div>
               )}
               {hostel?.parkingPrice && (
-                <div>
+                <div className="">
                   <p className="text-gray-500 text-sm">Tiền xe</p>
                   <p className="text-sm">{GenCurrecy(hostel?.parkingPrice)}</p>
                 </div>
@@ -151,7 +161,7 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
           </div>
 
           {/* rating */}
-          <div className="py-4">
+          <div className="py-4 ">
             <div className="flex flex-row">
               <div className="flex-1 mr-6">
                 <table className="w-full border-collapse border-spacing-0">
@@ -257,12 +267,12 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
 
       <hr />
       <div className="h-auto w-full grid grid-cols-3 gap-4 divide-y divide-gray-200">
-        <div className="col-span-2">
+        <div className="col-span-2  phone:col-span-3 sm:col-span-3 md:col-span-3 lg:col-span-2 ">
           <div className="my-5">
             {hostel?.description && (
               <div className="my-5 border-top divide-gray-200">
                 <p className="text-xl font-semibold">Mô tả</p>
-                <p className="text-sm mt-4 whitespace-pre-wrap">
+                <p className="text-sm mt-4 whitespace-pre-wrap break-all">
                   {hostel?.description}
                 </p>
               </div>
@@ -292,70 +302,96 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
           <hr />
         </div>
         {/* Author card */}
-        <div className="grid grid-rows-6 w-full h-3/5 border border-solid border-gray-200 content-center py-2">
-          <img
-            height={64}
-            width={64}
-            className="rounded-full mx-auto row-span-2"
-            src={hostel?.authorAvatar}
-          />
-          <p className="text-sm text-center row-span-1 m-auto">
-            {'Đăng bởi ' + hostel?.author}
-          </p>
-          <div className="cursor-pointer row-span-1 m-auto">
-            <Link href={'/users/' + hostel?.createdBy}>
-              <p className="text-sm ml-2 text-gray-500 text-center">
-                {'Xem thêm các tin khác từ ' + hostel?.author}
-              </p>
-            </Link>
-          </div>
-          <div className="row-span-2 m-auto">
-            <button
-              type="button"
-              className="button button__fill button__fill-large text__normal"
-              onClick={() => setIsShowPhone(!isShowPhone)}
-            >
-              {isShowPhone
-                ? 'Liên hệ ' + hostel?.phone
-                : 'Bấm để xem số điện thoại'}
-            </button>
-          </div>
-          <div className="row-span-2 m-auto">
-            <Link href="/chat">
+        <div className=" w-full  border border-solid border-gray-200 content-center py-2 flex items-center justify-center phone:col-span-3 sm:col-span-3 md:col-span-3 lg:col-span-1 ">
+          <div className="">
+            <div className="w-full mb-4 ">
+              <img
+                height={64}
+                width={64}
+                className="rounded-full mx-auto "
+                src={hostel?.authorAvatar}
+              />
+            </div>
+            <p className="text-sm text-center mb-2  ">
+              {'Đăng bởi ' + hostel?.author}
+            </p>
+            <div className="cursor-pointer  text-center mb-2">
+              <Link href={'/users/' + hostel?.createdBy}>
+                <p className="text-sm ml-2 text-gray-500 text-center">
+                  {'Xem thêm các tin khác từ ' + hostel?.author}
+                </p>
+              </Link>
+            </div>
+            <div className=" text-center mb-2">
               <button
                 type="button"
-                className="button button__border button__border-large text__normal"
+                className="button button__fill button__fill-large text__normal"
+                onClick={() => setIsShowPhone(!isShowPhone)}
               >
-                Chat với người đăng
+                {isShowPhone
+                  ? 'Liên hệ ' + hostel?.phone
+                  : 'Bấm để xem số điện thoại'}
               </button>
-            </Link>
+            </div>
+            <div className=" m-auto text-center">
+              <Link href="/chat">
+                <button
+                  type="button"
+                  className="button button__border button__border-large text__normal"
+                >
+                  Chat với người đăng
+                </button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
 
       {/* rating form  */}
       <div className="p-4  border-t border-solid border-[#70757a] grid grid-cols-2 gap-4">
-        <form action="">
+        <form
+          action=""
+          className="phone:col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-1"
+        >
           <div className="text-2xl font-bold mb-4 text-center">
             Nói với mọi người về đánh giá của bạn
           </div>
           <div className="text-center">
-            <AntdRate style={{ fontSize: 40 }} />
+            <AntdRate
+              value={star}
+              onChange={(value) => {
+                setStar(value);
+              }}
+              style={{ fontSize: 40 }}
+            />
           </div>
           <div className="py-4">
-            <TextArea rows={8} />
+            <TextArea
+              value={comment}
+              onChange={(e) => {
+                setComment(e.target.value);
+              }}
+              rows={8}
+            />
           </div>
           <div className="text-center">
             <button
+              disabled={star ? false : true}
               type="button"
-              className="button button__fill button__fill-large text__normal"
+              className={cx(
+                'button',
+                'button__fill',
+                'button__fill-large',
+                'text-sm',
+                star ? 'bg-[#786fa6]' : '!bg-[#dddddd] cursor-not-allowed'
+              )}
               onClick={onRatechange}
             >
               Đăng
             </button>
           </div>
         </form>
-        <div className="p-6 ">
+        <div className="p-6 phone:col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-1  ">
           {hostel?.rateInfo?.rateList?.map((r: Rate) => {
             return <Review rate={r} />;
           })}

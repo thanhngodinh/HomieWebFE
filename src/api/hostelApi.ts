@@ -39,7 +39,7 @@ export const hostelApi = {
     const url = `/posts/${id}`;
     return axiosClient.get(url);
   },
-  getCompare(compare: Compare): Promise<CompareRes> {
+  getCompare(compare: Compare): Promise<BaseResponse<CompareRes>> {
     const url = `/posts/compare/${compare.post1}/${compare.post2}`;
     return axiosClient.get(url);
   },
@@ -47,9 +47,9 @@ export const hostelApi = {
     const url = '/posts';
     return axiosClient.post(url, params);
   },
-  put({}): Promise<BaseResponse<Hostel[]>> {
+  patch({}): Promise<BaseResponse<Hostel[]>> {
     const url = '/posts';
-    return axiosClient.put(url);
+    return axiosClient.patch(url);
   },
   likePost(postId: string): Promise<BaseResponse<string>> {
     const url = `posts/like/${postId}`;

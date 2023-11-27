@@ -221,8 +221,8 @@ export const hostelSlice = createSlice({
         state.error = false;
       })
       .addCase(getCompare.fulfilled, (state, action) => {
-        state.compareHostel1 = action.payload?.post1 || undefined;
-        state.compareHostel2 = action.payload?.post2 || undefined;
+        state.compareHostel1 = action.payload?.data?.post1 || undefined;
+        state.compareHostel2 = action.payload?.data?.post2 || undefined;
         state.loading = false;
         state.error = false;
       })
