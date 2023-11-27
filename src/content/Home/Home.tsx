@@ -7,7 +7,7 @@ import SuggestItemBasic, {
   SuggestItemBasicProps,
 } from '../../components/SuggestItemBasic/SuggestItemBasic';
 import { Carousel, Select } from 'antd';
-import { Hostel } from '../../models/hostel';
+import { Post } from '../../models/hostel';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../app/store';
 import {
@@ -37,7 +37,7 @@ const Home: FC<HomeProps> = (props) => {
     { value: string; label: string; code: number }[]
   >([]);
 
-  const [provincevValue , setProvinceValue] = useState("")
+  const [provincevValue, setProvinceValue] = useState('');
 
   const getProvince = () => {
     fetch('https://provinces.open-api.vn/api/p')
@@ -66,8 +66,10 @@ const Home: FC<HomeProps> = (props) => {
       });
   };
 
-  const filterOption = (input: string, option?: { label: string; value: string }) =>
-  (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
+  const filterOption = (
+    input: string,
+    option?: { label: string; value: string }
+  ) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
 
   const filterOptionAutoComplete = (inputValue: string, option: any) => {
     return option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1;
@@ -76,14 +78,13 @@ const Home: FC<HomeProps> = (props) => {
   useEffect(() => {
     dispatch(getHostels());
     dispatch(getHostelSuggest());
-    getProvince()
-    getDistrict(1)
-    
+    getProvince();
+    getDistrict(1);
   }, [dispatch]);
 
-  useEffect(() =>{
-    setProvinceValue(getProvinceByCode(1)?.value || "")
-  },[province])
+  useEffect(() => {
+    setProvinceValue(getProvinceByCode(1)?.value || '');
+  }, [province]);
 
   const onSelectProvince = (valueSelect: string) => {
     const provinceSelected = province.find((p) => p.value === valueSelect);
@@ -93,15 +94,15 @@ const Home: FC<HomeProps> = (props) => {
     }
   };
 
-  console.log(87,district)
+  console.log(87, district);
 
-  const getValueInputSearch = (value: string) =>{
-    console.log(91,value)
-  }
+  const getValueInputSearch = (value: string) => {
+    console.log(91, value);
+  };
 
-  const getProvinceByCode = (code: number ) =>{
-    return province.find((p) => p.code === code)
-  }
+  const getProvinceByCode = (code: number) => {
+    return province.find((p) => p.code === code);
+  };
 
   return (
     <div className="home w-screen">
@@ -109,20 +110,37 @@ const Home: FC<HomeProps> = (props) => {
         <img className="w-full h-full" src={props.bgImg} />
         <div className="absolute top-1/4 w-full text-center flex justify-center">
           <div className="bg-white rounded-full w-3/6	 p-5 light">
-            
             {/* <SearchSingle inputProps={{ className: "text-white light " , bordered: false}} keySearch={"name"}  /> */}
-            <SearchSingle addonBefore={<Select showSearch size="large" className="w-2/6	 border-b text-left"   value={provincevValue} onChange={(value) => setProvinceValue(value)}  options={province} onSelect={onSelectProvince} filterOption={filterOption}  bordered={false}/>} 
-              bordered={false}         
-              inputProps={{className: "w-full text-left", size: "large" ,placeholder: "Tìm..." }}
-              searchWithAutoComplete={{options: district, autoCompleteProps: {
-                filterOption: filterOptionAutoComplete
-              }}}
+            <SearchSingle
+              addonBefore={
+                <Select
+                  showSearch
+                  size="large"
+                  className="w-2/6	 border-b text-left"
+                  value={provincevValue}
+                  onChange={(value) => setProvinceValue(value)}
+                  options={province}
+                  onSelect={onSelectProvince}
+                  filterOption={filterOption}
+                  bordered={false}
+                />
+              }
+              bordered={false}
+              inputProps={{
+                className: 'w-full text-left',
+                size: 'large',
+                placeholder: 'Tìm...',
+              }}
+              searchWithAutoComplete={{
+                options: district,
+                autoCompleteProps: {
+                  filterOption: filterOptionAutoComplete,
+                },
+              }}
               navigateTo="/posts"
-              keySearch={"district"}
-              addMoreValueSearch={{province: provincevValue}}
+              keySearch={'district'}
+              addMoreValueSearch={{ province: provincevValue }}
             />
-
-            
           </div>
         </div>
         <div className="absolute left-40 bottom-1/3 grid-flow-row">

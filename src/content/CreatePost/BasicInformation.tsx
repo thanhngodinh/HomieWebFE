@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import React, { useState } from 'react';
 import { storage } from '../../app/firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { Hostel, HostelCreate, Utilities } from '../../models/hostel';
+import { Post, HostelCreate, Utilities } from '../../models/hostel';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../app/store';
 import { createHostel } from '../../redux/hostel/slice';
@@ -20,11 +20,11 @@ import { Address, Coord } from './CreatePost';
 const cx = classNames.bind(styles);
 
 interface BasicInforProps {
-  coord?: Coord
-  getAddress?: (address: Address) => void
+  coord?: Coord;
+  getAddress?: (address: Address) => void;
 }
 
-const BasicInformation: FC<BasicInforProps> = ({getAddress, coord}) => {
+const BasicInformation: FC<BasicInforProps> = ({ getAddress, coord }) => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   // const { loading, error } = useSelector(createHostel);
@@ -64,14 +64,19 @@ const BasicInformation: FC<BasicInforProps> = ({getAddress, coord}) => {
     },
   });
 
-  const watchAddress = watch(['province','district','ward','street'])
+  const watchAddress = watch(['province', 'district', 'ward', 'street']);
 
   const onSubmit = (data: HostelCreate) => {
-    console.log( coord?.longitude,  coord?.latitude)
+    console.log(coord?.longitude, coord?.latitude);
     handleSelectedFile(imagesFile).then((res) => {
       dispatch(
         createHostel({
-          data: { ...data, imageUrl: res, longitude: coord?.longitude,latitude:  coord?.latitude},
+          data: {
+            ...data,
+            imageUrl: res,
+            longitude: coord?.longitude,
+            latitude: coord?.latitude,
+          },
           callback: () => router.push('/my/post'),
         })
       );
@@ -114,8 +119,13 @@ const BasicInformation: FC<BasicInforProps> = ({getAddress, coord}) => {
   }, []);
 
   useEffect(() => {
-    if(getAddress)
-      getAddress({province: watchAddress[0],district: watchAddress[1], ward: watchAddress[2], street: watchAddress[3]})
+    if (getAddress)
+      getAddress({
+        province: watchAddress[0],
+        district: watchAddress[1],
+        ward: watchAddress[2],
+        street: watchAddress[3],
+      });
   }, [JSON.stringify(watchAddress)]);
 
   const handlePreviewImage = (files: File[]) => {
@@ -363,7 +373,7 @@ const BasicInformation: FC<BasicInforProps> = ({getAddress, coord}) => {
               id="grid-city"
               type="text"
               placeholder="Đường"
-              {...register('street', { required: false})}
+              {...register('street', { required: false })}
             />
           </div>
         </div>
@@ -391,9 +401,7 @@ const BasicInformation: FC<BasicInforProps> = ({getAddress, coord}) => {
               })}
             />
             {errors.area && (
-              <p className="text-red-500 text-xs italic">
-                Hãy điền diện tích
-              </p>
+              <p className="text-red-500 text-xs italic">Hãy điền diện tích</p>
             )}
           </div>
         </div>
@@ -421,9 +429,7 @@ const BasicInformation: FC<BasicInforProps> = ({getAddress, coord}) => {
               })}
             />
             {errors.cost && (
-              <p className="text-red-500 text-xs italic">
-                Hãy điền giá phòng
-              </p>
+              <p className="text-red-500 text-xs italic">Hãy điền giá phòng</p>
             )}
           </div>
         </div>
@@ -450,9 +456,7 @@ const BasicInformation: FC<BasicInforProps> = ({getAddress, coord}) => {
               })}
             />
             {errors.deposit && (
-              <p className="text-red-500 text-xs italic">
-                Hãy điền giá phòng
-              </p>
+              <p className="text-red-500 text-xs italic">Hãy điền giá phòng</p>
             )}
           </div>
         </div>
@@ -587,7 +591,7 @@ const BasicInformation: FC<BasicInforProps> = ({getAddress, coord}) => {
               placeholder="Please select"
               onChange={(value: string[]) => setValue('utilities', value)}
               options={listUtilitiesOpt}
-            // {...register('utilities', { required: false })}
+              // {...register('utilities', { required: false })}
             />
             {/* <input
                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"

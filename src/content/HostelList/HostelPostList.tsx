@@ -2,7 +2,7 @@ import { FC, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './HostelPostList.module.scss';
 import HostelList from '../../components/HostelList';
-import { Hostel } from '../../models/hostel';
+import { Post } from '../../models/hostel';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../app/store';
 import { getHostels, selectHostels } from '../../redux/hostel/slice';

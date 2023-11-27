@@ -1,23 +1,18 @@
 import { CallBackParam } from './../../models/common';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import {
-  Compare,
-  Hostel,
-  HostelCreate,
-  HostelFilter,
-} from '../../models/hostel';
+import { Compare, Post, HostelCreate, HostelFilter } from '../../models/hostel';
 import { hostelApi } from '../../api/hostelApi';
 import { Rate } from '../../models/rate';
 
 export interface HostelState {
   loading?: boolean;
-  list: Hostel[];
-  compareHostel1?: Hostel;
-  compareHostel2?: Hostel;
-  listSuggest?: Hostel[];
+  list: Post[];
+  compareHostel1?: Post;
+  compareHostel2?: Post;
+  listSuggest?: Post[];
   totalSuggest?: number;
   total: number;
-  hostel?: Hostel;
+  hostel?: Post;
   error?: boolean;
 }
 

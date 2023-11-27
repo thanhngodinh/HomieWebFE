@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
   BaseResponse,
   CallBackParam,
-  Hostel,
+  Post,
   ResetUser,
   User,
 } from '../../models';
@@ -14,7 +14,7 @@ export interface UserState {
   profile?: User;
   error?: boolean;
   roommates?: User;
-  posts?: Hostel[];
+  posts?: Post[];
   status?: string;
 }
 

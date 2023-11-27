@@ -1,12 +1,12 @@
 import { FC, MouseEvent, useEffect, useState } from 'react';
 import HostelItem from '../HostelItem';
-import { Hostel } from '../../models/hostel';
+import { Post } from '../../models/hostel';
 import { GenAddress } from '../../utils/func';
 import { Button, Modal } from 'antd';
 
 interface HostelListProps {
   title?: string;
-  hostels: Hostel[];
+  hostels: Post[];
 }
 
 const HostelList: FC<HostelListProps> = ({ title, hostels }) => {

@@ -6,7 +6,7 @@ import SubHeader from '../../../components/SubHeader';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../app/store';
 import { getMyPosts, selectUsers } from '../../../redux/user/slice';
-import { Hostel } from '../../../models';
+import { Post } from '../../../models';
 
 const cx = classNames.bind(styles);
 

@@ -1,6 +1,6 @@
 import { BaseResponse } from './../models/common';
 import axiosClient from './axiosClient';
-import { Hostel, User, ResetUser } from '../models';
+import { Post, User, ResetUser } from '../models';
 
 const myApi = {
   getMyProfile(): Promise<BaseResponse<User>> {
@@ -8,12 +8,12 @@ const myApi = {
     return axiosClient.get(url);
   },
 
-  getMyPost(): Promise<BaseResponse<Hostel[]>> {
+  getMyPost(): Promise<BaseResponse<Post[]>> {
     const url = 'my/posts';
     return axiosClient.get(url);
   },
 
-  getMyLikedPost(): Promise<BaseResponse<Hostel[]>> {
+  getMyLikedPost(): Promise<BaseResponse<Post[]>> {
     const url = 'my/liked-posts';
     return axiosClient.get(url);
   },

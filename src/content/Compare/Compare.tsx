@@ -12,7 +12,7 @@ import {
   getHostelById,
   selectHostels,
 } from '../../redux/hostel/slice';
-import { Hostel } from '../../models';
+import { Post } from '../../models';
 
 const cx = classNames.bind(styles);
 

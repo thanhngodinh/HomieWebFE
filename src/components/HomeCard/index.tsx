@@ -5,13 +5,13 @@ import classNames from 'classnames/bind';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPerson } from '@fortawesome/free-solid-svg-icons';
-import { Hostel } from '../../models';
+import { Post } from '../../models';
 import { GenAddress, GenCurrecy } from '../../utils/func';
 
 const cx = classNames.bind(styles);
 
 type HomeProps = {
-  hostel?: Hostel;
+  hostel?: Post;
 };
 
 const HomeCard = ({ hostel }: HomeProps) => {

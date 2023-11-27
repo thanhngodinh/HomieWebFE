@@ -2,7 +2,7 @@ import { extend } from 'lodash';
 import { PageFilter } from './common';
 import { PostRateInfo } from './rate';
 
-export type Hostel = {
+export type Post = {
   id: string;
   name: string;
   province: string;
@@ -19,6 +19,8 @@ export type Hostel = {
   capacity: number;
   area: number;
   description: string;
+  latitude: string;
+  longitude: string;
   phone?: string;
   isLiked: boolean;
   imageUrl: string[];
@@ -28,7 +30,8 @@ export type Hostel = {
   createdBy?: string;
   updatedAt?: string;
   updatedBy?: string;
-  author?: string;
+  authorId: string;
+  authorName?: string;
   authorAvatar?: string;
   rateInfo: PostRateInfo;
 };
@@ -82,6 +85,6 @@ export interface Compare {
 }
 
 export interface CompareRes {
-  post1: Hostel;
-  post2: Hostel;
+  post1: Post;
+  post2: Post;
 }
