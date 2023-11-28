@@ -14,7 +14,7 @@ export const addDocument = async (collectionName: string, data: any) => {
 
 export const  getDocument = async (collectionName: string, condition?: Condition) =>{
     if(condition && condition.value) {
-        return await getDocs(query(collection(database, collectionName),where(condition.fieldName, condition.operator,condition.value),orderBy('createdAt')))
+        return await getDocs(query(collection(database, collectionName),where(condition.fieldName, condition.operator,condition.value),orderBy('createdAt','desc')))
     }
-    return await getDocs(query(collection(database, collectionName),orderBy('createdAt')))
+    return await getDocs(query(collection(database, collectionName),orderBy('createdAt','desc')))
 }
