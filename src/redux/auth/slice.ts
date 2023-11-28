@@ -2,17 +2,31 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import accountApi from '../../api/accountApi';
 import { Login, Register } from '../../models/auth';
 import { setToken } from '../../app/token';
-import { CallBackParam } from '../../models';
+import { CallBackParam, User } from '../../models';
 
 export interface AuthState {
   loading?: boolean;
   token: string;
+  profile: User;
   error?: boolean;
+}
+
+type Profile = {
+  id: string;
+  username: string;
+  phone: string;
+  email: string;
+  isVerifiedEmail: string;
+  isFindRoommate: boolean;
+  avatar: string;
+  gender: string;
+  name: string;
 }
 
 const initialState: AuthState = {
   loading: false,
   token: '',
+  profile: {} as User
 };
 
 export const loginAccount = createAsyncThunk(
@@ -65,7 +79,9 @@ export const authSlice = createSlice({
         state.error = false;
       })
       .addCase(loginAccount.fulfilled, (state, action) => {
+        console.log(82,action)
         state.token = action.payload?.data?.token || '';
+        state.profile = action.payload?.data?.profile as User || {};
         state.loading = false;
         state.error = false;
       })
@@ -89,9 +105,9 @@ export const authSlice = createSlice({
   },
 });
 
-export const selectAuths = (state: AuthState) => state;
-export const selectLoadingState = (state: AuthState) => state.loading;
-export const selectErrorState = (state: AuthState) => state.error;
+export const selectAuths = (state: any) => state.auth;
+export const selectLoadingState = (state: any) => state.loading;
+export const selectErrorState = (state: any) => state.error;
 
 export const authAction = authSlice.actions;
 

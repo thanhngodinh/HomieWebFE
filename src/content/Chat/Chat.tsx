@@ -5,52 +5,60 @@ import ChatList from './components/chatList/ChatList';
 import ChatContent from './components/chatContent/ChatContent';
 import UserProfile from './components/userProfile/UserProfile';
 import ReconnectingWebSocket from 'reconnecting-websocket';
+import { Condition, getDocument } from '../../firebase/service';
+import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../app/store';
+import { getMyProfile, selectUsers } from '../../redux/user/slice';
+import { useSelector } from 'react-redux';
 
 const cx = classNames.bind(styles);
 
 interface ChatProps {}
 
+export type Room = {
+  keyUserId: string;
+  id: string;
+  name: string;
+  createdAt: any;
+}
+
 const Chat: FC<ChatProps> = () => {
+  const router = useRouter();
+  const roomId = router.query.id as string;
+  const dispatch = useDispatch<AppDispatch>();
   const [data, setData] = useState();
-  // const [ws, setWS] = useState<WebSocket>();
+  const { profile } = useSelector(selectUsers);
+  const [rooms, setRooms] = useState<Room[]>([])
 
-  // useEffect(() => {
-  //   const newWS = new WebSocket(
-  //     'ws://localhost:8080/chat?user_id=d6877823-ea96-425c-9b76-2c1dd9e42e48'
-  //   );
-  //   newWS.onerror = (err) => console.error(err);
-  //   newWS.onopen = () => setWS(newWS);
-  //   newWS.onmessage = (msg) => setData(JSON.parse(msg.data));
-  // }, []);
 
-useEffect(() => {
-  const url = 'ws://localhost:8080/chat?user_id=d6877823-ea96-425c-9b76-2c1dd9e42e48'; // Thay URL bằng URL của máy chủ WebSocket của bạn
-  const ws = new ReconnectingWebSocket(url);
+  useEffect(() => {
+    (async ()  => {
+      if(profile && profile.id){
+        const condition: Condition = {
+          fieldName: 'keyUserId',
+          operator: '==',
+          value: profile.id
+        }
+        const data = await getDocument('rooms',condition)
+        const roomsRes = [] as any
+        data.forEach(doc => roomsRes.push(doc.data()))
+        console.log(roomsRes)
+        setRooms(roomsRes)
+      }
+    })()
+  }, [profile]);
 
-  ws.addEventListener('open', (event) => {
-    console.log('Kết nối WebSocket đã được thiết lập.');
-  });
+  useEffect(() => {
+      dispatch(getMyProfile());
+  }, [dispatch]);
 
-  ws.addEventListener('message', (event) => {
-    const message = JSON.parse(event.data);
-    setData(message);
-    console.log('Nhận tin nhắn từ máy chủ:', message);
-    // Hiển thị tin nhắn trên giao diện của ứng dụng
-  });
-
-  // Xử lý các sự kiện khác
-  ws.send('Dữ liệu của bạn');
-
-  return () => {
-    ws.close(); // Đảm bảo đóng kết nối khi component bị unmount
-  };
-}, []);
 
   console.log(data);
   return (
     <>
       <div className={cx('wrapper')}>
-        <ChatList />
+        <ChatList rooms={rooms}/>
         <ChatContent data={data} />
         <UserProfile />
       </div>

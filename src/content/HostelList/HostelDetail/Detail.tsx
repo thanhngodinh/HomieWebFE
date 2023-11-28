@@ -26,6 +26,9 @@ import { Input } from 'antd';
 import Review from '../../../components/Review';
 import { Rate } from '../../../models/rate';
 import { flatMap } from 'lodash';
+import { Condition, addDocument, getDocument } from '../../../firebase/service';
+import { selectAuths } from '../../../redux/auth/slice';
+import { getMyProfile, selectUsers } from '../../../redux/user/slice';
 
 const cx = classNames.bind(styles);
 
@@ -42,13 +45,17 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
   const [star, setStar] = useState<number>();
   const dispatch = useDispatch<AppDispatch>();
   const { hostel, listSuggest, loading, error } = useSelector(selectHostels);
+  const { profile } = useSelector(selectUsers);
+  
   const { listUtilities } = useSelector(selectUtilitiess);
 
+  // console.log(51,auths)
   useEffect(() => {
     if (id) {
       dispatch(getHostelById(id));
       dispatch(getUtilitiess());
       dispatch(getHostelSuggest());
+      dispatch(getMyProfile());
     }
   }, [dispatch, id]);
 
@@ -63,6 +70,33 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
   const onSubmit = (data: Rate) => {
     dispatch(ratePost(data));
   };
+  console.log(73,profile)
+
+  const handleChatWithAuthor = async (author: {id: string, name: string}) =>{
+    if(!profile) return;
+    try{
+      const condition:Condition = {
+        fieldName: 'id',
+        operator: '==',
+        value: author.id
+      }
+      console.log(75,author)
+      const roomIsExist = await getDocument('rooms',condition)
+      if(roomIsExist.empty){
+        const docRef = await addDocument('rooms', {keyUserId: profile.id, id: author.id,name: author.name})
+        if(docRef)
+        router.push(`/chat/${docRef.id}`)
+      }else {
+        roomIsExist.forEach(doc => {
+          router.push(`/chat/${doc.id}`)
+
+        })
+      }
+    }
+    catch (err) {
+      console.error(err)
+    }   
+  }
 
   return (
     <div className=" container mx-auto phone:mx-4 phonel:mx-auto sm:mx-auto md:mx-auto">
@@ -313,12 +347,12 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
               />
             </div>
             <p className="text-sm text-center mb-2  ">
-              {'Đăng bởi ' + hostel?.author}
+              {'Đăng bởi ' + hostel?.authorName}
             </p>
             <div className="cursor-pointer  text-center mb-2">
               <Link href={'/users/' + hostel?.createdBy}>
                 <p className="text-sm ml-2 text-gray-500 text-center">
-                  {'Xem thêm các tin khác từ ' + hostel?.author}
+                  {'Xem thêm các tin khác từ ' + hostel?.authorName}
                 </p>
               </Link>
             </div>
@@ -334,14 +368,13 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
               </button>
             </div>
             <div className=" m-auto text-center">
-              <Link href="/chat">
-                <button
-                  type="button"
-                  className="button button__border button__border-large text__normal"
-                >
-                  Chat với người đăng
-                </button>
-              </Link>
+              <button
+                type="button"
+                className="button button__border button__border-large text__normal"
+                onClick={(e) => handleChatWithAuthor({id: hostel.authorId, name: hostel.authorName})}
+              >
+                Chat với người đăng
+              </button>
             </div>
           </div>
         </div>

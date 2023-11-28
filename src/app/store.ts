@@ -14,7 +14,7 @@ export const storeRedux = configureStore({
   reducer: {
     hostel: hostelSlice.reducer,
     user: userSlice.reducer,
-    login: authSlice.reducer,
+    auth: authSlice.reducer,
     utilities: utilitiesSlice.reducer,
     search: searchSlice.reducer,
   },

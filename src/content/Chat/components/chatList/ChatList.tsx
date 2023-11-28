@@ -1,15 +1,18 @@
-import React, { Component } from 'react';
+import React, { Component, FC } from 'react';
 import styles from './chatList.module.scss';
 import ChatListItems from './ChatListItems';
 import classNames from 'classnames/bind';
+import { Room } from '../../Chat';
 
 const cx = classNames.bind(styles);
-
-const ChatList = () => {
+interface  ChatListProps  {
+  rooms: Room[]
+}
+const image = 'https://cmsapi-frontend.naruto-official.com/site/api/naruto/Image/get?path=/naruto/import/images/naruto02/501%EF%BD%9E600/542/C004.jpg'
+const ChatList: FC<ChatListProps> = ({rooms}) =>{
   const allChatUsers = [
     {
-      image:
-        'https://cmsapi-frontend.naruto-official.com/site/api/naruto/Image/get?path=/naruto/import/images/naruto02/501%EF%BD%9E600/542/C004.jpg',
+      
       id: 1,
       name: 'KHANGZOO',
       active: true,
@@ -158,15 +161,15 @@ const ChatList = () => {
         </div>
       </div>
       <div className={cx('chatlist__items')}>
-        {allChatUsers.map((item, index) => {
+        {rooms.map((item, index) => {
           return (
             <ChatListItems
               name={item.name}
               key={item.id}
               animationDelay={index + 1}
-              active={item.active ? 'active' : ''}
-              isOnline={item.isOnline ? 'active' : ''}
-              image={item.image}
+              active={''}
+              isOnline={''}
+              image={image}
             />
           );
         })}
