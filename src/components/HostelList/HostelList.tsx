@@ -3,6 +3,7 @@ import HostelItem from '../HostelItem';
 import { Post } from '../../models/hostel';
 import { GenAddress } from '../../utils/func';
 import { Button, Modal } from 'antd';
+import { useRouter } from 'next/router';
 
 interface HostelListProps {
   title?: string;
@@ -10,6 +11,8 @@ interface HostelListProps {
 }
 
 const HostelList: FC<HostelListProps> = ({ title, hostels }) => {
+  const router = useRouter();
+
   const [token, setToken] = useState('');
   const [compare, setCompare] = useState(['', '']);
   const [open, setOpen] = useState(false);
@@ -23,8 +26,6 @@ const HostelList: FC<HostelListProps> = ({ title, hostels }) => {
       setOpen(true);
     }
   }, [compare[1]]);
-
-  console.log('open', open);
 
   const handleCompare = (checked: boolean, id: string) => {
     if (checked === true && id) {
@@ -90,7 +91,9 @@ const HostelList: FC<HostelListProps> = ({ title, hostels }) => {
             className="bg-[#1677ff]"
             key="submit"
             type="primary"
-            onClick={undefined}
+            onClick={() => {
+              router.push('/compare/' + compare[0] + '/' + compare[1]);
+            }}
           >
             So sánh
           </Button>,

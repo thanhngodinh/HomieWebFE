@@ -91,11 +91,24 @@ export const getCompare = createAsyncThunk(
   }
 );
 
+export const checkCreatePost = createAsyncThunk(
+  'hostel/checkCreatePost',
+  async (callback: any) => {
+    try {
+      const response = await hostelApi.checkCreatePost();
+      callback(response?.status);
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
 export const createHostel = createAsyncThunk(
   'hostel/createHostel',
   async (hostel: CallBackParam<HostelCreate>) => {
     try {
-      const response = await hostelApi.post(hostel.data);
+      const response = await hostelApi.createPost(hostel.data);
       hostel.callback && hostel.callback();
       return response;
     } catch (error) {
@@ -146,7 +159,7 @@ export const hostelSlice = createSlice({
       .addCase(getHostels.fulfilled, (state, action) => {
         state.list = action.payload?.data || [];
         state.total = action.payload?.total || 0;
-        console.log(state.list);
+        // console.log(state.list);
         state.loading = false;
         state.error = false;
       })
@@ -233,7 +246,7 @@ export const hostelSlice = createSlice({
       .addCase(postHostelsWithQuerryParams.fulfilled, (state, action) => {
         state.list = action.payload?.data || [];
         state.total = action.payload?.total || 0;
-        console.log(state.list);
+        // console.log(state.list);
         state.loading = false;
         state.error = false;
       })
@@ -248,7 +261,7 @@ export const hostelSlice = createSlice({
       .addCase(getHostelsWithQuerryParams.fulfilled, (state, action) => {
         state.list = action.payload?.data || [];
         state.total = action.payload?.total || 0;
-        console.log(state.list);
+        // console.log(state.list);
         state.loading = false;
         state.error = false;
       })

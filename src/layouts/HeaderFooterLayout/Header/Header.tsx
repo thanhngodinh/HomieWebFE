@@ -3,10 +3,18 @@ import classNames from 'classnames/bind';
 import styles from './Header.module.scss';
 import Link from 'next/link';
 import { getToken } from '../../../app/token';
+import { checkCreatePost } from '../../../redux/hostel/slice';
+import { BaseResponse } from '../../../models';
+import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../../app/store';
 
 const cx = classNames.bind(styles);
 
 const Header: FC = () => {
+  const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+
   const [token, setToken] = useState('');
   useEffect(() => {
     let value = sessionStorage.getItem('token') || '';
@@ -56,11 +64,28 @@ const Header: FC = () => {
         <div className="col-span-2 text-center">
           <ul className="flex flex-col md:flex-row h-full items-center gap-2">
             <li>
-              <Link href={token.length > 0 ? '/create' : '/login'}>
+              <button
+                onClick={() => {
+                  dispatch(
+                    checkCreatePost((status: string) => {
+                      console.log(status);
+                      if (status == 'success') {
+                        router.push('/create');
+                      } else if (status == 'not login') {
+                        router.push('/login');
+                      } else if (status == 'not verify phone') {
+                        router.push('/my/profile');
+                      } else {
+                        router.push('/');
+                      }
+                    })
+                  );
+                }}
+              >
                 <span className="block py-2 pl-3 pr-4 text-purple font-medium light text-base hover:underline cursor-pointer">
                   Đăng tin
                 </span>
-              </Link>
+              </button>
             </li>
             {token.length > 0 ? (
               <>

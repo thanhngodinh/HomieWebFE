@@ -16,7 +16,7 @@ type HomeProps = {
 
 const HomeCard = ({ hostel }: HomeProps) => {
   return (
-    <div className="relative basis-1/5 group  bg-black rounded-md text-white overflow-hidden">
+    <div className="relative basis-1/5 group bg-black rounded-md text-white overflow-hidden h-96">
       <button
         type="button"
         className={`${cx(
@@ -32,14 +32,16 @@ const HomeCard = ({ hostel }: HomeProps) => {
       </div>
       <p
         className={`${cx(
-          'text-center uppercase tracking-wider text-white  font-medium text-[3.25rem] leading-[4.25rem] font-[Teko] m-0 z-[5] absolute top-[5%] right-[5%]',
+          'cursor-pointer text-center uppercase tracking-wider text-white font-medium text-[3rem] leading-[4.25rem] font-[Teko] m-0 z-[5] absolute top-[2%] right-[2%]',
           '_number'
         )}`}
       >
-        3{' '}
-        <span className=" group-hover:text-white">
-          <FontAwesomeIcon icon={faPerson} />
-        </span>
+        {hostel?.capacity}
+        {hostel?.capacity && (
+          <span className="group-hover:text-white ml-1">
+            <FontAwesomeIcon icon={faPerson} />
+          </span>
+        )}
       </p>
       {/* <div className={`${cx('_logo')}`}>
         <img
@@ -52,43 +54,15 @@ const HomeCard = ({ hostel }: HomeProps) => {
         <>
           <p
             className={`${cx(
-              'font-extrabold text-left !leading-5 text-2xl !ml-0 mb-6 mr-16',
+              'font-extraboldtext-left !leading-5 text-2xl !ml-0 mb-6 mr-16',
               '_name'
             )}`}
           >
             {hostel?.name}
           </p>
-          <p className=" text-left uppercase font-normal text-sm !leading-4 text-xl !ml-0 my-2">
-            Giá phòng
-            <span className="block font-extrabold my-2">
-              {GenCurrecy(hostel?.cost)}
-            </span>
-          </p>
-          <p className=" text-left uppercase font-normal text-sm !leading-4 text-xl !ml-0 my-2">
-            Diện tích
-            <span className="block font-extrabold my-2">{hostel?.area}</span>
-          </p>
-          <p className=" text-left uppercase font-normal text-sm !leading-4 text-xl !ml-0 my-2">
-            Tiền điện
-            <span className="block font-extrabold my-2">
-              {GenCurrecy(hostel?.electricityPrice)}
-            </span>
-          </p>{' '}
-          <p className=" text-left uppercase font-normal text-sm !leading-4 text-xl !ml-0 my-2">
-            Tiền nước
-            <span className="block font-extrabold my-2">
-              {GenCurrecy(hostel?.waterPrice)}
-            </span>
-          </p>{' '}
-          <p className=" text-left uppercase font-normal text-sm !leading-4 text-xl !ml-0 my-2">
-            Tiền xe
-            <span className="block font-extrabold my-2">
-              {GenCurrecy(hostel?.parkingPrice)}
-            </span>
-          </p>{' '}
-          <p className=" text-left uppercase font-normal text-sm !leading-4 text-xl !ml-0 my-2">
-            Địa chỉ
-            <span className="text-xl lowercase ml-2">
+          <div className="text-left font-normal text-sm !leading-4 text-xl !ml-0 my-2">
+            <span className="uppercase">Địa chỉ:</span>
+            <span className="text-xl ml-2">
               {GenAddress(
                 hostel?.street,
                 hostel?.ward,
@@ -96,7 +70,41 @@ const HomeCard = ({ hostel }: HomeProps) => {
                 hostel?.province
               )}
             </span>
+          </div>{' '}
+          <p className="text-left font-normal text-sm !leading-4 text-xl !ml-0 my-2">
+            <span className="uppercase">Địa chỉ:</span>
+            <span className="block font-extrabold my-2">
+              {GenCurrecy(hostel?.cost)}
+            </span>
+          </p>
+          <p className="text-left uppercase font-normal text-sm !leading-4 text-xl !ml-0 my-2">
+            Tiện ích:
+            <span className="block font-extrabold my-2">
+              {hostel?.utilities}
+            </span>
+          </p>
+          {/* <p className="text-left uppercase font-normal text-sm !leading-4 text-xl !ml-0 my-2">
+            Diện tích:
+            <span className="block font-extrabold my-2">{hostel?.area}</span>
+          </p> */}
+          {/* <p className="text-left uppercase font-normal text-sm !leading-4 text-xl !ml-0 my-2">
+            Tiền điện
+            <span className="block font-extrabold my-2">
+              {GenCurrecy(hostel?.electricityPrice)}
+            </span>
           </p>{' '}
+          <p className="text-left uppercase font-normal text-sm !leading-4 text-xl !ml-0 my-2">
+            Tiền nước
+            <span className="block font-extrabold my-2">
+              {GenCurrecy(hostel?.waterPrice)}
+            </span>
+          </p>{' '}
+          <p className="text-left uppercase font-normal text-sm !leading-4 text-xl !ml-0 my-2">
+            Tiền xe
+            <span className="block font-extrabold my-2">
+              {GenCurrecy(hostel?.parkingPrice)}
+            </span>
+          </p>{' '} */}
         </>
       </div>
 

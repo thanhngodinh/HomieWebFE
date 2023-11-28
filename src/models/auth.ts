@@ -8,7 +8,7 @@ export type Login = {
 export interface LoginRes {
   isResetPass: boolean;
   token: string;
-  profile?: User;
+  profile: User;
 }
 
 export type Register = {

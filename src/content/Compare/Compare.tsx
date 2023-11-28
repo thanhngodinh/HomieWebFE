@@ -19,9 +19,10 @@ const cx = classNames.bind(styles);
 interface CompareProps {}
 
 type TextCompare = {
-  home: any;
+  home1: any;
   field: string;
-  away: any;
+  home2: any;
+  isLessGood: boolean;
 };
 
 const Compare: FC<CompareProps> = () => {
@@ -41,63 +42,73 @@ const Compare: FC<CompareProps> = () => {
 
       setText([
         {
-          home: compareHostel1?.cost,
+          home1: compareHostel1?.cost,
           field: 'Giá',
-          away: compareHostel2?.cost,
+          home2: compareHostel2?.cost,
+          isLessGood: true,
         },
         {
-          home: compareHostel1?.capacity,
+          home1: compareHostel1?.capacity || 'Không xác định',
           field: 'Sức chứa',
-          away: compareHostel2?.capacity,
+          home2: compareHostel2?.capacity || 'Không xác định',
+          isLessGood: false,
         },
         {
-          home: compareHostel1?.area,
+          home1: compareHostel1?.area || 'Không xác định',
           field: 'Diện tích',
-          away: compareHostel2?.area,
+          home2: compareHostel2?.area || 'Không xác định',
+          isLessGood: false,
         },
         {
-          home: compareHostel1?.deposit,
+          home1: compareHostel1?.deposit || 0,
           field: 'Tiền cọc',
-          away: compareHostel2?.deposit,
+          home2: compareHostel2?.deposit || 0,
+          isLessGood: true,
         },
         {
-          home: compareHostel1?.electricityPrice,
+          home1: compareHostel1?.electricityPrice || 0,
           field: 'Tiền điện',
-          away: compareHostel2?.electricityPrice,
+          home2: compareHostel2?.electricityPrice || 0,
+          isLessGood: true,
         },
         {
-          home: compareHostel1?.waterPrice,
+          home1: compareHostel1?.waterPrice || 0,
           field: 'Tiền nước',
-          away: compareHostel2?.waterPrice,
+          home2: compareHostel2?.waterPrice || 0,
+          isLessGood: true,
         },
         {
-          home: compareHostel1?.parkingPrice,
+          home1: compareHostel1?.parkingPrice || 0,
           field: 'Tiền xe',
-          away: compareHostel2?.parkingPrice,
+          home2: compareHostel2?.parkingPrice || 0,
+          isLessGood: true,
         },
         {
-          home: compareHostel1?.serviecPrice,
+          home1: compareHostel1?.serviecPrice || 0,
           field: 'Tiền dịch vụ',
-          away: compareHostel2?.serviecPrice,
+          home2: compareHostel2?.serviecPrice || 0,
+          isLessGood: true,
         },
         {
-          home: compareHostel1?.utilities,
+          home1: compareHostel1?.utilities?.length || 0,
           field: 'Tiện ích',
-          away: compareHostel2?.utilities,
+          home2: compareHostel2?.utilities?.length || 0,
+          isLessGood: false,
         },
       ]);
     }
   }, [dispatch, id1, id2]);
 
-  console.log(compareHostel1, compareHostel2);
-
-  const BetterNow = (home: string, away: string) => {
-    if (parseInt(home) > parseInt(away)) {
-      return 'home';
-    } else if (parseInt(home) === parseInt(away)) {
+  const CheckWorse = (home1: string, home2: string, isLessGood: boolean) => {
+    if (parseInt(home1) == parseInt(home2)) {
       return '';
+    } else if (
+      (parseInt(home1) > parseInt(home2) && isLessGood) ||
+      (parseInt(home1) < parseInt(home2) && !isLessGood)
+    ) {
+      return 'home1';
     } else {
-      return 'away';
+      return 'home2';
     }
   };
   return (
@@ -110,9 +121,9 @@ const Compare: FC<CompareProps> = () => {
             <table className={cx('__statsTable')}>
               <thead>
                 <tr className={cx('__statsTeamBlock')}>
-                  <th className="pl-4">
+                  <th className="pl-1">
                     <a className={cx('__statsTeamText')}>
-                      {/* <div className={cx('__statsTeamBadge__block', '__home')}>
+                      {/* <div className={cx('__statsTeamBadge__block', '__home1')}>
                         <img
                           src="https://cdn.nba.com/logos/nba/1610612741/primary/L/logo.svg"
                           className={cx('__statsTeamBadge__block--adjust')}
@@ -122,8 +133,8 @@ const Compare: FC<CompareProps> = () => {
                       <HomeCard hostel={compareHostel1} />
                     </a>
                   </th>
-                  <th className="w-[20%]">VS</th>
-                  <th className="pr-4">
+                  <th className="w-[15%]">VS</th>
+                  <th className="pr-1">
                     <a className={cx('__statsTeamText')}>
                       <HomeCard hostel={compareHostel2} />
                     </a>
@@ -140,13 +151,14 @@ const Compare: FC<CompareProps> = () => {
                             <>
                               <p
                                 className={
-                                  BetterNow(x.home, x.away) === 'home'
-                                    ? `${cx('betterNow')} mr-2 `
+                                  CheckWorse(x.home1, x.home2, x.isLessGood) ===
+                                  'home1'
+                                    ? `${cx('worse')} mr-2 `
                                     : 'mr-2'
                                 }
                               >
                                 <span className="text-[18px] font-bold leading-[20px]">
-                                  {x.home}
+                                  {x.home1}
                                 </span>
                               </p>
                             </>
@@ -154,13 +166,14 @@ const Compare: FC<CompareProps> = () => {
                             <>
                               <p
                                 className={
-                                  BetterNow(x.home, x.away) === 'home'
-                                    ? `${cx('betterNow')} col-span-5 `
+                                  CheckWorse(x.home1, x.home2, x.isLessGood) ===
+                                  'home1'
+                                    ? `${cx('worse')} col-span-5 `
                                     : ''
                                 }
                               >
                                 <span className="text-[18px] font-bold leading-[20px]">
-                                  {x.home}
+                                  {x.home1}
                                 </span>
                               </p>
                             </>
@@ -178,13 +191,14 @@ const Compare: FC<CompareProps> = () => {
                             <>
                               <p
                                 className={
-                                  BetterNow(x.home, x.away) === 'away'
-                                    ? `${cx('betterNow')}  `
+                                  CheckWorse(x.home1, x.home2, x.isLessGood) ===
+                                  'home2'
+                                    ? `${cx('worse')}  `
                                     : ''
                                 }
                               >
                                 <span className="text-[18px] font-bold leading-[20px]">
-                                  {x.away}
+                                  {x.home2}
                                 </span>
                               </p>
                             </>
@@ -192,13 +206,14 @@ const Compare: FC<CompareProps> = () => {
                             <>
                               <p
                                 className={
-                                  BetterNow(x.home, x.away) === 'away'
-                                    ? `${cx('betterNow')}  col-span-5 `
+                                  CheckWorse(x.home1, x.home2, x.isLessGood) ===
+                                  'home2'
+                                    ? `${cx('worse')}  col-span-5 `
                                     : ''
                                 }
                               >
                                 <span className="text-[18px] font-bold leading-[20px]">
-                                  {x.away}
+                                  {x.home2}
                                 </span>
                               </p>
                             </>

@@ -1,10 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
-  BaseResponse,
   CallBackParam,
   Post,
   ResetUser,
   User,
+  VerifyOTPReq,
+  VerifyPhoneReq,
 } from '../../models';
 import myApi from '../../api/myApi';
 import userApi from '../../api/userApi';
@@ -37,6 +38,30 @@ export const updateMyProfile = createAsyncThunk(
     try {
       const response = await myApi.updateMyProfile(params.data);
       params.callback && params.callback();
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
+export const verifyPhone = createAsyncThunk(
+  'user/verifyPhone',
+  async (data: VerifyPhoneReq) => {
+    try {
+      const response = await myApi.verifyPhone(data);
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
+export const verifyPhoneOTP = createAsyncThunk(
+  'user/verifyPhoneOTP',
+  async (data: VerifyOTPReq) => {
+    try {
+      const response = await myApi.verifyPhoneOTP(data);
       return response;
     } catch (error) {
       console.error(error);
@@ -165,6 +190,34 @@ export const userSlice = createSlice({
         state.error = false;
       })
       .addCase(searchRoommates.rejected, (state, action) => {
+        state.error = true;
+        state.loading = false;
+      })
+      // verifyPhoneOTP
+      .addCase(verifyPhoneOTP.pending, (state, action) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(verifyPhoneOTP.fulfilled, (state, action) => {
+        state.status = action.payload?.status;
+        state.loading = false;
+        state.error = false;
+      })
+      .addCase(verifyPhoneOTP.rejected, (state, action) => {
+        state.error = true;
+        state.loading = false;
+      })
+      // verifyPhone
+      .addCase(verifyPhone.pending, (state, action) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(verifyPhone.fulfilled, (state, action) => {
+        state.status = action.payload?.status;
+        state.loading = false;
+        state.error = false;
+      })
+      .addCase(verifyPhone.rejected, (state, action) => {
         state.error = true;
         state.loading = false;
       })

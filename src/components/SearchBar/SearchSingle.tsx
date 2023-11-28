@@ -41,7 +41,7 @@ const SearchSingle: FC<SearchSingleProps> = ({keySearch,navigateTo,inputProps,bo
     // const { list, total, loading, error } = useSelector(selectHostels);
     const hostelsResult = useSelector(selectHostels);
     const router = useRouter();
-    console.log(router)
+    // console.log(router)
 
     const onSearch = (value:string, _e: any) => {
       // const newQuery = value;
