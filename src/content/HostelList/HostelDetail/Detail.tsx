@@ -83,7 +83,7 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
       console.log(75,author)
       const roomIsExist = await getDocument('rooms',condition)
       if(roomIsExist.empty){
-        const docRef = await addDocument('rooms', {keyUserId: profile.id, id: author.id,name: author.name})
+        const docRef = await addDocument('rooms', {keyUserId: profile.id, keyUserName: profile.name ,id: author.id,name: author.name})
         if(docRef)
         router.push(`/chat/${docRef.id}`)
       }else {

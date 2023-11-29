@@ -12,6 +12,7 @@ import userApi from '../../api/userApi';
 export interface UserState {
   loading?: boolean;
   profile?: User;
+  user?: User;
   error?: boolean;
   roommates?: User;
   posts?: Post[];
@@ -82,6 +83,18 @@ export const updatePassword = createAsyncThunk(
   async (data?: ResetUser) => {
     try {
       const response = await myApi.updatePassword(data);
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
+export const getUserById = createAsyncThunk(
+  'user/getUserById',
+  async (id: string) => {
+    try {
+      const response = await userApi.getUserById(id);
       return response;
     } catch (error) {
       console.error(error);
@@ -181,7 +194,21 @@ export const userSlice = createSlice({
       .addCase(updatePassword.rejected, (state, action) => {
         state.error = true;
         state.loading = false;
-      });
+      })
+      // getUserById
+      .addCase(getUserById.pending, (state, action) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(getUserById.fulfilled, (state, action) => {
+        state.user = action.payload?.data;
+        state.loading = false;
+        state.error = false;
+      })
+      .addCase(getUserById.rejected, (state, action) => {
+        state.error = true;
+        state.loading = false;
+      })
   },
 });
 

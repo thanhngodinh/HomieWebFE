@@ -2,9 +2,15 @@ import React, { Component } from 'react';
 
 import styles from './userProfile.module.scss';
 import classNames from 'classnames/bind';
+import { User } from '../../../../models';
 
 const cx = classNames.bind(styles);
-const UserProfile = () => {
+
+type UserProfileProps = {
+  info?: User
+}
+
+const UserProfile = ({info}: UserProfileProps) => {
   const toggleInfo = (e: any) => {
     e.target.parentNode.classList.toggle('open');
   };
@@ -15,10 +21,11 @@ const UserProfile = () => {
         <div className={cx('profile__image')}>
           <img src="https://cmsapi-frontend.naruto-official.com/site/api/naruto/Image/get?path=/naruto/import/images/naruto02/501%EF%BD%9E600/542/C004.jpg" />
         </div>
-        <h4>UCHIHA MADARA</h4>
-        <p>CEO & Founder at Highly Inc</p>
+        <h4>{info?.name}</h4>
+        <p>{info?.email}</p>
+        <p>{info?.phone}</p>
       </div>
-      <div className={cx('profile__card')}>
+      {/* <div className={cx('profile__card')}>
         <div className={cx('card__header')} onClick={toggleInfo}>
           <h4>Information</h4>
           <svg
@@ -40,7 +47,7 @@ const UserProfile = () => {
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
           ultrices urna a imperdiet egestas. Donec in magna quis ligula
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

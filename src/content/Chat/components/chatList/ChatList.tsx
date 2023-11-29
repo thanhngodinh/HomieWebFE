@@ -164,6 +164,7 @@ const ChatList: FC<ChatListProps> = ({rooms}) =>{
         {rooms.map((item, index) => {
           return (
             <ChatListItems
+              lastMessage={item.chats && item.chats[item.chats?.length-1].message}
               name={item.name}
               key={item.id}
               animationDelay={index + 1}

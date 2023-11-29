@@ -11,6 +11,7 @@ interface ChatListItemsProps {
   image: string;
   isOnline: any;
   name: string;
+  lastMessage?: string;
 }
 const ChatListItems = (props: ChatListItemsProps) => {
   const selectChat = (e: any) => {
@@ -41,7 +42,7 @@ const ChatListItems = (props: ChatListItemsProps) => {
 
       <div className={cx('userMeta')}>
         <p>{props.name}</p>
-        <span className={cx('activeTime')}>32 mins ago</span>
+        <span className={cx('activeTime')}>{props.lastMessage || ""}</span>
       </div>
     </div>
   );
