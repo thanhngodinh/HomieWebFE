@@ -6,6 +6,7 @@ import { CallBackParam, User } from '../../models';
 
 export interface AuthState {
   loading?: boolean;
+  profile?: User;
   token: string;
   profile: User;
   error?: boolean;
@@ -56,7 +57,7 @@ export const registerAccount = createAsyncThunk(
         name: params.data.name,
       });
       params.callback && params.callback();
-      return response?.status;
+      return response;
     } catch (error) {
       console.error(error);
     }

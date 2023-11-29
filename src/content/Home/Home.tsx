@@ -1,7 +1,6 @@
 import { FC, useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Home.module.scss';
-import SearchIcon from '@mui/icons-material/Search';
 import HostelList from '../../components/HostelList';
 import SuggestItemBasic, {
   SuggestItemBasicProps,
@@ -93,8 +92,6 @@ const Home: FC<HomeProps> = (props) => {
       getDistrict(provinceSelected.code);
     }
   };
-
-  console.log(87, district);
 
   const getValueInputSearch = (value: string) => {
     console.log(91, value);

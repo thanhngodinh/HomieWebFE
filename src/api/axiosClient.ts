@@ -17,7 +17,7 @@ axiosClient.interceptors.request.use(
         'Content-Type': 'application/json',
       };
     } else {
-      console.log('Access Token: ', accessToken || 'token is null');
+      // console.log('Access Token: ', accessToken || 'token is null');
       config.headers = {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',

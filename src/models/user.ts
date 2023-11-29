@@ -6,12 +6,21 @@ export type User = {
   gender?: string;
   phone?: string;
   isVerifiedEmail?: boolean;
+  isVerifiedPhone?: boolean;
   isFindRoommate?: boolean;
   dateOfBirth?: string;
   province?: string;
   district?: string[];
   costFrom?: number;
   costTo?: number;
+};
+
+export type VerifyPhoneReq = {
+  phone: string;
+};
+
+export type VerifyOTPReq = {
+  otp: string;
 };
 
 export type ResetUser = {

@@ -24,7 +24,7 @@ const PostItem: FC<PostItemProps> = ({
   endDate,
   status,
 }) => {
-  console.log(new Date().toISOString());
+  // console.log(new Date().toISOString());
   return (
     <div className="h-full w-full grid grid-cols-4 gap-4 text-base">
       <div className="w-full h-[200px]">

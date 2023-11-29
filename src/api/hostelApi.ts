@@ -43,11 +43,15 @@ export const hostelApi = {
     const url = `/posts/compare/${compare.post1}/${compare.post2}`;
     return axiosClient.get(url);
   },
-  post(params: HostelCreate): Promise<BaseResponse<Post>> {
+  checkCreatePost(): Promise<BaseResponse<string>> {
+    const url = '/posts/check-create';
+    return axiosClient.post(url);
+  },
+  createPost(params: HostelCreate): Promise<BaseResponse<Post>> {
     const url = '/posts';
     return axiosClient.post(url, params);
   },
-  patch({}): Promise<BaseResponse<Post[]>> {
+  updatePost({}): Promise<BaseResponse<Post[]>> {
     const url = '/posts';
     return axiosClient.patch(url);
   },

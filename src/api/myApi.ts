@@ -1,6 +1,7 @@
+import { VerifyOTPReq } from './../models/user';
 import { BaseResponse } from './../models/common';
 import axiosClient from './axiosClient';
-import { Post, User, ResetUser } from '../models';
+import { Post, User, ResetUser, VerifyPhoneReq } from '../models';
 
 const myApi = {
   getMyProfile(): Promise<BaseResponse<User>> {
@@ -26,6 +27,16 @@ const myApi = {
   updateMyProfile(profile: User): Promise<BaseResponse<User>> {
     const url = 'my/profile';
     return axiosClient.patch(url, profile);
+  },
+
+  verifyPhone(data: VerifyPhoneReq): Promise<BaseResponse<string>> {
+    const url = 'my/verify-phone';
+    return axiosClient.patch(url, data);
+  },
+
+  verifyPhoneOTP(data: VerifyOTPReq): Promise<BaseResponse<string>> {
+    const url = 'my/verify-otp';
+    return axiosClient.patch(url, data);
   },
 };
 
