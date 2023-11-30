@@ -19,7 +19,7 @@ const UserProfile = ({info}: UserProfileProps) => {
     <div className={cx('main__userprofile')}>
       <div className={cx('profile__card')}>
         <div className={cx('profile__image')}>
-          <img src="https://cmsapi-frontend.naruto-official.com/site/api/naruto/Image/get?path=/naruto/import/images/naruto02/501%EF%BD%9E600/542/C004.jpg" />
+          <img src={info?.avatar} />
         </div>
         <h4>{info?.name}</h4>
         <p>{info?.email}</p>

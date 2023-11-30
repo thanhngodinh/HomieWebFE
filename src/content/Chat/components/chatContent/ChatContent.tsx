@@ -1,4 +1,4 @@
-import React, { Component, useState, createRef, useEffect } from 'react';
+import React, { Component, useState, createRef, useEffect, useRef } from 'react';
 import styles from './chatContent.module.scss';
 import classNames from 'classnames/bind';
 import { UploadOutlined } from '@ant-design/icons';
@@ -11,6 +11,7 @@ import Chat, { Room } from '../../Chat';
 import { serverTimestamp } from 'firebase/firestore';
 import { User } from '../../../../models';
 import { formatShortDate, formatShortDateTime } from '../../../../utils/date';
+import { FormItem } from 'react-hook-form-antd';
 
 const cx = classNames.bind(styles);
 
@@ -33,6 +34,7 @@ interface ChatContentProps {
 }
 const ChatContent = ({data,user,me}: ChatContentProps) => {
   const [form] = Form.useForm();
+  const refContent = useRef<any>(null)
   // const [state, setState] = useState<ChatContentType>();
   const [isClient, setIsClient] = useState(false);
   const messagesEndRef = createRef() as any;
@@ -62,8 +64,9 @@ const ChatContent = ({data,user,me}: ChatContentProps) => {
   const handleSubmitForm = async (value: any) => {
     const {message} = value
     if(!data?.roomId ) return;
+    if(!message) return;
     let chatClone = [] as Chat[]
-    const dataUpdate = {id: me?.id||"" ||"", name: me?.name || ""  ,message: message, createdAt: new Date().toISOString()}
+    const dataUpdate = {id: me?.id||"" ||"", name: me?.name || "", avatar: me?.avatar || ""  ,message: message, createdAt: new Date().toISOString()}
     if(!data?.chats || (data?.chats && data?.chats.length === 0 )){
       chatClone = [dataUpdate]
     }else{ 
@@ -77,6 +80,10 @@ const ChatContent = ({data,user,me}: ChatContentProps) => {
       if(message && data?.roomId){
         await updateDocument("rooms",data?.roomId, {chats: chatClone})
       }
+      reset()
+      console.log(97,refContent.current.scrollHeight)
+      refContent.current.scrollTop = refContent.current.scrollHeight
+
     } catch (error) {
       console.log(error)
     }
@@ -90,6 +97,13 @@ const ChatContent = ({data,user,me}: ChatContentProps) => {
     return false
   }
 
+  // const handleButtonSubmit = () =>{
+  //   setValue("message", "");
+  //   console.log(97,refContent.current.scrollHeight)
+  //   refContent.current.scrollTop = refContent.current.scrollHeight
+  // }
+  useEffect(()=>{refContent.current.scrollTop = refContent.current.scrollHeight},[refContent.current?.scrollHeight])
+
   return (
     <div className={cx('main__chatcontent')}>
       <div className={cx('content__header')}>
@@ -97,7 +111,7 @@ const ChatContent = ({data,user,me}: ChatContentProps) => {
           <div className={cx('current-chatting-user')}>
             <Avatar
               isOnline="active"
-              image={'https://cmsapi-frontend.naruto-official.com/site/api/naruto/Image/get?path=/naruto/import/images/naruto02/501%EF%BD%9E600/542/C004.jpg'}
+              image={user?.avatar || 'https://cmsapi-frontend.naruto-official.com/site/api/naruto/Image/get?path=/naruto/import/images/naruto02/501%EF%BD%9E600/542/C004.jpg'}
             />
             <p>{user?.name}</p>
           </div>
@@ -108,7 +122,7 @@ const ChatContent = ({data,user,me}: ChatContentProps) => {
           </div>
         </div>
       </div>
-      <div className={cx('content__body')}>
+      <div ref={refContent} className={cx('content__body')}>
         <div className={cx('chat__items')}>
           {data&&data.chats && data.chats.map((chat, i: number) => {
             return (
@@ -116,7 +130,7 @@ const ChatContent = ({data,user,me}: ChatContentProps) => {
                 key={i}
                 user={checkTheMessageIsMine(chat.id) ? 'me' : 'other'}
                 msg={chat.message}
-                image={checkTheMessageIsMine(chat.id) ? "https://cmsapi-frontend.naruto-official.com/site/api/naruto/Image/get?path=/naruto/import/images/naruto02/501%EF%BD%9E600/542/C004.jpg": 'https://staticg.sportskeeda.com/editor/2022/07/6da3a-16579565613971.png?w=840'}
+                image={chat.avatar || "https://cmsapi-frontend.naruto-official.com/site/api/naruto/Image/get?path=/naruto/import/images/naruto02/501%EF%BD%9E600/542/C004.jpg"}
                 time={formatShortDateTime(chat.createdAt)}
               />
             );
@@ -137,22 +151,25 @@ const ChatContent = ({data,user,me}: ChatContentProps) => {
                 </Upload>
               </div>
             </Form.Item> */}
-            <Form.Item
+            <FormItem
               name="message"
               style={{ marginBottom: '0', width: '100%' }}
+              control={control}
             >
               <input
                 type="text"
                 placeholder="Type a message here"
+                autoComplete="false"
                 // onChange={onStateChange}
                 // value={state?.msg}
               />
-            </Form.Item>
-            <Form.Item style={{ marginBottom: '0' }}>
+            </FormItem>
+            <div style={{ marginBottom: '0' }}>
               <button
                 type="submit"
                 className={cx('btnSendMsg')}
                 id="sendMsgBtn"
+                // onClick={handleButtonSubmit}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -169,7 +186,7 @@ const ChatContent = ({data,user,me}: ChatContentProps) => {
                   />
                 </svg>
               </button>
-            </Form.Item>
+            </div>
           </div>
         </div>
       </Form>

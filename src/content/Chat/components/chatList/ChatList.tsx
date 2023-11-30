@@ -3,102 +3,15 @@ import styles from './chatList.module.scss';
 import ChatListItems from './ChatListItems';
 import classNames from 'classnames/bind';
 import { Room } from '../../Chat';
+import { User } from '../../../../models';
 
 const cx = classNames.bind(styles);
 interface  ChatListProps  {
-  rooms: Room[]
+  rooms: Room[];
+  user?: User;
 }
 const image = 'https://cmsapi-frontend.naruto-official.com/site/api/naruto/Image/get?path=/naruto/import/images/naruto02/501%EF%BD%9E600/542/C004.jpg'
-const ChatList: FC<ChatListProps> = ({rooms}) =>{
-  const allChatUsers = [
-    {
-      
-      id: 1,
-      name: 'KHANGZOO',
-      active: true,
-      isOnline: true,
-    },
-    {
-      image:
-        'https://cmsapi-frontend.naruto-official.com/site/api/naruto/Image/get?path=/naruto/import/images/naruto02/501%EF%BD%9E600/542/C004.jpg',
-      id: 2,
-      name: 'KHANGZOO',
-      active: false,
-      isOnline: false,
-    },
-    {
-      image:
-        'https://cmsapi-frontend.naruto-official.com/site/api/naruto/Image/get?path=/naruto/import/images/naruto02/501%EF%BD%9E600/542/C004.jpg',
-      id: 3,
-      name: 'KHANGZOO',
-      active: false,
-      isOnline: false,
-    },
-    {
-      image:
-        'https://cmsapi-frontend.naruto-official.com/site/api/naruto/Image/get?path=/naruto/import/images/naruto02/501%EF%BD%9E600/542/C004.jpg',
-      id: 4,
-      name: 'KHANGZOO',
-      active: false,
-      isOnline: true,
-    },
-    {
-      image:
-        'https://cmsapi-frontend.naruto-official.com/site/api/naruto/Image/get?path=/naruto/import/images/naruto02/501%EF%BD%9E600/542/C004.jpg',
-      id: 5,
-      name: 'KHANGZOO',
-      active: false,
-      isOnline: false,
-    },
-    {
-      image:
-        'https://cmsapi-frontend.naruto-official.com/site/api/naruto/Image/get?path=/naruto/import/images/naruto02/501%EF%BD%9E600/542/C004.jpg',
-      id: 6,
-      name: 'KHANGZOO',
-      active: false,
-      isOnline: true,
-    },
-    {
-      image:
-        'https://cmsapi-frontend.naruto-official.com/site/api/naruto/Image/get?path=/naruto/import/images/naruto02/501%EF%BD%9E600/542/C004.jpg',
-      id: 7,
-      name: 'KHANGZOO',
-      active: false,
-      isOnline: true,
-    },
-    {
-      image:
-        'https://cmsapi-frontend.naruto-official.com/site/api/naruto/Image/get?path=/naruto/import/images/naruto02/501%EF%BD%9E600/542/C004.jpg',
-      id: 8,
-      name: 'KHANGZOO',
-      active: false,
-      isOnline: true,
-    },
-    {
-      image:
-        'https://cmsapi-frontend.naruto-official.com/site/api/naruto/Image/get?path=/naruto/import/images/naruto02/501%EF%BD%9E600/542/C004.jpg',
-      id: 9,
-      name: 'KHANGZOO',
-      active: false,
-      isOnline: true,
-    },
-    {
-      image:
-        'https://cmsapi-frontend.naruto-official.com/site/api/naruto/Image/get?path=/naruto/import/images/naruto02/501%EF%BD%9E600/542/C004.jpg',
-      id: 10,
-      name: 'KHANGZOO',
-      active: false,
-      isOnline: true,
-    },
-    {
-      image:
-        'https://cmsapi-frontend.naruto-official.com/site/api/naruto/Image/get?path=/naruto/import/images/naruto02/501%EF%BD%9E600/542/C004.jpg',
-      id: 11,
-      name: 'KHANGZOO',
-      active: false,
-      isOnline: true,
-    },
-  ];
+const ChatList: FC<ChatListProps> = ({rooms, user}) =>{
 
   return (
     <div className={cx('main__chatlist')}>
@@ -165,12 +78,12 @@ const ChatList: FC<ChatListProps> = ({rooms}) =>{
           return (
             <ChatListItems
               lastMessage={item.chats && item.chats[item.chats?.length-1].message}
-              name={item.name}
+              name={user?.id === item.keyUserId ? item.keyUserName : item.name}
               key={item.id}
               animationDelay={index + 1}
               active={''}
               isOnline={''}
-              image={image}
+              image={user?.id === item.keyUserId ? item.keyUserAvatar : item.avatar}
             />
           );
         })}

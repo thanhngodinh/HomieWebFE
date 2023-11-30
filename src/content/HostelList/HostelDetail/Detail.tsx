@@ -72,7 +72,7 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
   };
   console.log(73,profile)
 
-  const handleChatWithAuthor = async (author: {id: string, name: string}) =>{
+  const handleChatWithAuthor = async (author: {id: string, name: string, avatar: string}) =>{
     if(!profile) return;
     try{
       const condition:Condition = {
@@ -83,7 +83,7 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
       console.log(75,author)
       const roomIsExist = await getDocument('rooms',condition)
       if(roomIsExist.empty){
-        const docRef = await addDocument('rooms', {keyUserId: profile.id, keyUserName: profile.name ,id: author.id,name: author.name})
+        const docRef = await addDocument('rooms', {keyUserId: profile.id, keyUserName: profile.name, keyUserAvatar:  profile.avatar  ,id: author.id,name: author.name,  avatar: author.avatar})
         if(docRef)
         router.push(`/chat/${docRef.id}`)
       }else {
@@ -371,7 +371,7 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
               <button
                 type="button"
                 className="button button__border button__border-large text__normal"
-                onClick={(e) => handleChatWithAuthor({id: hostel.authorId, name: hostel.authorName})}
+                onClick={(e) => handleChatWithAuthor({id: hostel.authorId, name: hostel.authorName, avatar: hostel.authorAvatar})}
               >
                 Chat với người đăng
               </button>

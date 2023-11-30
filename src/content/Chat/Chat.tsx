@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useLayoutEffect, useState, useMemo } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Chat.module.scss';
 import ChatList from './components/chatList/ChatList';
@@ -11,6 +11,8 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../app/store';
 import { getMyProfile, getUserById, selectUsers } from '../../redux/user/slice';
 import { useSelector } from 'react-redux';
+import useFirestore from '../../firebase/useFirestore';
+import { WhereFilterOp } from 'firebase/firestore';
 
 const cx = classNames.bind(styles);
 
@@ -20,8 +22,10 @@ export type Room = {
   roomId: string
   keyUserId: string;
   keyUserName: string;
+  keyUserAvatar: string;
   id: string;
   name: string;
+  avatar: string;
   createdAt: any;
   chats?: Chat[]
 }
@@ -30,6 +34,7 @@ type Chat = {
   id: string;
   name: string;
   message: string;
+  avatar: string;
   createdAt: any;
 }
 
@@ -42,34 +47,63 @@ const Chat: FC<ChatProps> = () => {
   const [rooms, setRooms] = useState<Room[]>([])
   const [roomSelected, setRoomSelected] = useState<Room>()
 
+  const condition1 = useMemo(()=>{
+    return {
+      fieldName: 'keyUserId',
+      operator: '==' as WhereFilterOp,
+      value: profile?.id || ""
+    }
+  },[profile?.id])
+  
+  const condition2 = useMemo(()=>{
+    return {
+      fieldName: 'id',
+      operator: '==' as WhereFilterOp,
+      value: profile?.id || ""
+    }
+  },[profile?.id])
+
+  const document = useFirestore('rooms',condition1,condition2,'roomId')
+  console.log(58,document)
 
   useEffect(() => {
-    (async ()  => {
-      if(profile && profile.id){
-        const condition1: Condition = {
-          fieldName: 'keyUserId',
-          operator: '==',
-          value: profile.id
-        }
-        const condition2: Condition = {
-          fieldName: 'id',
-          operator: '==',
-          value: profile.id
-        }
-        const data = await getDocumentMutipleCondition('rooms',condition1,condition2)
-        const roomsRes = [] as any
-        data.forEach(doc => roomsRes.push({roomId: doc.id , ...doc.data()}))
-        console.log(roomsRes)
-        setRooms(roomsRes)
-        const roomSelect = getRoomsById(roomsRes,roomId)
-        if(roomSelect){
-          setRoomSelected(roomSelect)
-        }
+    if(document){
+      console.log(61,document)
+      setRooms(document)
+      const roomSelect = getRoomsById(document,roomId)
+      if(roomSelect){
+        setRoomSelected(roomSelect)
       }
-    })()
-  }, [profile]);
+    }
+  }, [document]);
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   (async ()  => {
+  //     if(profile && profile.id){
+  //       const condition1: Condition = {
+  //         fieldName: 'keyUserId',
+  //         operator: '==',
+  //         value: profile.id
+  //       }
+  //       const condition2: Condition = {
+  //         fieldName: 'id',
+  //         operator: '==',
+  //         value: profile.id
+  //       }
+  //       const data = await getDocumentMutipleCondition('rooms',condition1,condition2)
+  //       const roomsRes = [] as any
+  //       data.forEach(doc => roomsRes.push({roomId: doc.id , ...doc.data()}))
+  //       console.log(roomsRes)
+  //       setRooms(roomsRes)
+  //       const roomSelect = getRoomsById(roomsRes,roomId)
+  //       if(roomSelect){
+  //         setRoomSelected(roomSelect)
+  //       }
+  //     }
+  //   })()
+  // }, [profile]);
+
+  useLayoutEffect(() => {
       dispatch(getMyProfile());
   }, [dispatch]);
 
@@ -88,7 +122,7 @@ const Chat: FC<ChatProps> = () => {
   return (
     <>
       <div className={cx('wrapper')}>
-        <ChatList rooms={rooms}/>
+        <ChatList rooms={rooms} user={user}/>
         <ChatContent data={roomSelected} user={user} me={profile}/>
         <UserProfile info={user}/>
       </div>

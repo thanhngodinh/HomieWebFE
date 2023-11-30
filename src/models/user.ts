@@ -13,6 +13,7 @@ export type User = {
   district?: string[];
   costFrom?: number;
   costTo?: number;
+  avatar?:string;
 };
 
 export type VerifyPhoneReq = {
