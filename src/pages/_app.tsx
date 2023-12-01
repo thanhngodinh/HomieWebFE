@@ -27,6 +27,10 @@ import {
   faHeart,
 } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
+import { getToken } from '../app/token';
+import FloatChat from '../components/FloatChat';
+import { useRouter } from 'next/router';
+
 
 library.add(
   faKitchenSet,
@@ -50,12 +54,17 @@ type MyAppProps = AppProps & {
 };
 
 const MyApp = ({ Component, pageProps }: MyAppProps) => {
+  const router = useRouter();
+  const path = router.pathname; 
   const PageLayout = Component.Layout || BaseLayout;
 
   return (
     <Provider store={storeRedux}>
       <PageLayout>
         <Component {...pageProps} />
+        {typeof window !== 'undefined' && !path.includes("chat") && getToken() ?
+          <FloatChat />: <></>
+        }
       </PageLayout>
     </Provider>
   );

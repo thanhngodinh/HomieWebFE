@@ -1,4 +1,4 @@
-import { FieldValue, Timestamp, WhereFilterOp, addDoc, collection, getDocs, query, where, orderBy, serverTimestamp, updateDoc, doc, or } from 'firebase/firestore'
+import { FieldValue, Timestamp, WhereFilterOp, addDoc, collection, getDocs, query, where, orderBy, serverTimestamp, updateDoc, doc, or, and, setDoc } from 'firebase/firestore'
 import database from './config'
 
 export type Condition = {
@@ -10,6 +10,12 @@ export type Condition = {
 export const addDocument = async (collectionName: string, data: any) => {
     return await addDoc(collection(database, collectionName), { ...data, createdAt: serverTimestamp() })
 
+}
+
+export const addNewDoc = async (collectionName: string, documentId:string ,data: any) => {
+    await setDoc(doc(database, collectionName, documentId), {
+        ...data, createdAt: serverTimestamp() 
+    });
 }
 
 export const getDocument = async (collectionName: string, condition?: Condition) => {
@@ -29,4 +35,12 @@ export const getDocumentMutipleCondition = async (collectionName: string, condit
 export const updateDocument = async (collectionName: string, docId: string, data: any) => {
     return await updateDoc(doc(database, collectionName, docId), { ...data })
 
+}
+
+export const getDocumentWithFloatChat = async  (collectionName: string, userId: string ) => {
+    if(!userId) return;
+    const conditionUser1 = and(where("userOne", "==", userId), where("userOneSeen", "==", false))
+    const conditionUser2 = and(where("userTwo", "==", userId), where("userTwoSeen", "==", false))
+
+    return await getDocs(query(collection(database, collectionName),or(conditionUser1,conditionUser2)))
 }

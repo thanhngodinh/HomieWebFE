@@ -6,7 +6,7 @@ import Avatar from '../chatList/Avatar';
 import ChatItem from './ChatItem';
 import { Button, Form, Upload } from 'antd';
 import { useForm } from 'react-hook-form';
-import { updateDocument } from '../../../../firebase/service';
+import { addNewDoc, updateDocument } from '../../../../firebase/service';
 import Chat, { Room } from '../../Chat';
 import { serverTimestamp } from 'firebase/firestore';
 import { User } from '../../../../models';
@@ -79,6 +79,7 @@ const ChatContent = ({data,user,me}: ChatContentProps) => {
     try {
       if(message && data?.roomId){
         await updateDocument("rooms",data?.roomId, {chats: chatClone})
+        await addNewDoc("room_operations", data?.roomId, {userOne: data?.keyUserId, userTwo: data?.id, userOneSeen: me?.id === data?.keyUserId, userTwoSeen: me?.id === data?.id})
       }
       reset()
       console.log(97,refContent.current.scrollHeight)

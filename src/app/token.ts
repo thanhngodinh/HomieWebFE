@@ -1,5 +1,5 @@
 export const getToken = () => {
-  return sessionStorage.getItem('token') || undefined;
+  return sessionStorage?.getItem('token') || undefined;
 };
 
 export const setToken = (token: string) => {

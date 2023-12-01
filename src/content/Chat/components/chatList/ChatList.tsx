@@ -80,6 +80,7 @@ const ChatList: FC<ChatListProps> = ({rooms, user}) =>{
               lastMessage={item.chats && item.chats[item.chats?.length-1].message}
               name={user?.id === item.keyUserId ? item.keyUserName : item.name}
               key={item.id}
+              roomId={item.roomId}
               animationDelay={index + 1}
               active={''}
               isOnline={''}

@@ -63,7 +63,7 @@ const Chat: FC<ChatProps> = () => {
     }
   },[profile?.id])
 
-  const document = useFirestore('rooms',condition1,condition2,'roomId')
+  const document = useFirestore('rooms',condition1,condition2,'roomId',roomId, profile?.id )
   console.log(58,document)
 
   useEffect(() => {
