@@ -1,11 +1,6 @@
-.wrapper {
-    display: flex;
-    width: 800px;
-    margin: 0 auto;
-}
 
 .right-side {
-    margin: 28px 60px 0;
+    margin: 28px 20px 0;
     font-size: 1rem;
 
     h3 {
@@ -18,13 +13,6 @@
     label {
         color: #484848;
     }
-
-    form input {
-    width: 100%;
-    margin: 12px 0 16px;
-    border: 1px solid #e3e3e3;
-    border-radius: 4px;
-}
 }
 
 .login-btn {
@@ -84,8 +72,9 @@
 }
 
 .footer {
+    margin-top: 12px;
     text-align: center;
-    padding: 0 auto;
+    padding: 1rem auto;
     font-size: 0.875rem;
     font-weight: 700;
     span {

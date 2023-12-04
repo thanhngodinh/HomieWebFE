@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
+import { Utilities } from '../models';
 
-export const GetUtility = (utility: string, utilities: any) => {
+export const GetUtility = (utility: string, utilities: Utilities[]) => {
   for (let u of utilities) {
     if (utility == u?.id) return u;
   }

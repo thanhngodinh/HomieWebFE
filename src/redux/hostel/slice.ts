@@ -22,15 +22,6 @@ const initialState: HostelState = {
   total: 0,
 };
 
-export const getHostels = createAsyncThunk('hostel/getHostels', async () => {
-  try {
-    const response = await hostelApi.get();
-    return response;
-  } catch (error) {
-    console.error(error);
-  }
-});
-
 export const postHostelsWithQuerryParams = createAsyncThunk(
   'hostel/postHostelsWithQuerryParams',
   async (query?: HostelFilter) => {
@@ -146,27 +137,11 @@ export const hostelSlice = createSlice({
   initialState,
   reducers: {
     setHostel(state, action) {
-      state.list = action.payload;
+      state.list = action.payload?.data;
     },
   },
   extraReducers: (builder) => {
     builder
-      // get
-      .addCase(getHostels.pending, (state, action) => {
-        state.loading = true;
-        state.error = false;
-      })
-      .addCase(getHostels.fulfilled, (state, action) => {
-        state.list = action.payload?.data || [];
-        state.total = action.payload?.total || 0;
-        // console.log(state.list);
-        state.loading = false;
-        state.error = false;
-      })
-      .addCase(getHostels.rejected, (state, action) => {
-        state.error = true;
-        state.loading = false;
-      })
       // suggest
       .addCase(getHostelSuggest.pending, (state, action) => {
         state.loading = true;
@@ -214,7 +189,7 @@ export const hostelSlice = createSlice({
         state.error = false;
       })
       .addCase(getHostelById.fulfilled, (state, action) => {
-        state.hostel = action.payload || undefined;
+        state.hostel = action.payload?.data || undefined;
         console.log(state.hostel);
         state.loading = false;
         state.error = false;

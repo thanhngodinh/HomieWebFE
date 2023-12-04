@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../app/store';
 import {
   getHostelSuggest,
-  getHostels,
+  postHostelsWithQuerryParams,
   selectHostels,
 } from '../../redux/hostel/slice';
 import { getUtilitiess, selectUtilitiess } from '../../redux/utilities/slice';
@@ -75,7 +75,7 @@ const Home: FC<HomeProps> = (props) => {
   };
 
   useEffect(() => {
-    dispatch(getHostels());
+    dispatch(postHostelsWithQuerryParams({ pageSize: 10 }));
     dispatch(getHostelSuggest());
     getProvince();
     getDistrict(1);

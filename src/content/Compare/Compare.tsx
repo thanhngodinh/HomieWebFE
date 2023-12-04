@@ -13,6 +13,7 @@ import {
   selectHostels,
 } from '../../redux/hostel/slice';
 import { Post } from '../../models';
+import Link from 'next/link';
 
 const cx = classNames.bind(styles);
 
@@ -48,15 +49,15 @@ const Compare: FC<CompareProps> = () => {
           isLessGood: true,
         },
         {
-          home1: compareHostel1?.capacity || 'Không xác định',
+          home1: compareHostel1?.capacity,
           field: 'Sức chứa',
-          home2: compareHostel2?.capacity || 'Không xác định',
+          home2: compareHostel2?.capacity,
           isLessGood: false,
         },
         {
-          home1: compareHostel1?.area || 'Không xác định',
+          home1: compareHostel1?.area,
           field: 'Diện tích',
-          home2: compareHostel2?.area || 'Không xác định',
+          home2: compareHostel2?.area,
           isLessGood: false,
         },
         {
@@ -91,7 +92,7 @@ const Compare: FC<CompareProps> = () => {
         },
         {
           home1: compareHostel1?.utilities?.length || 0,
-          field: 'Tiện ích',
+          field: 'Số tiện ích',
           home2: compareHostel2?.utilities?.length || 0,
           isLessGood: false,
         },
@@ -122,22 +123,15 @@ const Compare: FC<CompareProps> = () => {
               <thead>
                 <tr className={cx('__statsTeamBlock')}>
                   <th className="pl-1">
-                    <a className={cx('__statsTeamText')}>
-                      {/* <div className={cx('__statsTeamBadge__block', '__home1')}>
-                        <img
-                          src="https://cdn.nba.com/logos/nba/1610612741/primary/L/logo.svg"
-                          className={cx('__statsTeamBadge__block--adjust')}
-                        ></img>
-                      </div>
-                      Chicago Bulls */}
+                    <div className={cx('__statsTeamText')}>
                       <HomeCard hostel={compareHostel1} />
-                    </a>
+                    </div>
                   </th>
                   <th className="w-[15%]">VS</th>
                   <th className="pr-1">
-                    <a className={cx('__statsTeamText')}>
+                    <div className={cx('__statsTeamText')}>
                       <HomeCard hostel={compareHostel2} />
-                    </a>
+                    </div>
                   </th>
                 </tr>
               </thead>

@@ -40,11 +40,11 @@ const LoginPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   return (
-    <div className={cx('wrapper')}>
-      <div className="w-7/12 relative">
+    <div className={'flex h-full w-1/2 mx-auto'}>
+      <div className="w-1/2 relative">
         <Image src={bg} alt="left-side-img" layout="fill" objectFit="cover" />
       </div>
-      <div className={cx('right-side')}>
+      <div className={'w-full relative my-10 mx-4'}>
         <h3>Đăng nhập</h3>
         <Form
           form={form}
@@ -72,10 +72,10 @@ const LoginPage: React.FC = () => {
             control={control}
             required
           >
-            <Input />
+            <Input size="large" />
           </FormItem>
           <FormItem name="password" label="Mật khẩu" control={control} required>
-            <Input.Password />
+            <Input.Password size="large" />
           </FormItem>
 
           <button className={cx('login-btn')}>Đăng nhập</button>

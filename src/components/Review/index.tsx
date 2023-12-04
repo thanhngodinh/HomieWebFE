@@ -26,7 +26,7 @@ const Review: FC<ReviewProps> = ({ rate }) => {
               className="mr-2"
               style={{ fontSize: '12px' }}
               disabled
-              defaultValue={2}
+              value={rate.star}
             />
           </div>
           <div className="align-top">

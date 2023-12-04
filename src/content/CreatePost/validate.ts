@@ -1,0 +1,43 @@
+import * as yup from 'yup';
+
+export const schema = yup.object({
+  province: yup.string().required('Vui lòng chọn tỉnh/thành phố'),
+  district: yup.string().required('Vui lòng chọn quận/huyện'),
+  ward: yup.string().required('Vui lòng chọn phường/xã'),
+  area: yup
+    .number()
+    .required('Vui lòng nhập Diện tích')
+    .min(0, 'Diện tích không được bé hơn 0')
+    .max(1000000, 'Diện tích không hợp lý'),
+  capacity: yup
+    .number()
+    .required('Vui lòng nhập Sức chứa')
+    .min(0, 'Sức chứa không được bé hơn 0')
+    .max(100, 'Sức chứa không hợp lý'),
+  cost: yup
+    .number()
+    .required('Vui lòng nhập Tiền thuê')
+    .min(0, 'Tiền thuê không được bé hơn 0'),
+  deposit: yup
+    .number()
+    .required('Vui lòng nhập Tiền cọc')
+    .min(0, 'Tiền cọc không được bé hơn 0'),
+  electricityPrice: yup
+    .number()
+    .required('Vui lòng nhập Tiền cọc')
+    .min(0, 'Tiền cọc không được bé hơn 0'),
+  waterPrice: yup
+    .number()
+    .required('Vui lòng nhập Tiền cọc')
+    .min(0, 'Tiền cọc không được bé hơn 0'),
+  parkingPrice: yup
+    .number()
+    .required('Vui lòng nhập Tiền cọc')
+    .min(0, 'Tiền cọc không được bé hơn 0'),
+  servicePrice: yup
+    .number()
+    .required('Vui lòng nhập Tiền cọc')
+    .min(0, 'Tiền cọc không được bé hơn 0'),
+  name: yup.string().required('Vui lòng nhập Tiêu đề'),
+  description: yup.string().required('Vui lòng nhập Mô tả'),
+});

@@ -1,6 +1,6 @@
-import { extend } from 'lodash';
 import { PageFilter } from './common';
 import { PostRateInfo } from './rate';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 export type Post = {
   id: string;
@@ -42,6 +42,7 @@ export type HostelCreate = {
   district: string;
   ward: string;
   street: string;
+  type: string;
   status: string;
   cost: number;
   deposit: number;
@@ -55,14 +56,14 @@ export type HostelCreate = {
   description: string;
   imageUrl: string[];
   utilities: string[];
-  longitude?: number;
-  latitude?: number;
+  longitude?: number | string;
+  latitude?: number | string;
 };
 
 export type Utilities = {
   id: string;
   name: string;
-  icon: string;
+  icon: IconProp;
 };
 
 export interface HostelFilter extends PageFilter {

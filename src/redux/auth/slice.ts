@@ -8,7 +8,6 @@ export interface AuthState {
   loading?: boolean;
   profile?: User;
   token: string;
-  profile: User;
   error?: boolean;
 }
 
@@ -22,12 +21,12 @@ type Profile = {
   avatar: string;
   gender: string;
   name: string;
-}
+};
 
 const initialState: AuthState = {
   loading: false,
   token: '',
-  profile: {} as User
+  profile: {} as User,
 };
 
 export const loginAccount = createAsyncThunk(
@@ -69,7 +68,7 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     setAuth(state, action) {
-      state.token = action.payload;
+      state.token = action.payload?.data?.token;
     },
   },
   extraReducers: (builder) => {
@@ -80,9 +79,9 @@ export const authSlice = createSlice({
         state.error = false;
       })
       .addCase(loginAccount.fulfilled, (state, action) => {
-        console.log(82,action)
+        console.log(82, action);
         state.token = action.payload?.data?.token || '';
-        state.profile = action.payload?.data?.profile as User || {};
+        state.profile = (action.payload?.data?.profile as User) || {};
         state.loading = false;
         state.error = false;
       })

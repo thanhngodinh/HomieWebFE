@@ -43,10 +43,11 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
   const [isShowPhone, setIsShowPhone] = useState(false);
   const [comment, setComment] = useState('');
   const [star, setStar] = useState<number>();
+  const [maxRate, setMaxRate] = useState<number>(1);
   const dispatch = useDispatch<AppDispatch>();
   const { hostel, listSuggest, loading, error } = useSelector(selectHostels);
   const { profile } = useSelector(selectUsers);
-  
+
   const { listUtilities } = useSelector(selectUtilitiess);
 
   // console.log(51,auths)
@@ -59,44 +60,51 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
     }
   }, [dispatch, id]);
 
-  const onRatechange = () => {
+  const onRateChange = () => {
     if (star) {
-      dispatch(
-        ratePost({ postId: hostel.id as string, star: star, comment: comment })
+      dispatch(ratePost({ postId: id, star: star, comment: comment })).finally(
+        () => {
+          router.reload();
+        }
       );
     }
   };
 
-  const onSubmit = (data: Rate) => {
-    dispatch(ratePost(data));
-  };
-  console.log(73,profile)
+  console.log(73, profile);
 
-  const handleChatWithAuthor = async (author: {id: string, name: string, avatar: string}) =>{
-    if(!profile) return;
-    try{
-      const condition:Condition = {
+  const handleChatWithAuthor = async (author: {
+    id: string;
+    name: string;
+    avatar: string;
+  }) => {
+    if (!profile) return;
+    try {
+      const condition: Condition = {
         fieldName: 'id',
         operator: '==',
-        value: author.id
+        value: author.id,
+      };
+      console.log(75, author);
+      const roomIsExist = await getDocument('rooms', condition);
+      if (roomIsExist.empty) {
+        const docRef = await addDocument('rooms', {
+          keyUserId: profile.id,
+          keyUserName: profile.name,
+          keyUserAvatar: profile.avatar,
+          id: author.id,
+          name: author.name,
+          avatar: author.avatar,
+        });
+        if (docRef) router.push(`/chat/${docRef.id}`);
+      } else {
+        roomIsExist.forEach((doc) => {
+          router.push(`/chat/${doc.id}`);
+        });
       }
-      console.log(75,author)
-      const roomIsExist = await getDocument('rooms',condition)
-      if(roomIsExist.empty){
-        const docRef = await addDocument('rooms', {keyUserId: profile.id, keyUserName: profile.name, keyUserAvatar:  profile.avatar  ,id: author.id,name: author.name,  avatar: author.avatar})
-        if(docRef)
-        router.push(`/chat/${docRef.id}`)
-      }else {
-        roomIsExist.forEach(doc => {
-          router.push(`/chat/${doc.id}`)
-
-        })
-      }
+    } catch (err) {
+      console.error(err);
     }
-    catch (err) {
-      console.error(err)
-    }   
-  }
+  };
 
   return (
     <div className=" container mx-auto phone:mx-4 phonel:mx-auto sm:mx-auto md:mx-auto">
@@ -208,7 +216,13 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
                             style={{
                               paddingLeft:
                                 (hostel?.rateInfo?.star5 * 100) /
-                                  hostel?.rateInfo?.total +
+                                  Math.max(
+                                    hostel?.rateInfo?.star1,
+                                    hostel?.rateInfo?.star2,
+                                    hostel?.rateInfo?.star3,
+                                    hostel?.rateInfo?.star4,
+                                    hostel?.rateInfo?.star5
+                                  ) +
                                 '%',
                             }}
                             className="bg-[#786fa6] border-[#786fa6] border-4 rounded w-0"
@@ -224,8 +238,14 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
                           <div
                             style={{
                               paddingLeft:
-                                hostel?.rateInfo?.star4 /
-                                  hostel?.rateInfo?.total +
+                                (hostel?.rateInfo?.star4 * 100) /
+                                  Math.max(
+                                    hostel?.rateInfo?.star1,
+                                    hostel?.rateInfo?.star2,
+                                    hostel?.rateInfo?.star3,
+                                    hostel?.rateInfo?.star4,
+                                    hostel?.rateInfo?.star5
+                                  ) +
                                 '%',
                             }}
                             className="bg-[#786fa6] border-[#786fa6] border-4 rounded w-0"
@@ -241,8 +261,14 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
                           <div
                             style={{
                               paddingLeft:
-                                hostel?.rateInfo?.star3 /
-                                  hostel?.rateInfo?.total +
+                                (hostel?.rateInfo?.star3 * 100) /
+                                  Math.max(
+                                    hostel?.rateInfo?.star1,
+                                    hostel?.rateInfo?.star2,
+                                    hostel?.rateInfo?.star3,
+                                    hostel?.rateInfo?.star4,
+                                    hostel?.rateInfo?.star5
+                                  ) +
                                 '%',
                             }}
                             className="bg-[#786fa6] border-[#786fa6] border-4 rounded w-0"
@@ -258,8 +284,14 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
                           <div
                             style={{
                               paddingLeft:
-                                hostel?.rateInfo?.star2 /
-                                  hostel?.rateInfo?.total +
+                                (hostel?.rateInfo?.star2 * 100) /
+                                  Math.max(
+                                    hostel?.rateInfo?.star1,
+                                    hostel?.rateInfo?.star2,
+                                    hostel?.rateInfo?.star3,
+                                    hostel?.rateInfo?.star4,
+                                    hostel?.rateInfo?.star5
+                                  ) +
                                 '%',
                             }}
                             className="bg-[#786fa6] border-[#786fa6] border-4 rounded w-0"
@@ -275,8 +307,14 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
                           <div
                             style={{
                               paddingLeft:
-                                hostel?.rateInfo?.star1 /
-                                  hostel?.rateInfo?.total +
+                                (hostel?.rateInfo?.star1 * 100) /
+                                  Math.max(
+                                    hostel?.rateInfo?.star1,
+                                    hostel?.rateInfo?.star2,
+                                    hostel?.rateInfo?.star3,
+                                    hostel?.rateInfo?.star4,
+                                    hostel?.rateInfo?.star5
+                                  ) +
                                 '%',
                             }}
                             className="bg-[#786fa6] border-[#786fa6] border-4 rounded w-0"
@@ -371,7 +409,13 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
               <button
                 type="button"
                 className="button button__border button__border-large text__normal"
-                onClick={(e) => handleChatWithAuthor({id: hostel.authorId, name: hostel.authorName, avatar: hostel.authorAvatar})}
+                onClick={(e) =>
+                  handleChatWithAuthor({
+                    id: hostel.authorId,
+                    name: hostel.authorName,
+                    avatar: hostel.authorAvatar,
+                  })
+                }
               >
                 Chat với người đăng
               </button>
@@ -418,7 +462,7 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
                 'text-sm',
                 star ? 'bg-[#786fa6]' : '!bg-[#dddddd] cursor-not-allowed'
               )}
-              onClick={onRatechange}
+              onClick={onRateChange}
             >
               Đăng
             </button>

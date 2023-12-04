@@ -5,7 +5,6 @@ import { getToken } from '../app/token';
 const axiosClient = axios.create({
   baseURL: 'http://localhost:8080/',
 });
-
 // Interceptors
 axiosClient.interceptors.request.use(
   function (config: AxiosRequestConfig) {

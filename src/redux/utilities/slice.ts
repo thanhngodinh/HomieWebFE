@@ -17,7 +17,7 @@ export const getUtilitiess = createAsyncThunk(
   'utilities/getUtilitiess',
   async () => {
     try {
-      const response = await utilitiesApi.get({});
+      const response = await utilitiesApi.get();
       return response;
     } catch (error) {
       console.error(error);
@@ -30,7 +30,7 @@ export const utilitiesSlice = createSlice({
   initialState,
   reducers: {
     setUtilities(state, action) {
-      state.listUtilities = action.payload;
+      state.listUtilities = action.payload?.data;
     },
   },
   extraReducers: (builder) => {
@@ -40,8 +40,7 @@ export const utilitiesSlice = createSlice({
         state.error = false;
       })
       .addCase(getUtilitiess.fulfilled, (state, action) => {
-        state.listUtilities = action.payload || [];
-        console.log(state.listUtilities);
+        state.listUtilities = action.payload?.data || [];
         state.loading = false;
         state.error = false;
       })

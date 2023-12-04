@@ -13,14 +13,6 @@ import { objectToQueryParams } from '../utils/func';
 import { Rate } from '../models/rate';
 
 export const hostelApi = {
-  get(): Promise<BaseResponse<Post[]>> {
-    const url = `/posts`;
-    return axiosClient.get(url);
-  },
-  search({}): Promise<BaseResponse<Post[]>> {
-    const url = '/posts';
-    return axiosClient.get(url);
-  },
   searchGet(query?: HostelFilter): Promise<BaseResponse<Post[]>> {
     const queryParams = objectToQueryParams(query);
     const queryString = queryParams ? `/search?${queryParams}` : '';
@@ -35,7 +27,7 @@ export const hostelApi = {
     const url = '/posts/suggest';
     return axiosClient.get(url);
   },
-  getById(id: string): Promise<Post> {
+  getById(id: string): Promise<BaseResponse<Post>> {
     const url = `/posts/${id}`;
     return axiosClient.get(url);
   },
@@ -56,17 +48,17 @@ export const hostelApi = {
     return axiosClient.patch(url);
   },
   likePost(postId: string): Promise<BaseResponse<string>> {
-    const url = `posts/like/${postId}`;
+    const url = `/posts/like/${postId}`;
     return axiosClient.post(url);
   },
   ratePost(params: Rate): Promise<BaseResponse<string>> {
-    const url = `posts/rates`;
+    const url = `/rates/${params.postId}`;
     return axiosClient.post(url, params);
   },
 };
 
 export const utilitiesApi = {
-  get({}): Promise<Utilities[]> {
+  get(): Promise<BaseResponse<Utilities[]>> {
     const url = '/utilities';
     return axiosClient.get(url);
   },
