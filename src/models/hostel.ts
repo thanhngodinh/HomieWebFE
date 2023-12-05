@@ -9,7 +9,7 @@ export type Post = {
   district: string;
   ward: string;
   street: string;
-  postType?: string;
+  type: string;
   status: 'A' | 'I' | 'W';
   cost: number;
   electricityPrice?: number;

@@ -14,6 +14,7 @@ interface HostelItemProps {
   size?: number;
   cost: number;
   address: string;
+  type: string;
   isLiked: boolean;
   token: string;
   handleCompare?: (checked: boolean, id: string) => void;
@@ -50,6 +51,10 @@ const HostelItem: FC<HostelItemProps> = (props) => {
           <hr className="w-full" />
         </div>
         <div className="text-base row-span-1 mb-1">
+          <div className="text-base row-span-1 mb-1 ">
+            <span className="font-semibold">Loại phòng: </span>
+            <span>{props.type}</span>
+          </div>
           <span className="font-semibold">Địa chỉ: </span>
           <span className="phone:text-sm sm:text-md">{props.address}</span>
         </div>
@@ -57,9 +62,6 @@ const HostelItem: FC<HostelItemProps> = (props) => {
           <span className="font-semibold">Giá thuê: </span>
           <span>{GenCurrecy(props.cost)}</span>
         </div>
-        <p className=" row-span-1 mb-2 phone:text-sm sm:text-md">
-          Phòng {props.size} người
-        </p>
       </div>
 
       {props.removeAction ? (

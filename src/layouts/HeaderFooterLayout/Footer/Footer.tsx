@@ -6,8 +6,8 @@ const cx = classNames.bind(styles);
 
 const Footer: FC = () => {
   return (
-    <footer className="bg-gray-100 w-screen mt-5 px-40 pt-20 pb-20">
-      <div className="grid grid-cols-12">
+    <footer className="bg-slate-100 w-screen mt-5 px-40 pt-20 pb-20">
+      <div className="grid grid-cols-12 ">
         <div className="col-span-3">
           <h1 className="text-xl">Support</h1>
           <ul className="no-underline mt-2">

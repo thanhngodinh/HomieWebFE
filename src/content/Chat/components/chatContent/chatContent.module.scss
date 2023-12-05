@@ -36,7 +36,7 @@
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
-    margin-bottom: 15px;
+    margin: 0 16px 16px;
     transition: all 0.3s ease;
     transform: scale(0);
     transform-origin: right;
@@ -62,15 +62,14 @@
     }
   }
   .chat__item .avatar {
-    margin-right: 0px;
-    margin-left: 20px;
+    margin: auto;
     background: #fff;
-    padding: 1px;
   }
   .chat__item__content {
     background-color: #786fa6;
     color: #fff;
-    padding: 15px;
+    padding: 16px;
+    margin: 0 12px;
     border-radius: 10px 10px 0 10px;
     max-width: 50%;
     min-width: 215px;

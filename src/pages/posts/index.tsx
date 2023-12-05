@@ -250,7 +250,10 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
       {/* Bắt đầu Map */}
 
       <div id="map-box" className="mt-8 w-4/5 mx-auto h-[400px]" style={!showMap ? {display: 'none'}: {display: 'block'}}>
-        <MapBox markers={list && Array.isArray(list) ? list.map((item) => { return { latitude: item.latitude, longitude: item.longitude } }) : []} />
+        <MapBox markers={list && Array.isArray(list) ? list.map((item) => { return {
+          latitude: parseFloat(item.latitude),
+          longitude: parseFloat(item.longitude),
+        }; }) : []} />
       </div>
       
       

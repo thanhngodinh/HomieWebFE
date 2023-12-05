@@ -109,7 +109,7 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
   return (
     <div className=" container mx-auto phone:mx-4 phonel:mx-auto sm:mx-auto md:mx-auto">
       <div className="grid grid-cols-2 gap-4 mb-4">
-        <div className="bg-slate-50 rounded-lg phone:col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-1 ">
+        <div className="bg-slate-50 rounded-lg phone:col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-1 pt-8">
           {hostel?.imageUrl && (
             <Carousel
               autoPlay={true}
@@ -130,7 +130,7 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
             </Carousel>
           )}
         </div>
-        <div className="px-6 text-black phone:col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-1">
+        <div className="px-6 pt-4 text-black phone:col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-1">
           <div className="text-4xl font-bold mb-4">{hostel?.name}</div>
 
           <div className="my-5">
@@ -337,12 +337,11 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
         </div>
       </div>
 
-      <hr />
-      <div className="h-auto w-full grid grid-cols-3 gap-4 divide-y divide-gray-200">
-        <div className="col-span-2  phone:col-span-3 sm:col-span-3 md:col-span-3 lg:col-span-2 ">
-          <div className="my-5">
+      <div className="h-auto w-full grid grid-cols-3 gap-4 border-t border-solid border-[#70757a]">
+        <div className="col-span-2 phone:col-span-3 sm:col-span-3 md:col-span-3 lg:col-span-2 ">
+          <div className="py-5">
             {hostel?.description && (
-              <div className="my-5 border-top divide-gray-200">
+              <div className="my-5">
                 <p className="text-xl font-semibold">Mô tả</p>
                 <p className="text-sm mt-4 whitespace-pre-wrap break-all">
                   {hostel?.description}
@@ -350,9 +349,7 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
               </div>
             )}
           </div>
-          <hr />
-
-          <div className="my-5 border-top divide-gray-200">
+          <div className="py-5">
             <p className="text-xl font-semibold">Các tiện ích khác</p>
 
             <div className="grid grid-cols-3 gap-2 mt-4">
@@ -371,10 +368,9 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
               })}
             </div>
           </div>
-          <hr />
         </div>
         {/* Author card */}
-        <div className=" w-full  border border-solid border-gray-200 content-center py-2 flex items-center justify-center phone:col-span-3 sm:col-span-3 md:col-span-3 lg:col-span-1 ">
+        <div className=" w-full border border-solid  border-[#70757a] content-center py-2 flex items-center justify-center phone:col-span-3 sm:col-span-3 md:col-span-3 lg:col-span-1 ">
           <div className="">
             <div className="w-full mb-4 ">
               <img
@@ -425,7 +421,7 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
       </div>
 
       {/* rating form  */}
-      <div className="p-4  border-t border-solid border-[#70757a] grid grid-cols-2 gap-4">
+      <div className="p-4 border-t border-solid border-[#70757a] grid grid-cols-2 gap-4">
         <form
           action=""
           className="phone:col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-1"
