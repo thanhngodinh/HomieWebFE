@@ -41,11 +41,13 @@ type Chat = {
 const Chat: FC<ChatProps> = () => {
   const router = useRouter();
   const roomId = router.query.id as string;
+  console.log(44, router.query);
   const dispatch = useDispatch<AppDispatch>();
   const [data, setData] = useState();
   const { profile, user } = useSelector(selectUsers);
-  const [rooms, setRooms] = useState<Room[]>([])
   const [roomSelected, setRoomSelected] = useState<Room>()
+  const [resultsSearch, setResultsSearch] = useState<Room[]>([])
+
 
   const condition1 = useMemo(()=>{
     return {
@@ -63,19 +65,25 @@ const Chat: FC<ChatProps> = () => {
     }
   },[profile?.id])
 
-  const document = useFirestore('rooms',condition1,condition2,'roomId',roomId, profile?.id )
-  console.log(58,document)
+  const documents = useFirestore('rooms',condition1,condition2,'roomId',roomId, profile?.id )
+  // console.log(58,document)
 
   useEffect(() => {
-    if(document){
-      console.log(61,document)
-      setRooms(document)
-      const roomSelect = getRoomsById(document,roomId)
+    if(documents && documents.length>0){
+      let roomSelect = {} as Room | undefined
+      if(!roomId){
+        
+        router.push(`/chat/${documents[0].roomId}`)
+      }
+      else{
+        roomSelect = getRoomsById(documents,roomId)
+      }
+      console.log(75,roomSelect)
       if(roomSelect){
         setRoomSelected(roomSelect)
       }
     }
-  }, [document]);
+  }, [documents,roomId]);
 
   // useEffect(() => {
   //   (async ()  => {
@@ -108,23 +116,30 @@ const Chat: FC<ChatProps> = () => {
   }, [dispatch]);
 
   useEffect(() => {
+    console.log(112,roomSelected)
     if(roomSelected){
       const targetUser = roomSelected.id !== profile.id ? roomSelected.id :  roomSelected.keyUserId
       dispatch(getUserById(targetUser || ""));
     }
-}, [roomSelected]);
-
+  }, [roomSelected]);
+  
   const getRoomsById = (rooms: Room[],id: string) => {
     return rooms?.find(room => room.roomId === id)
   }
 
-  console.log(data);
   return (
     <>
       <div className={cx('wrapper')}>
-        <ChatList rooms={rooms} user={user}/>
-        <ChatContent data={roomSelected} user={user} me={profile}/>
-        <UserProfile info={user}/>
+        <ChatList rooms={documents} user={user} me={profile}/>
+        {roomSelected? 
+        <>
+          <ChatContent data={roomSelected} user={user} me={profile}/>
+          <UserProfile info={user}/>
+        </>
+          : <></>
+        }
+        
+        
       </div>
     </>
   );

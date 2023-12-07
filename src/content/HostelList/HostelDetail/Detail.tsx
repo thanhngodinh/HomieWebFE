@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Detail.module.scss';
 import Carousel from 'react-material-ui-carousel';
-import { Carousel as Carousel2, Rate as AntdRate } from 'antd';
+import { Carousel as Carousel2, Rate as AntdRate, Button } from 'antd';
 import React from 'react';
 import SuggestItemBasic from '../../../components/SuggestItemBasic';
 import Link from 'next/link';
@@ -21,7 +21,7 @@ import {
 } from '../../../redux/utilities/slice';
 import { useRouter } from 'next/router';
 // import { useParams } from 'next/navigation';
-import { GenAddress, GenCurrecy, GetUtility } from '../../../utils/func';
+import { GenAddress, GenCurrecy, GetUtility, formatGoogleAddress } from '../../../utils/func';
 import { Input } from 'antd';
 import Review from '../../../components/Review';
 import { Rate } from '../../../models/rate';
@@ -29,6 +29,8 @@ import { flatMap } from 'lodash';
 import { Condition, addDocument, getDocument } from '../../../firebase/service';
 import { selectAuths } from '../../../redux/auth/slice';
 import { getMyProfile, selectUsers } from '../../../redux/user/slice';
+import { faBookAtlas, faMapLocationDot } from '@fortawesome/free-solid-svg-icons';
+import Map from '../../../components/Map';
 
 const cx = classNames.bind(styles);
 
@@ -41,6 +43,8 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
   const id = router.query.id as string;
 
   const [isShowPhone, setIsShowPhone] = useState(false);
+  const [showMap, setShowMap] = useState(false);
+
   const [comment, setComment] = useState('');
   const [star, setStar] = useState<number>();
   const [maxRate, setMaxRate] = useState<number>(1);
@@ -109,8 +113,8 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
   return (
     <div className=" container mx-auto phone:mx-4 phonel:mx-auto sm:mx-auto md:mx-auto">
       <div className="grid grid-cols-2 gap-4 mb-4">
-        <div className="bg-slate-50 rounded-lg phone:col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-1 pt-8">
-          {hostel?.imageUrl && (
+        <div className={`bg-slate-50 rounded-lg phone:col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-1 ${!showMap ? 'pt-8' : ''}`}>
+          {!showMap && hostel?.imageUrl && (
             <Carousel
               autoPlay={true}
               stopAutoPlayOnHover={true}
@@ -129,12 +133,35 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
               ]}
             </Carousel>
           )}
+
+          {showMap && (
+            <Map height='500' address={formatGoogleAddress({
+              province: hostel?.province,
+              district: hostel?.district,
+              ward: hostel?.ward,
+              street: hostel?.street
+            }) || ''}></Map>
+          )}
         </div>
         <div className="px-6 pt-4 text-black phone:col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-1">
           <div className="text-4xl font-bold mb-4">{hostel?.name}</div>
 
           <div className="my-5">
-            <p className="text-xl font-semibold mb-5">Thông tin cơ bản</p>
+            <div className="flex flex-start gap-4">
+              <p className="text-xl font-semibold mb-5"> Thông tin cơ bản</p>
+              <Button
+                htmlType="button"
+                className="buttonIcon buttonIcon__border"
+                onClick={() => setShowMap(!showMap)}
+                size="small"
+              >
+                {!showMap ? (
+                  <FontAwesomeIcon icon={faBookAtlas}  size="xs"/>
+                ) : (
+                  <FontAwesomeIcon icon={faMapLocationDot}  size="xs"/>                
+                )}
+              </Button>
+            </div>
             <div>
               <p className="text-gray-500 text-sm">Địa chỉ</p>
               <p className="text-sm">

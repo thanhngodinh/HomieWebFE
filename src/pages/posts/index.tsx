@@ -231,25 +231,26 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
               },
             ]}
             actionSearch={postHostelsWithQuerryParams}
-            footerSearch={
-              <Button
-                htmlType="button"
-                className="buttonIcon buttonIcon__border"
-                onClick={() => setShowMap(!showMap)}
-              >
-                {!showMap ? (
-                  <FontAwesomeIcon icon={faBookAtlas}  size="xs"/>
-                ) : (
-                  <FontAwesomeIcon icon={faMapLocationDot}  size="xs"/>                
-                )}
-              </Button>
-            }
+            // footerSearch={
+            //   <Button
+            //     htmlType="button"
+            //     className="buttonIcon buttonIcon__border"
+            //     onClick={() => setShowMap(!showMap)}
+            //   >
+            //     {!showMap ? (
+            //       <FontAwesomeIcon icon={faBookAtlas}  size="xs"/>
+            //     ) : (
+            //       <FontAwesomeIcon icon={faMapLocationDot}  size="xs"/>                
+            //     )}
+            //   </Button>
+            // }
           ></SearchMultiple>
         </div>
       </header>
       {/* Bắt đầu Map */}
 
-      <div id="map-box" className="mt-8 w-4/5 mx-auto h-[400px]" style={!showMap ? {display: 'none'}: {display: 'block'}}>
+      {/* <div id="map-box" className={`mt-8 w-4/5 mx-auto h-[400px]`} style={!showMap ? {visibility: 'hidden'}: {visibility: 'visible'}}> */}
+      <div id="map-box" className={`mt-8 w-4/5 mx-auto h-[400px]`}>
         <MapBox markers={list && Array.isArray(list) ? list.map((item) => { return {
           latitude: parseFloat(item.latitude),
           longitude: parseFloat(item.longitude),

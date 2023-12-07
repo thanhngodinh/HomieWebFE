@@ -1,9 +1,14 @@
-import { FC } from 'react';
+import { FC,useLayoutEffect } from 'react';
 import Link from 'next/link';
 import { GenCurrecy } from '../../utils/func';
 import { Avatar, Button, Tag } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMessage } from '@fortawesome/free-solid-svg-icons';
+import { getMyProfile, selectUsers } from '../../redux/user/slice';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../app/store';
+import { Condition, addDocument, getDocument } from '../../firebase/service';
+import { useRouter } from 'next/router';
 
 interface RoommateItemProps {
   id: string;
@@ -17,6 +22,52 @@ interface RoommateItemProps {
 }
 
 const RoommateItem: FC<RoommateItemProps> = (props) => {
+  const dispatch = useDispatch<AppDispatch>()
+  const router = useRouter()
+  const { profile } = useSelector(selectUsers);
+
+  useLayoutEffect(() => {
+    dispatch(getMyProfile());
+    
+  }, [dispatch]);
+  const handleChatWithAuthor = async (author: {
+    id: string;
+    name: string;
+    avatar: string;
+  }) => {
+    if (!profile) return;
+    try {
+      const condition: Condition = {
+        fieldName: 'id',
+        operator: '==',
+        value: author.id,
+      };
+      console.log(75, author);
+      const roomIsExist = await getDocument('rooms', condition);
+      console.log(48,roomIsExist.empty)
+      if (roomIsExist.empty) {
+        console.log(58,profile, author)
+
+        const docRef = await addDocument('rooms', {
+          keyUserId: profile.id,
+          keyUserName: profile.name,
+          keyUserAvatar: profile.avatar,
+          id: author.id,
+          name: author.name,
+          avatar: author.avatar,
+        });
+        console.log(58,profile, author)
+        if (docRef) router.push(`/chat/${docRef.id}`);
+      } else {
+        roomIsExist.forEach((doc) => {
+          console.log(48,doc)
+          router.push(`/chat/${doc.id}`);
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
   return (
     <>
       <div className="relative grid phone:grid-rows-2 sm:grid-rows-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6 xxl:grid-cols-6 content-center  y-4 bg-slate-100 rounded-xxl px-8 md:h-72 sm:h-96 phone:h-96 mb-3">
@@ -60,14 +111,18 @@ const RoommateItem: FC<RoommateItemProps> = (props) => {
           </div>
         </div>
         <div className="h-full flex items-center col-span-1 text-right mb-6 cursor-pointer m-auto phone:absolute phone:block phone:h-auto phone:right-0 phone:mr-3 sm:absolute sm:block sm:h-auto sm:right-0 sm:mr-3 md:flex md:h-full md:relative ">
-          <Link href="/chat">
+
             <button
               type="button"
+              onClick={() => handleChatWithAuthor({
+                id: props.id,
+                name: props.name,
+                avatar: props.img
+              })}
               className=" button button__fill button__fill-medium text__normal phone:hidden sm:hidden md:block"
             >
               Chat
             </button>
-          </Link>
 
           <Link href="/chat">
             <div className="text-[#786fa6] sm:block md:hidden">

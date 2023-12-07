@@ -7,7 +7,6 @@ import ReactMapGL, {
 } from 'react-map-gl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse } from '@fortawesome/free-solid-svg-icons';
-import 'mapbox-gl/dist/mapbox-gl.css';
 
 type Coord = {
     longitude?: number;
@@ -39,6 +38,7 @@ const MapBox: FC<MapBoxProps> = ({markers}) => {
 
     useEffect(()=>{
         if(markers){
+            let zoom = 8
             const center = (positions: Coord[]) => {
                 if (!positions.length) {
                   return null;
@@ -46,23 +46,24 @@ const MapBox: FC<MapBoxProps> = ({markers}) => {
             
                 const lng_sum = positions.reduce((sum, coordinate) => sum + (coordinate?.longitude || 0), 0);
                 const lat_sum = positions.reduce((sum, coordinate) => sum + (coordinate?.latitude || 0), 0);
-                return { longitude: lng_sum / positions.length, latitude: lat_sum / positions.length, zoom: 5 };
+                return { longitude: lng_sum / positions.length, latitude: lat_sum / positions.length, zoom: 8 };
             };
             const adjustMarker = markers.filter(m => !!m.latitude && !!m.longitude)
+            if(adjustMarker.length>20) { zoom = 4}
             console.log(adjustMarker)
             if(adjustMarker.length > 0){
                 const positionCenter = center(adjustMarker)
-                setCurrentAddress({...positionCenter})
+                setCurrentAddress({...positionCenter, zoom})
+
             }
             
         }
-    },[])
+    },[markers])
 
     
   return (
     <ReactMapGL
         {...currentAddress}
-        mapLib={import('mapbox-gl')}
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_TOKEN}
         // initialViewState={{
         // }}

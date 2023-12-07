@@ -37,6 +37,7 @@ const ChatContent = ({data,user,me}: ChatContentProps) => {
   const refContent = useRef<any>(null)
   // const [state, setState] = useState<ChatContentType>();
   const [isClient, setIsClient] = useState(false);
+  const [chatValue, setChatValue] = useState("");
   const messagesEndRef = createRef() as any;
 
   const scrollToBottom = () => {
@@ -51,6 +52,7 @@ const ChatContent = ({data,user,me}: ChatContentProps) => {
   const {
     control,
     reset,
+    resetField,
     setValue,
     getValues,
     handleSubmit,
@@ -81,7 +83,7 @@ const ChatContent = ({data,user,me}: ChatContentProps) => {
         await updateDocument("rooms",data?.roomId, {chats: chatClone})
         await addNewDoc("room_operations", data?.roomId, {userOne: data?.keyUserId, userTwo: data?.id, userOneSeen: me?.id === data?.keyUserId, userTwoSeen: me?.id === data?.id})
       }
-      reset()
+      resetField("message")
       console.log(97,refContent.current.scrollHeight)
       refContent.current.scrollTop = refContent.current.scrollHeight
 
@@ -105,16 +107,19 @@ const ChatContent = ({data,user,me}: ChatContentProps) => {
   // }
   useEffect(()=>{refContent.current.scrollTop = refContent.current.scrollHeight},[refContent.current?.scrollHeight])
 
+  console.log(108,user)
+
   return (
     <div className={cx('main__chatcontent')}>
       <div className={cx('content__header')}>
         <div className={cx('blocks')}>
           <div className={cx('current-chatting-user')}>
             <Avatar
+              size="s"
               isOnline="active"
-              image={user?.avatar || 'https://cmsapi-frontend.naruto-official.com/site/api/naruto/Image/get?path=/naruto/import/images/naruto02/501%EF%BD%9E600/542/C004.jpg'}
+              image={user?.avatar || 'https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png'}
             />
-            <p>{user?.name}</p>
+            <p className="pl-2">{user?.name}</p>
           </div>
         </div>
 
@@ -124,18 +129,22 @@ const ChatContent = ({data,user,me}: ChatContentProps) => {
         </div>
       </div>
       <div ref={refContent} className={cx('content__body')}>
-        <div className={cx('chat__items')}>
-          {data&&data.chats && data.chats.map((chat, i: number) => {
+        <div className="h-full">
+          {data&&data.chats ? data.chats.map((chat, i: number) => {
             return (
               <ChatItem
                 key={i}
                 user={checkTheMessageIsMine(chat.id) ? 'me' : 'other'}
                 msg={chat.message}
-                image={chat.avatar || "https://cmsapi-frontend.naruto-official.com/site/api/naruto/Image/get?path=/naruto/import/images/naruto02/501%EF%BD%9E600/542/C004.jpg"}
+                image={chat.avatar || "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png"}
                 time={formatShortDateTime(chat.createdAt)}
               />
             );
-          })}
+          }): <div className="h-full text-center flex flex-col-reverse pb-4 items-center">
+              <p>Hãy nhắn những tin nhắn đầu tiên với {user?.name}</p>
+              <Avatar size="l" isOnline="active" image={user?.avatar || "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png"} />
+            </div>
+          }
           <div ref={messagesEndRef} />
         </div>
       </div>
@@ -161,8 +170,6 @@ const ChatContent = ({data,user,me}: ChatContentProps) => {
                 type="text"
                 placeholder="Type a message here"
                 autoComplete="false"
-                // onChange={onStateChange}
-                // value={state?.msg}
               />
             </FormItem>
             <div style={{ marginBottom: '0' }}>
@@ -170,7 +177,7 @@ const ChatContent = ({data,user,me}: ChatContentProps) => {
                 type="submit"
                 className={cx('btnSendMsg')}
                 id="sendMsgBtn"
-                // onClick={handleButtonSubmit}
+                // onClick={}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

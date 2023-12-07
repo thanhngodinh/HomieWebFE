@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import styles from './userProfile.module.scss';
 import classNames from 'classnames/bind';
 import { User } from '../../../../models';
+import Avatar from '../chatList/Avatar';
 
 const cx = classNames.bind(styles);
 
@@ -18,9 +19,7 @@ const UserProfile = ({info}: UserProfileProps) => {
   return (
     <div className={cx('main__userprofile')}>
       <div className={cx('profile__card')}>
-        <div className={cx('profile__image')}>
-          <img src={info?.avatar} />
-        </div>
+        <Avatar image={info?.avatar ||  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/default-avatar.png" } isOnline={undefined} size={'m'}></Avatar>
         <h4>{info?.name}</h4>
         <p>{info?.email}</p>
         <p>{info?.phone}</p>

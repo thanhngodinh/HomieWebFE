@@ -14,6 +14,7 @@ import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 
 interface IProps {
   address: string;
+  height?: string;
 }
 
 type Address = {
@@ -24,7 +25,7 @@ type Address = {
   placeId?: string
 };
 
-export default function Map({ address }: IProps) {
+export default function Map({ address,height }: IProps) {
   // const [selected, setSelected] = useState<any | null>(null);
   // const mapRef = useRef<any | null>(null);
   // const [currentAddress, setCurrentAddress] = useState<Address>({
@@ -84,7 +85,7 @@ export default function Map({ address }: IProps) {
       </ReactMapGL> */}
       <iframe
         width="100%"
-        height="600"
+        height={height|| 600}
         loading="lazy"
         
         src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_MAPS_API_KEY}

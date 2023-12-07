@@ -9,6 +9,7 @@ import '../assets/scss/common.scss';
 import '../assets/scss/input.scss';
 import '../assets/scss/button.scss';
 import { storeRedux } from '../app/store';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {

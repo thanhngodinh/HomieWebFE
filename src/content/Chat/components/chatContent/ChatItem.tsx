@@ -25,7 +25,7 @@ const ChatItem = (props: ChatItemProps) => {
           {/* <span>Seen 1.03PM</span> */}
         </div>
       </div>
-      <Avatar isOnline="active" image={props.image} />
+      <Avatar size="s" isOnline="active" image={props.image} />
     </div>
   );
 };
