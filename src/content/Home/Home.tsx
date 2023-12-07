@@ -75,7 +75,7 @@ const Home: FC<HomeProps> = (props) => {
   };
 
   useEffect(() => {
-    dispatch(postHostelsWithQuerryParams({ pageSize: 10 }));
+    dispatch(postHostelsWithQuerryParams({ pageSize: 5 }));
     dispatch(getHostelSuggest());
     getProvince();
     getDistrict(1);
@@ -113,7 +113,7 @@ const Home: FC<HomeProps> = (props) => {
                 <Select
                   showSearch
                   size="large"
-                  className="w-2/6	 border-b text-left"
+                  className="w-2/6 border-b text-left"
                   value={provincevValue}
                   onChange={(value) => setProvinceValue(value)}
                   options={province}
@@ -155,7 +155,7 @@ const Home: FC<HomeProps> = (props) => {
                   return (
                     <div className="p-2 mb-4">
                       <SuggestItemBasic
-                        link={'/'}
+                        link={i.link}
                         img={i.img}
                         title={i.title}
                       />
@@ -180,28 +180,28 @@ Home.defaultProps = {
   city: [
     {
       img: 'https://cdn.vntrip.vn/cam-nang/wp-content/uploads/2017/07/ho-hoan-kiem-3.jpg',
-      title: 'Ha Noi',
-      link: '/',
+      title: 'Thành phố Hà Nội',
+      link: '/posts?pageIdx=0&district=&province=Thành+phố+Hà+Nội',
     },
     {
-      img: 'https://cdn.vntrip.vn/cam-nang/wp-content/uploads/2017/07/ho-hoan-kiem-3.jpg',
-      title: 'TP HCM',
-      link: '/',
+      img: 'https://bcp.cdnchinhphu.vn/zoom/600_315/334894974524682240/2023/3/10/thanh-pho-ho-chi-minh-224682-16784361448451965541176-0-0-382-611-crop-16784361587461533125918.jpg',
+      title: 'Thành phố Hồ Chí Minh',
+      link: '/posts?pageIdx=0&district=Quận+1&province=Thành+phố+Hồ+Chí+Minh',
     },
     {
-      img: 'https://cdn.vntrip.vn/cam-nang/wp-content/uploads/2017/07/ho-hoan-kiem-3.jpg',
-      title: 'Da Nang',
-      link: '/',
+      img: 'https://baodautu.vn/Images/chicong/2023/11/02/phe-duyet-quy-hoach-thanh-pho-da-nang-thoi-ky-2021---2030-tam-nhin-den-20501698923654.jpg',
+      title: 'Thành phố Đà Nẵng',
+      link: '/posts?pageIdx=0&district=&province=Thành+phố+Đà+Nẵng',
     },
     {
-      img: 'https://cdn.vntrip.vn/cam-nang/wp-content/uploads/2017/07/ho-hoan-kiem-3.jpg',
-      title: 'Can Tho',
-      link: '/',
+      img: 'https://upload.wikimedia.org/wikipedia/commons/c/c4/Can-tho-tuonglamphotos.jpg',
+      title: 'Thành phố Cần Thơ',
+      link: '/posts?pageIdx=0&district=&province=Thành+phố+Cần+Thơ',
     },
     {
-      img: 'https://cdn.vntrip.vn/cam-nang/wp-content/uploads/2017/07/ho-hoan-kiem-3.jpg',
-      title: 'Binh Duong',
-      link: '/',
+      img: 'https://cdn.vietnambiz.vn/171464876016439296/2021/5/14/img1606-16209784381851840410693.jpg',
+      title: 'Tỉnh Bình Dương',
+      link: '/posts?pageIdx=0&district=&province=Thành+phố+Bình+Dương',
     },
   ],
 };

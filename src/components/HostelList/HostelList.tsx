@@ -13,13 +13,8 @@ interface HostelListProps {
 const HostelList: FC<HostelListProps> = ({ title, hostels }) => {
   const router = useRouter();
 
-  const [token, setToken] = useState('');
   const [compare, setCompare] = useState(['', '']);
   const [open, setOpen] = useState(false);
-  useEffect(() => {
-    let value = sessionStorage.getItem('token') || '';
-    setToken(value);
-  }, []);
 
   useEffect(() => {
     if (compare[1]) {
@@ -69,8 +64,7 @@ const HostelList: FC<HostelListProps> = ({ title, hostels }) => {
                 item.province
               )}
               cost={item.cost}
-              isLiked={item.isLiked}
-              token={token}
+              avgRate={item.avgRate}
               handleCompare={handleCompare}
               isCompareChecked={compare.includes(item.id)}
             />
@@ -117,8 +111,7 @@ const HostelList: FC<HostelListProps> = ({ title, hostels }) => {
                   item.province
                 )}
                 cost={item.cost}
-                isLiked={item.isLiked}
-                token={token}
+                avgRate={item.avgRate}
                 handleCompare={handleCompare}
                 isCompareChecked={compare.includes(item.id)}
                 removeAction={true}

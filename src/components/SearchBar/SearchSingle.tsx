@@ -7,7 +7,7 @@ import styles from './SearchSingle.module.scss';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { selectSearchQuery, updateQuery, updateResults } from '../../redux/search/slice';
-import { postHostelsWithQuerryParams, selectHostels } from '../../redux/hostel/slice';
+import { elasticSearch, postHostelsWithQuerryParams, selectHostels } from '../../redux/hostel/slice';
 import { AppDispatch } from '../../app/store';
 import { objectToQueryParams } from '../../utils/func';
 import { SearchOutlined } from '@ant-design/icons';
@@ -103,7 +103,8 @@ const SearchSingle: FC<SearchSingleProps> = ({keySearch,navigateTo,inputProps,bo
     },[dispatch])
 
     const PostHostelsWithQuerryParams = useCallback((query:any)=>{
-      dispatch(postHostelsWithQuerryParams(query))
+      // dispatch(postHostelsWithQuerryParams(query));
+      dispatch(elasticSearch(query));
     },[dispatch])
 
 

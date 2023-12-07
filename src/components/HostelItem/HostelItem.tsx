@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../app/store';
 import { likePost } from '../../redux/hostel/slice';
 import { Checkbox } from 'antd';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 interface HostelItemProps {
   id: string;
@@ -15,34 +16,24 @@ interface HostelItemProps {
   cost: number;
   address: string;
   type: string;
-  isLiked: boolean;
-  token: string;
+  avgRate: number;
   handleCompare?: (checked: boolean, id: string) => void;
   isCompareChecked?: boolean;
   removeAction?: boolean;
 }
 
 const HostelItem: FC<HostelItemProps> = (props) => {
-  const dispatch = useDispatch<AppDispatch>();
-
-  const [isLiked, setIsLiked] = useState(props.isLiked);
-
-  const onLikeChange = () => {
-    setIsLiked(!isLiked);
-    dispatch(likePost(props.id));
-  };
-
   return (
     <div className="relative rounded-lg grid phone:grid-rows-2 sm:grid-rows-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6 xxl:grid-cols-6 content-center  y-4 bg-slate-100 rounded-xxl px-8 md:h-72 sm:h-96 phone:h-[26rem] mb-3">
       <div className=" cursor-pointer m-auto">
-        <Link href={'posts/' + props.id}>
+        <Link href={'/posts/' + props.id}>
           <div className="w-[160px] h-[150px]">
             <img className="w-full h-full rounded-xl" src={props.img} />
           </div>
         </Link>
       </div>
       <div className="sm:col-span-2 md:col-span- lg:col-span-4 xl:col-span-4 xxl:col-span-4 sm:pl-16 phone:pl-0  my-auto">
-        <Link href={'posts/' + props.id}>
+        <Link href={'/posts/' + props.id}>
           <h2 className="phone:text-base sm:text-xl  xl:text-2xl xxl:text-2xl mb-2 text-primary light cursor-pointer my-auto">
             {props.name}
           </h2>
@@ -67,33 +58,22 @@ const HostelItem: FC<HostelItemProps> = (props) => {
       {props.removeAction ? (
         <></>
       ) : (
-        <div className="h-full flex flex-col justify-center items-center col-span-1 text-right mb-6 cursor-pointer m-auto phone:absolute phone:block phone:h-auto phone:right-0 phone:mr-3 sm:absolute sm:block sm:h-auto sm:right-0 sm:mr-3 md:flex md:h-full md:relative ">
-          {props.token ? (
-            isLiked ? (
-              <div className="mb-2">
-                <FontAwesomeIcon
-                  icon={'heart'}
-                  style={{ color: '#eb0a0a' }}
-                  onClick={onLikeChange}
-                />
-              </div>
-            ) : (
-              <div className="mb-2">
-                <FontAwesomeIcon
-                  icon={['far', 'heart']}
-                  onClick={onLikeChange}
-                />
-              </div>
-            )
+        <div className="h-full flex flex-col justify-center items-center col-span-1 text-right mb-6 m-auto phone:absolute phone:block phone:h-auto phone:right-0 phone:mr-3 sm:absolute sm:block sm:h-auto sm:right-0 sm:mr-3 md:flex md:h-full md:relative ">
+          {props.avgRate == 0 ? (
+            <div className="font-semibold text-xs my-1">Chưa có đánh giá</div>
           ) : (
-            <>
-              <div className="mb-2">
-                <Link href={'/login'}>
-                  <FontAwesomeIcon icon={['far', 'heart']} />
-                </Link>
-              </div>
-            </>
+            <div>
+              <span className="font-semibold ">
+                {props.avgRate + ' '}
+              </span>
+              <FontAwesomeIcon
+                size={'sm'}
+                icon={faStar}
+                style={{ color: '#FADB14' }}
+              />
+            </div>
           )}
+
           <div className="phone:absolute sm:relative phone:top-[380px] phone:right-[0px] sm:bottom-0 sm:top-0 sm:right-0 phone:w-[100px] sm:w-auto">
             <Checkbox
               checked={props.isCompareChecked}

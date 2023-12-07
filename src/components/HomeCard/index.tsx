@@ -53,12 +53,6 @@ const HomeCard = ({ hostel }: HomeProps) => {
             </span>
           )}
         </p>
-        {/* <div className={`${cx('_logo')}`}>
-        <img
-          className="h-full object-contain "
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Flag_of_Vietnam.svg/2000px-Flag_of_Vietnam.svg.png"
-        />
-      </div> */}
 
         <div className={`${cx('_playerInfo')}`}>
           <>
@@ -81,12 +75,12 @@ const HomeCard = ({ hostel }: HomeProps) => {
                 )}
               </span>
             </div>{' '}
-            <p className="text-left font-normal !leading-5 text-xl !ml-0 my-2">
+            <div className="text-left font-normal !leading-5 text-xl !ml-0 my-2">
               <span className="uppercase">Giá phòng:</span>
               <span className="block font-extrabold my-2">
                 {GenCurrecy(hostel?.cost)}
               </span>
-            </p>
+            </div>
             <span className="text-left uppercase font-normal !leading-5 text-xl !ml-0 my-2">
               Tiện ích:
             </span>
@@ -103,40 +97,8 @@ const HomeCard = ({ hostel }: HomeProps) => {
                 );
               })}
             </span>
-            {/* <p className="text-left uppercase font-normal text-sm !leading-4 text-xl !ml-0 my-2">
-            Diện tích:
-            <span className="block font-extrabold my-2">{hostel?.area}</span>
-          </p> */}
-            {/* <p className="text-left uppercase font-normal text-sm !leading-4 text-xl !ml-0 my-2">
-            Tiền điện
-            <span className="block font-extrabold my-2">
-              {GenCurrecy(hostel?.electricityPrice)}
-            </span>
-          </p>{' '}
-          <p className="text-left uppercase font-normal text-sm !leading-4 text-xl !ml-0 my-2">
-            Tiền nước
-            <span className="block font-extrabold my-2">
-              {GenCurrecy(hostel?.waterPrice)}
-            </span>
-          </p>{' '}
-          <p className="text-left uppercase font-normal text-sm !leading-4 text-xl !ml-0 my-2">
-            Tiền xe
-            <span className="block font-extrabold my-2">
-              {GenCurrecy(hostel?.parkingPrice)}
-            </span>
-          </p>{' '} */}
           </>
         </div>
-
-        {/* {openEditModal && (
-        <CreatePlayerModal
-          reload={reload}
-          setReload={setReload}
-          player={player}
-          title="Edit Player"
-          handleCloseModal={() => setOpenEditModal(false)}
-        ></CreatePlayerModal>
-      )} */}
       </div>
     </Link>
   );

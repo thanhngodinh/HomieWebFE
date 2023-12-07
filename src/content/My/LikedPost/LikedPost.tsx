@@ -14,12 +14,6 @@ const cx = classNames.bind(styles);
 interface MyPostProps {}
 
 const LikedPost: FC<MyPostProps> = () => {
-  const [token, setToken] = useState('');
-  useEffect(() => {
-    let value = sessionStorage.getItem('token') || '';
-    setToken(value);
-  }, []);
-
   const dispatch = useDispatch<AppDispatch>();
   const { posts, loading, error } = useSelector(selectUsers);
 
@@ -49,6 +43,7 @@ const LikedPost: FC<MyPostProps> = () => {
                     name={post.name}
                     img={post.imageUrl[0]}
                     size={post.capacity}
+                    type={post.type}
                     address={GenAddress(
                       post.street,
                       post.ward,
@@ -56,8 +51,7 @@ const LikedPost: FC<MyPostProps> = () => {
                       post.province
                     )}
                     cost={post.cost}
-                    isLiked={post.isLiked}
-                    token={token}
+                    avgRate={post.avgRate}
                   />
                 </div>
               </>

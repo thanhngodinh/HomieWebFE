@@ -26,7 +26,7 @@ const myApi = {
 
   updateMyProfile(profile: User): Promise<BaseResponse<User>> {
     const url = 'my/profile';
-    return axiosClient.patch(url, profile);
+    return axiosClient.put(url, profile);
   },
 
   verifyPhone(data: VerifyPhoneReq): Promise<BaseResponse<string>> {

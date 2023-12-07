@@ -82,13 +82,15 @@ const LoadProfile: FC<ProfileProps> = ({ profile }) => {
       </p>
       <p className="text-base font-semibold">
         Quận/Huyện mong muốn:{' '}
-        <span className="font-normal">{profile?.district?.toString()}</span>
+        <span className="font-normal">
+          {profile?.district?.toString()
+            .replace('{', '')
+            .replace('}', '')
+            .replaceAll(`"`, '')}
+        </span>
       </p>
       <p className="text-base font-semibold">
-        Giới tính:{' '}
-        <span className="font-normal">
-          {profile?.gender == 'M' ? 'Nam' : 'Nữ'}
-        </span>
+        Bạn muốn ở chung: <span className="font-normal">{profile?.gender}</span>
       </p>
       <p className="text-base font-semibold">
         Giá phòng mong muốn:{' '}

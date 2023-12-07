@@ -23,6 +23,7 @@ import { AppDispatch } from '../../../app/store';
 import { getMyProfile, selectUsers } from '../../../redux/user/slice';
 import EditProfile from './EditProfile';
 import LoadProfile from './LoadProfile';
+import Link from 'next/link';
 
 interface ProfileProps {}
 
@@ -63,12 +64,18 @@ const Profile: FC<ProfileProps> = () => {
 
               <h2>{profile?.name}</h2>
               <div className="grid grid-cols-2 divide-x items-center">
-                <h3>
-                  2<div className="text__normal">Đã theo dõi</div>
-                </h3>
-                <h3>
-                  12<div className="text__normal">Người theo dõi</div>
-                </h3>
+                <Link href="/my/post">
+                  <div className="cursor-pointer">
+                    <h3>{profile?.numPost || 0}</h3>
+                    <div className="text__normal">Bài đã đăng</div>
+                  </div>
+                </Link>
+                <Link href="/my/liked-post">
+                  <div className="cursor-pointer">
+                    <h3>{profile?.numLike || 0}</h3>
+                    <div className="text__normal">Bài đã thích</div>
+                  </div>
+                </Link>
               </div>
 
               <div className="">

@@ -27,6 +27,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../app/store';
 import { useSelector } from 'react-redux';
 import {
+  elasticSearch,
   getHostelsWithQuerryParams,
   postHostelsWithQuerryParams,
   selectHostels,
@@ -40,7 +41,11 @@ import SearchMultiple from '../../components/SearchMultiple';
 import type { SliderMarks } from 'antd/es/slider';
 import { formatNumber } from '../../utils/func';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookAtlas, faHouseUser, faMapLocationDot } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBookAtlas,
+  faHouseUser,
+  faMapLocationDot,
+} from '@fortawesome/free-solid-svg-icons';
 import { District, Province, Ward } from '../../models';
 import { getUtilitiess, selectUtilitiess } from '../../redux/utilities/slice';
 import MapBox from '../../components/MapBox';
@@ -67,7 +72,7 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
     { value: string; label: string; code: number }[]
   >([]);
 
-  const [showMap, setShowMap] = useState<boolean>(false)
+  const [showMap, setShowMap] = useState<boolean>(false);
 
   // const [codeProvince,setCodeProvince] = useState(1)
 
@@ -97,8 +102,8 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
         const districtMap =
           data && data.districts
             ? data.districts.map((d) => {
-              return { label: d.name, value: d.name, code: d.code };
-            })
+                return { label: d.name, value: d.name, code: d.code };
+              })
             : [];
         setDistrict(districtMap);
         // setValue('district', data?.districts[0]?.name);
@@ -112,8 +117,8 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
         const wardMap =
           data && data.wards
             ? data.wards.map((d) => {
-              return { label: d.name, value: d.name, code: d.code };
-            })
+                return { label: d.name, value: d.name, code: d.code };
+              })
             : [];
         setWard(wardMap);
       });
@@ -204,7 +209,6 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
                   min: 0,
                   style: { width: '100%' },
                 },
-
               },
               {
                 name: 'deposit',
@@ -219,9 +223,7 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
                   // tooltip: { formatter: formatNumber },
                   // style: { width: '80%' },
                   style: { width: '100%' },
-
                 },
-
               },
               {
                 name: 'utilities',
@@ -230,7 +232,7 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
                 tagsData: listUtilities,
               },
             ]}
-            actionSearch={postHostelsWithQuerryParams}
+            actionSearch={elasticSearch}
             // footerSearch={
             //   <Button
             //     htmlType="button"
@@ -240,7 +242,7 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
             //     {!showMap ? (
             //       <FontAwesomeIcon icon={faBookAtlas}  size="xs"/>
             //     ) : (
-            //       <FontAwesomeIcon icon={faMapLocationDot}  size="xs"/>                
+            //       <FontAwesomeIcon icon={faMapLocationDot}  size="xs"/>
             //     )}
             //   </Button>
             // }
@@ -251,15 +253,22 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
 
       {/* <div id="map-box" className={`mt-8 w-4/5 mx-auto h-[400px]`} style={!showMap ? {visibility: 'hidden'}: {visibility: 'visible'}}> */}
       <div id="map-box" className={`mt-8 w-4/5 mx-auto h-[400px]`}>
-        <MapBox markers={list && Array.isArray(list) ? list.map((item) => { return {
-          latitude: parseFloat(item.latitude),
-          longitude: parseFloat(item.longitude),
-        }; }) : []} />
+        <MapBox
+          markers={
+            list && Array.isArray(list)
+              ? list.map((item) => {
+                  return {
+                    latitude: parseFloat(item.latitude),
+                    longitude: parseFloat(item.longitude),
+                  };
+                })
+              : []
+          }
+        />
       </div>
-      
-      
+
       {/* Kết thúc Map */}
-      <SearchResults total={Array.isArray(list) ? list.length : 0}>
+      <SearchResults total={total}>
         <HostelList hostels={list} />
       </SearchResults>
       <div className={`mt-8 w-4/5 mx-auto text-center`}>

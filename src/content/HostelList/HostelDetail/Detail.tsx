@@ -12,6 +12,7 @@ import { AppDispatch } from '../../../app/store';
 import {
   getHostelById,
   getHostelSuggest,
+  likePost,
   ratePost,
   selectHostels,
 } from '../../../redux/hostel/slice';
@@ -21,7 +22,12 @@ import {
 } from '../../../redux/utilities/slice';
 import { useRouter } from 'next/router';
 // import { useParams } from 'next/navigation';
-import { GenAddress, GenCurrecy, GetUtility, formatGoogleAddress } from '../../../utils/func';
+import {
+  GenAddress,
+  GenCurrecy,
+  GetUtility,
+  formatGoogleAddress,
+} from '../../../utils/func';
 import { Input } from 'antd';
 import Review from '../../../components/Review';
 import { Rate } from '../../../models/rate';
@@ -29,7 +35,10 @@ import { flatMap } from 'lodash';
 import { Condition, addDocument, getDocument } from '../../../firebase/service';
 import { selectAuths } from '../../../redux/auth/slice';
 import { getMyProfile, selectUsers } from '../../../redux/user/slice';
-import { faBookAtlas, faMapLocationDot } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBookAtlas,
+  faMapLocationDot,
+} from '@fortawesome/free-solid-svg-icons';
 import Map from '../../../components/Map';
 
 const cx = classNames.bind(styles);
@@ -42,19 +51,20 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
   const router = useRouter();
   const id = router.query.id as string;
 
-  const [isShowPhone, setIsShowPhone] = useState(false);
+  const [token, setToken] = useState('');
   const [showMap, setShowMap] = useState(false);
-
   const [comment, setComment] = useState('');
   const [star, setStar] = useState<number>();
-  const [maxRate, setMaxRate] = useState<number>(1);
+  const [isLiked, setIsLiked] = useState(false);
+  const [isShowPhone, setIsShowPhone] = useState(false);
+
   const dispatch = useDispatch<AppDispatch>();
+
   const { hostel, listSuggest, loading, error } = useSelector(selectHostels);
   const { profile } = useSelector(selectUsers);
 
   const { listUtilities } = useSelector(selectUtilitiess);
 
-  // console.log(51,auths)
   useEffect(() => {
     if (id) {
       dispatch(getHostelById(id));
@@ -63,6 +73,15 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
       dispatch(getMyProfile());
     }
   }, [dispatch, id]);
+
+  useEffect(() => {
+    setIsLiked(hostel?.isLiked);
+  }, [loading]);
+
+  useEffect(() => {
+    let value = sessionStorage.getItem('token') || '';
+    setToken(value);
+  }, []);
 
   const onRateChange = () => {
     if (star) {
@@ -74,7 +93,10 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
     }
   };
 
-  console.log(73, profile);
+  const onLikeChange = () => {
+    setIsLiked(!isLiked);
+    dispatch(likePost(id));
+  };
 
   const handleChatWithAuthor = async (author: {
     id: string;
@@ -112,8 +134,12 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
 
   return (
     <div className=" container mx-auto phone:mx-4 phonel:mx-auto sm:mx-auto md:mx-auto">
-      <div className="grid grid-cols-2 gap-4 mb-4">
-        <div className={`bg-slate-50 rounded-lg phone:col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-1 ${!showMap ? 'pt-8' : ''}`}>
+      <div className="relative grid grid-cols-2 gap-4 mb-4">
+        <div
+          className={`relative bg-slate-50 rounded-lg phone:col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-1 ${
+            !showMap ? 'pt-8' : ''
+          }`}
+        >
           {!showMap && hostel?.imageUrl && (
             <Carousel
               autoPlay={true}
@@ -135,20 +161,51 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
           )}
 
           {showMap && (
-            <Map height='500' address={formatGoogleAddress({
-              province: hostel?.province,
-              district: hostel?.district,
-              ward: hostel?.ward,
-              street: hostel?.street
-            }) || ''}></Map>
+            <Map
+              height="500"
+              address={
+                formatGoogleAddress({
+                  province: hostel?.province,
+                  district: hostel?.district,
+                  ward: hostel?.ward,
+                  street: hostel?.street,
+                }) || ''
+              }
+            ></Map>
+          )}
+
+          {token ? (
+            isLiked ? (
+              <div className="absolute right-4 top-2 z-10">
+                <FontAwesomeIcon
+                  icon={'heart'}
+                  style={{ color: '#eb0a0a' }}
+                  onClick={onLikeChange}
+                />
+              </div>
+            ) : (
+              <div className="absolute right-4 top-2 z-10">
+                <FontAwesomeIcon
+                  icon={['far', 'heart']}
+                  onClick={onLikeChange}
+                />
+              </div>
+            )
+          ) : (
+            <div className="absolute right-4 top-2 z-10">
+              <Link href={'/login'}>
+                <FontAwesomeIcon icon={['far', 'heart']} />
+              </Link>
+            </div>
           )}
         </div>
+
         <div className="px-6 pt-4 text-black phone:col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-1">
           <div className="text-4xl font-bold mb-4">{hostel?.name}</div>
 
           <div className="my-5">
             <div className="flex flex-start gap-4">
-              <p className="text-xl font-semibold mb-5"> Thông tin cơ bản</p>
+              <p className="text-xl font-semibold mb-5">Thông tin cơ bản</p>
               <Button
                 htmlType="button"
                 className="buttonIcon buttonIcon__border"
@@ -156,9 +213,9 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
                 size="small"
               >
                 {!showMap ? (
-                  <FontAwesomeIcon icon={faBookAtlas}  size="xs"/>
+                  <FontAwesomeIcon icon={faBookAtlas} size="xs" />
                 ) : (
-                  <FontAwesomeIcon icon={faMapLocationDot}  size="xs"/>                
+                  <FontAwesomeIcon icon={faMapLocationDot} size="xs" />
                 )}
               </Button>
             </div>

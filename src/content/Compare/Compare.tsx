@@ -40,65 +40,67 @@ const Compare: FC<CompareProps> = () => {
   useEffect(() => {
     if (id1 && id2) {
       dispatch(getCompare({ post1: id1, post2: id2 }));
-
-      setText([
-        {
-          home1: compareHostel1?.cost,
-          field: 'Giá',
-          home2: compareHostel2?.cost,
-          isLessGood: true,
-        },
-        {
-          home1: compareHostel1?.capacity,
-          field: 'Sức chứa',
-          home2: compareHostel2?.capacity,
-          isLessGood: false,
-        },
-        {
-          home1: compareHostel1?.area,
-          field: 'Diện tích',
-          home2: compareHostel2?.area,
-          isLessGood: false,
-        },
-        {
-          home1: compareHostel1?.deposit || 0,
-          field: 'Tiền cọc',
-          home2: compareHostel2?.deposit || 0,
-          isLessGood: true,
-        },
-        {
-          home1: compareHostel1?.electricityPrice || 0,
-          field: 'Tiền điện',
-          home2: compareHostel2?.electricityPrice || 0,
-          isLessGood: true,
-        },
-        {
-          home1: compareHostel1?.waterPrice || 0,
-          field: 'Tiền nước',
-          home2: compareHostel2?.waterPrice || 0,
-          isLessGood: true,
-        },
-        {
-          home1: compareHostel1?.parkingPrice || 0,
-          field: 'Tiền xe',
-          home2: compareHostel2?.parkingPrice || 0,
-          isLessGood: true,
-        },
-        {
-          home1: compareHostel1?.serviecPrice || 0,
-          field: 'Tiền dịch vụ',
-          home2: compareHostel2?.serviecPrice || 0,
-          isLessGood: true,
-        },
-        {
-          home1: compareHostel1?.utilities?.length || 0,
-          field: 'Số tiện ích',
-          home2: compareHostel2?.utilities?.length || 0,
-          isLessGood: false,
-        },
-      ]);
     }
   }, [dispatch, id1, id2]);
+
+  useEffect(() => {
+    setText([
+      {
+        home1: compareHostel1?.cost,
+        field: 'Giá',
+        home2: compareHostel2?.cost,
+        isLessGood: true,
+      },
+      {
+        home1: compareHostel1?.capacity,
+        field: 'Sức chứa',
+        home2: compareHostel2?.capacity,
+        isLessGood: false,
+      },
+      {
+        home1: compareHostel1?.area,
+        field: 'Diện tích',
+        home2: compareHostel2?.area,
+        isLessGood: false,
+      },
+      {
+        home1: compareHostel1?.deposit || 0,
+        field: 'Tiền cọc',
+        home2: compareHostel2?.deposit || 0,
+        isLessGood: true,
+      },
+      {
+        home1: compareHostel1?.electricityPrice || 0,
+        field: 'Tiền điện',
+        home2: compareHostel2?.electricityPrice || 0,
+        isLessGood: true,
+      },
+      {
+        home1: compareHostel1?.waterPrice || 0,
+        field: 'Tiền nước',
+        home2: compareHostel2?.waterPrice || 0,
+        isLessGood: true,
+      },
+      {
+        home1: compareHostel1?.parkingPrice || 0,
+        field: 'Tiền xe',
+        home2: compareHostel2?.parkingPrice || 0,
+        isLessGood: true,
+      },
+      {
+        home1: compareHostel1?.serviecPrice || 0,
+        field: 'Tiền dịch vụ',
+        home2: compareHostel2?.serviecPrice || 0,
+        isLessGood: true,
+      },
+      {
+        home1: compareHostel1?.utilities?.length || 0,
+        field: 'Số tiện ích',
+        home2: compareHostel2?.utilities?.length || 0,
+        isLessGood: false,
+      },
+    ]);
+  }, [loading]);
 
   const CheckWorse = (home1: string, home2: string, isLessGood: boolean) => {
     if (parseInt(home1) == parseInt(home2)) {

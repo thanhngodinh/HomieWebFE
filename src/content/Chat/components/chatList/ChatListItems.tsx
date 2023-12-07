@@ -35,13 +35,10 @@ const ChatListItems = (props: ChatListItemsProps) => {
       className={`${cx('chatlist__item')} ${props.active ? props.active : ''} `}
     >
       <Avatar
-        image={
-          props.image
-            ? props.image
-            : 'https://cmsapi-frontend.naruto-official.com/site/api/naruto/Image/get?path=/naruto/import/images/naruto02/501%EF%BD%9E600/542/C004.jpg'
-        }
-        isOnline={props.isOnline}
-      />
+        image={props.image
+          ? props.image
+          : 'https://cmsapi-frontend.naruto-official.com/site/api/naruto/Image/get?path=/naruto/import/images/naruto02/501%EF%BD%9E600/542/C004.jpg'}
+        isOnline={props.isOnline} size={'s'}      />
 
       <div className={cx('userMeta')}>
         <p>{props.name}</p>

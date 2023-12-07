@@ -23,6 +23,10 @@ export const hostelApi = {
     const url = '/posts/search';
     return axiosClient.post(url, params);
   },
+  elasticSearch(params?: HostelFilter): Promise<BaseResponse<Post[]>> {
+    const url = '/posts/esearch';
+    return axiosClient.post(url, params);
+  },
   getSuggest({}): Promise<BaseResponse<Post[]>> {
     const url = '/posts/suggest';
     return axiosClient.get(url);

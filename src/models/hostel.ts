@@ -23,6 +23,7 @@ export type Post = {
   longitude: string;
   phone?: string;
   isLiked: boolean;
+  avgRate: number;
   imageUrl: string[];
   utilities: string[];
   createdAt?: string;

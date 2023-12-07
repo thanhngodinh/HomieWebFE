@@ -9,6 +9,7 @@ import {
   Divider,
   Form,
   Input,
+  InputNumber,
   Radio,
   RadioChangeEvent,
   Row,
@@ -209,8 +210,9 @@ const EditProfile: FC<ProfileProps> = (props) => {
                 }}
                 value={genderValue}
               >
-                <Radio value={'M'}>Nam</Radio>
-                <Radio value={'W'}>Nữ</Radio>
+                <Radio value={'Nam'}>Nam</Radio>
+                <Radio value={'Nữ'}>Nữ</Radio>
+                <Radio value={'Nam hoặc Nữ'}>Nam hoặc Nữ</Radio>
               </Radio.Group>
             </FormItem>
 
@@ -218,21 +220,37 @@ const EditProfile: FC<ProfileProps> = (props) => {
               <Col span={12} key="costFrom">
                 <FormItem
                   name="costFrom"
-                  label="Giá từ"
+                  label="Giá phòng từ"
                   control={control}
                   required={isFindRoommate}
                 >
-                  <Input />
+                  <InputNumber
+                    controls={false}
+                    style={{ width: '100%' }}
+                    placeholder="Hãy nhập Giá phòng tối thiểu"
+                    formatter={(value) =>
+                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                    }
+                    parser={(value) => value!.replace(/\$\s?|(,*)/g, '')}
+                  />
                 </FormItem>
               </Col>
               <Col span={12} key="costTo">
                 <FormItem
                   name="costTo"
-                  label="Giá tới"
+                  label="Tới"
                   control={control}
                   required={isFindRoommate}
                 >
-                  <Input />
+                  <InputNumber
+                    controls={false}
+                    style={{ width: '100%' }}
+                    placeholder="Hãy nhập Giá phòng tối đa"
+                    formatter={(value) =>
+                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                    }
+                    parser={(value) => value!.replace(/\$\s?|(,*)/g, '')}
+                  />
                 </FormItem>
               </Col>
             </Row>

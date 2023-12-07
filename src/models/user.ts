@@ -13,7 +13,9 @@ export type User = {
   district?: string[];
   costFrom?: number;
   costTo?: number;
-  avatar?:string;
+  avatar?: string;
+  numPost?: number;
+  numLike?: number;
 };
 
 export type VerifyPhoneReq = {

@@ -107,7 +107,7 @@ const RoommateItem: FC<RoommateItemProps> = (props) => {
           </div>
           <div className="text-base mb-1">
             <span className="font-semibold">Giới tính: </span>
-            <span>{props.gender == 'M' ? 'Nam' : 'Nữ'}</span>
+            <span>{props.gender}</span>
           </div>
         </div>
         <div className="h-full flex items-center col-span-1 text-right mb-6 cursor-pointer m-auto phone:absolute phone:block phone:h-auto phone:right-0 phone:mr-3 sm:absolute sm:block sm:h-auto sm:right-0 sm:mr-3 md:flex md:h-full md:relative ">
