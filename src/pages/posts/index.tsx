@@ -45,6 +45,7 @@ import { District, Province, Ward } from '../../models';
 import { getUtilitiess, selectUtilitiess } from '../../redux/utilities/slice';
 import MapBox from '../../components/MapBox';
 import { Button } from 'antd';
+import Pagination from '../../components/Pagination/Pagination';
 
 const HostelSearchPage: NextPage & { Layout?: FC } = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -182,7 +183,6 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
               },
               { name: 'street', label: 'Đường' },
               { name: 'name', label: 'Tên' },
-              { name: 'status', label: 'Status' },
               {
                 name: 'capacity',
                 label: 'Sức chứa',
@@ -192,36 +192,36 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
                   min: 0,
                   max: 20,
                   addonBefore: <FontAwesomeIcon icon={faHouseUser} />,
-                  style: { width: '80%' },
+                  style: { width: '100%' },
                 },
               },
               {
                 name: 'cost',
                 label: 'Giá thuê',
-                typeInput: 'inputRange',
+                typeInput: 'inputNumber',
                 type: 'number',
-                inputRangeProperties: {
+                inputNumberProperties: {
                   min: 0,
-                  max: 10000000,
-                  marks: marksCost,
-                  step: 100000,
-                  tooltip: { formatter: formatNumber },
-                  style: { width: '80%' },
+                  style: { width: '100%' },
                 },
+
               },
               {
                 name: 'deposit',
                 label: 'Tiền cọc',
-                typeInput: 'inputRange',
+                typeInput: 'inputNumber',
                 type: 'number',
-                inputRangeProperties: {
+                inputNumberProperties: {
                   min: 0,
-                  max: 10000000,
-                  marks: marksCost,
-                  step: 100000,
-                  tooltip: { formatter: formatNumber },
-                  style: { width: '80%' },
+                  // max: 10000000,
+                  // marks: marksCost,
+                  // step: 100000,
+                  // tooltip: { formatter: formatNumber },
+                  // style: { width: '80%' },
+                  style: { width: '100%' },
+
                 },
+
               },
               {
                 name: 'utilities',
@@ -262,6 +262,9 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
       <SearchResults total={Array.isArray(list) ? list.length : 0}>
         <HostelList hostels={list} />
       </SearchResults>
+      <div className={`mt-8 w-4/5 mx-auto text-center`}>
+        <Pagination total={total}></Pagination>
+      </div>
     </>
   );
 };

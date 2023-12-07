@@ -88,13 +88,13 @@ const SearchMultiple: FC<SearchMultipleProps> = ({
   const optionsToShow = showMore ? options : options?.slice(0, 3);
 
   const defaultSearchType = {
-    // pageSize: {type: 'number'},
+    pageSize: {type: 'number'},
     pageIdx: { type: 'number' },
   };
 
   const defaultSearchValue = {
-    // pageSize: 1,
-    pageIdx: 0,
+    pageSize: 5,
+    pageIdx: 1,
   };
 
   const router = useRouter();

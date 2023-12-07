@@ -30,9 +30,11 @@ const FloatChat: FC<FloatChatProps> = (props) => {
     dispatch(getMyProfile());
     }, [dispatch]);
 
-	useEffect(() => {
-		setIsClient(true)
-	}, []);
+	// useEffect(() => {
+	// 	if(profile){
+	// 	setIsClient(true)
+	// 	}
+	// }, [profile]);
 
   useEffect(() => {
   	(async ()  => {
@@ -54,7 +56,7 @@ const FloatChat: FC<FloatChatProps> = (props) => {
 
 	// 	</div>
   // );
-	if(isClient) return (
+	if(profile) return (
 		<Link href={`/chat/${rooms[0] ? rooms[0].roomId :  ""}`}>
     		<FloatButton icon={<CommentOutlined />} shape="circle" badge={{ dot: rooms && rooms.length !==0 }} style={{ right: 24 }} />
 
