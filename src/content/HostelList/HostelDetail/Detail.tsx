@@ -37,6 +37,7 @@ import { selectAuths } from '../../../redux/auth/slice';
 import { getMyProfile, selectUsers } from '../../../redux/user/slice';
 import {
   faBookAtlas,
+  faHeart,
   faMapLocationDot,
 } from '@fortawesome/free-solid-svg-icons';
 import Map from '../../../components/Map';
@@ -178,23 +179,20 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
             isLiked ? (
               <div className="absolute right-4 top-2 z-10">
                 <FontAwesomeIcon
-                  icon={'heart'}
+                  icon={faHeart}
                   style={{ color: '#eb0a0a' }}
                   onClick={onLikeChange}
                 />
               </div>
             ) : (
               <div className="absolute right-4 top-2 z-10">
-                <FontAwesomeIcon
-                  icon={['far', 'heart']}
-                  onClick={onLikeChange}
-                />
+                <FontAwesomeIcon icon={faHeart} onClick={onLikeChange} />
               </div>
             )
           ) : (
             <div className="absolute right-4 top-2 z-10">
               <Link href={'/login'}>
-                <FontAwesomeIcon icon={['far', 'heart']} />
+                <FontAwesomeIcon icon={faHeart} />
               </Link>
             </div>
           )}

@@ -63,10 +63,15 @@ const RegisterPage: React.FC = () => {
           <FormItem name="username" label="Email" control={control} required>
             <Input />
           </FormItem>
-          <FormItem name="phone" label="Số điện thoại" control={control}>
+          <FormItem
+            name="phone"
+            label="Số điện thoại"
+            control={control}
+            required
+          >
             <Input />
           </FormItem>
-          <FormItem name="name" label="Họ tên" control={control}>
+          <FormItem name="name" label="Họ tên" control={control} required>
             <Input />
           </FormItem>
 

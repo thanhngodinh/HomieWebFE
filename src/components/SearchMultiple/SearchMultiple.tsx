@@ -64,7 +64,7 @@ interface SearchMultipleProps {
   navigateTo?: string;
   options?: SearchOptions[];
   actionSearch?: any;
-  footerSearch?: React.ReactNode
+  footerSearch?: React.ReactNode;
 }
 
 const { CheckableTag } = Tag;
@@ -88,7 +88,7 @@ const SearchMultiple: FC<SearchMultipleProps> = ({
   const optionsToShow = showMore ? options : options?.slice(0, 3);
 
   const defaultSearchType = {
-    pageSize: {type: 'number'},
+    pageSize: { type: 'number' },
     pageIdx: { type: 'number' },
   };
 
@@ -302,7 +302,16 @@ const SearchMultiple: FC<SearchMultipleProps> = ({
                     name={name}
                     control={control}
                     render={({ field }) => (
-                      <InputNumber {...field} {...inputNumberProperties} />
+                      <InputNumber
+                        size="large"
+                        controls={false}
+                        formatter={(value) =>
+                          `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                        }
+                        parser={(value) => value!.replace(/\$\s?|(,*)/g, '')}
+                        {...field}
+                        {...inputNumberProperties}
+                      />
                     )}
                   />
                 ) : typeInput === 'inputRange' ? (
@@ -314,7 +323,7 @@ const SearchMultiple: FC<SearchMultipleProps> = ({
                     )}
                   />
                 ) : typeInput === 'datetimeRange' ? (
-                  <Input></Input>
+                  <Input size="large"></Input>
                 ) : typeInput === 'tagsMultipleSelection' ? (
                   <Space size={[0, 8]} wrap>
                     {tagsData &&
@@ -332,13 +341,14 @@ const SearchMultiple: FC<SearchMultipleProps> = ({
                               }
                             >
                               {
-                                <>
+                                <div className="m-1">
                                   <FontAwesomeIcon
                                     icon={(tag?.icon as any) || ''}
-                                    size="xs"
                                   />
-                                  <span>{' ' + tag.name}</span>
-                                </>
+                                  <span className="text-sm">
+                                    {' ' + tag.name}
+                                  </span>
+                                </div>
                               }
                             </CheckableTag>
                           )}
@@ -351,6 +361,7 @@ const SearchMultiple: FC<SearchMultipleProps> = ({
                     control={control}
                     render={({ field }) => (
                       <AutoComplete
+                        size="large"
                         {...autoCompleteInputProperties}
                         {...field}
                       ></AutoComplete>
@@ -360,7 +371,7 @@ const SearchMultiple: FC<SearchMultipleProps> = ({
                   <Controller
                     name={name}
                     control={control}
-                    render={({ field }) => <Input {...field} />}
+                    render={({ field }) => <Input size="large" {...field} />}
                   />
                 )}
               </FormItem>

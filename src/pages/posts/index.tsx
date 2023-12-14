@@ -1,22 +1,3 @@
-// import { NextPage } from 'next';
-// import { FC } from 'react';
-// import HostelPostList from '../../content/HostelList/HostelPostList';
-// import HeaderFooterLayout from '../../layouts/HeaderFooterLayout';
-// import SearchBar from '../../components/SearchBar';
-
-// const HostelListPage: NextPage & { Layout?: FC } = () => {
-//   return (
-//     <>
-//       <SearchBar keySearch='name'  navigateTo="/hostel/search"/>
-//       <HostelPostList />
-//     </>
-//   )
-// };
-
-// HostelListPage.Layout = HeaderFooterLayout;
-
-// export default HostelListPage;
-
 import { NextPage } from 'next';
 import { FC, useEffect, useState } from 'react';
 import HeaderFooterLayout from '../../layouts/HeaderFooterLayout';
@@ -187,7 +168,43 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
                 },
               },
               { name: 'street', label: 'Đường' },
+              {
+                name: 'type',
+                label: 'Loại nhà',
+                typeInput: 'autoCompleteInput',
+                autoCompleteInputProperties: {
+                  options: [
+                    { value: 'Ký túc xá', label: 'Ký túc xá' },
+                    { value: 'Phòng cho thuê', label: 'Phòng cho thuê' },
+                    { value: 'Nhà nguyên căn', label: 'Nhà nguyên căn' },
+                    { value: 'Phòng ở ghép', label: 'Phòng ở ghép' },
+                    { value: 'Căn hộ', label: 'Căn hộ' },
+                  ],
+                  filterOption: filterProvince,
+                  onSelect: onSelectProvince,
+                },
+              },
               { name: 'name', label: 'Tên' },
+              {
+                name: 'costFrom',
+                label: 'Tiền thuê tối thiểu',
+                typeInput: 'inputNumber',
+                type: 'number',
+                inputNumberProperties: {
+                  min: 0,
+                  style: { width: '100%' },
+                },
+              },
+              {
+                name: 'costTo',
+                label: 'Tiền thuê tối đa',
+                typeInput: 'inputNumber',
+                type: 'number',
+                inputNumberProperties: {
+                  min: 0,
+                  style: { width: '100%' },
+                },
+              },
               {
                 name: 'capacity',
                 label: 'Sức chứa',
@@ -201,8 +218,8 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
                 },
               },
               {
-                name: 'cost',
-                label: 'Giá thuê',
+                name: 'depositFrom',
+                label: 'Tiền cọc tối thiểu',
                 typeInput: 'inputNumber',
                 type: 'number',
                 inputNumberProperties: {
@@ -211,8 +228,8 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
                 },
               },
               {
-                name: 'deposit',
-                label: 'Tiền cọc',
+                name: 'depositTo',
+                label: 'Tiền cọc tối đa',
                 typeInput: 'inputNumber',
                 type: 'number',
                 inputNumberProperties: {

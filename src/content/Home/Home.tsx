@@ -179,7 +179,7 @@ Home.defaultProps = {
     'https://firebasestorage.googleapis.com/v0/b/nextjs-img.appspot.com/o/image%2Fhero-Fullwidth.png?alt=media&token=87167ea2-8c41-4dd7-87f8-b85a5a1a375c',
   city: [
     {
-      img: 'https://cdn.vntrip.vn/cam-nang/wp-content/uploads/2017/07/ho-hoan-kiem-3.jpg',
+      img: 'https://res.klook.com/image/upload/fl_lossy.progressive,w_800,c_fill,q_85/destination/lbnwgbgs4eqnzlvozlql.jpg',
       title: 'Thành phố Hà Nội',
       link: '/posts?pageIdx=0&district=&province=Thành+phố+Hà+Nội',
     },

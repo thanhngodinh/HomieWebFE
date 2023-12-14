@@ -2,7 +2,7 @@ import { extend } from 'lodash';
 import { PageFilter } from './common';
 
 export type PostRateInfo = {
-  Id: number;
+  id: number;
   postId: string;
   star1: number;
   star2: number;

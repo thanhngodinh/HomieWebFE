@@ -43,7 +43,7 @@ const HostelItem: FC<HostelItemProps> = (props) => {
         </div>
         <div className="text-base row-span-1 mb-1">
           <div className="text-base row-span-1 mb-1 ">
-            <span className="font-semibold">Loại phòng: </span>
+            <span className="font-semibold">Loại nhà: </span>
             <span>{props.type}</span>
           </div>
           <span className="font-semibold">Địa chỉ: </span>

@@ -1,9 +1,10 @@
 import * as yup from 'yup';
 
 export const schema = yup.object({
-  province: yup.string().required('Vui lòng chọn tỉnh/thành phố'),
-  district: yup.string().required('Vui lòng chọn quận/huyện'),
-  ward: yup.string().required('Vui lòng chọn phường/xã'),
+  type: yup.string().required('Vui lòng chọn Loại nhà'),
+  province: yup.string().required('Vui lòng chọn Tỉnh/Thành phố'),
+  district: yup.string().required('Vui lòng chọn Quận/Huyện'),
+  ward: yup.string().required('Vui lòng chọn Phường/Xã'),
   area: yup
     .number()
     .required('Vui lòng nhập Diện tích')
