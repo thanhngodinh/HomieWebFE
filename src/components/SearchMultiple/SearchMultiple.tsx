@@ -19,6 +19,7 @@ import {
   selectSearchQuery,
   updateQuery,
   updateResults,
+  updateResultsMap,
 } from '../../redux/search/slice';
 import {
   postHostelsWithQuerryParams,
@@ -32,7 +33,7 @@ import {
   objectWithoutEmptyFields,
 } from '../../utils/func';
 import { FormItem } from 'react-hook-form-antd';
-import { Control, Controller, useForm } from 'react-hook-form';
+import { Control, Controller, EventType, UseFormReset, UseFormResetField, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { HostelFilter } from '../../models';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -64,7 +65,9 @@ interface SearchMultipleProps {
   navigateTo?: string;
   options?: SearchOptions[];
   actionSearch?: any;
+  actionSearchMap?:any;
   footerSearch?: React.ReactNode;
+  handleWatch?: (data: unknown, value: {name?: string, type?: EventType}, reset:  UseFormResetField<any>) => void
 }
 
 const { CheckableTag } = Tag;
@@ -73,7 +76,9 @@ const SearchMultiple: FC<SearchMultipleProps> = ({
   options,
   navigateTo,
   actionSearch,
+  actionSearchMap,
   footerSearch,
+  handleWatch,
 }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch<AppDispatch>();
@@ -90,20 +95,25 @@ const SearchMultiple: FC<SearchMultipleProps> = ({
   const defaultSearchType = {
     pageSize: { type: 'number' },
     pageIdx: { type: 'number' },
+    province: { type: 'string' },
   };
 
   const defaultSearchValue = {
     pageSize: 5,
     pageIdx: 1,
+    province: "Thành phố Hà Nội"
   };
 
   const router = useRouter();
   const {
     control,
     register,
+    watch,
     getValues,
     setValue,
     handleSubmit,
+    reset,
+    resetField,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -114,6 +124,7 @@ const SearchMultiple: FC<SearchMultipleProps> = ({
   useEffect(() => {
     const defaultValue = router.query;
     const keys = Object.keys(defaultValue);
+    console.log(134,defaultValue)
     if (keys.length != 0 && !isDefaultValue) {
       for (const q of keys) {
         if (q.slice(-2) === 'To') {
@@ -125,7 +136,11 @@ const SearchMultiple: FC<SearchMultipleProps> = ({
       }
       const inputsTag = getInputsTypeTagsMultiple(options);
       for (const input of inputsTag) {
-        setSelectedTags({ [input.name]: defaultValue[input.name] });
+        
+        const value = !defaultValue[input.name] || Array.isArray(defaultValue[input.name]) ? defaultValue[input.name] : [defaultValue[input.name]]
+        setSelectedTags({ [input.name]: value });
+        console.log(134,value)
+
       }
       setIsDefaultValue(true);
     }
@@ -148,7 +163,7 @@ const SearchMultiple: FC<SearchMultipleProps> = ({
     // *gán các biến ngoại lệ
 
     const inputsTagMultiple = getInputsTypeTagsMultiple(options);
-    for (const input of inputsTagMultiple) {
+    for (const input of inputsTagMultiple) {      
       (data as any)[input.name] = selectedTags[input.name];
     }
 
@@ -193,13 +208,19 @@ const SearchMultiple: FC<SearchMultipleProps> = ({
 
     console.log('Enter here...', router.query);
     const paramQuery = router.query as any;
-    UpdateQuery(paramQuery);
+    const paramQueryClone = {...paramQuery}
+    const inputsTag = getInputsTypeTagsMultiple(options);
+      for (const input of inputsTag) {
+        if(paramQueryClone[input.name] && !Array.isArray(paramQueryClone[input.name]))
+        paramQueryClone[input.name] =  [paramQueryClone[input.name]]
+      }
+    UpdateQuery(paramQueryClone);
     if (
       (Object.keys(defaultSearchValue).length != 0 &&
-        Object.keys(paramQuery).length != 0) ||
+        Object.keys(paramQueryClone).length != 0) ||
       Object.keys(defaultSearchValue).length == 0
     ) {
-      ActionSearch(paramQuery);
+      ActionSearch(paramQueryClone);
     }
   }, [router.query]);
 
@@ -213,7 +234,11 @@ const SearchMultiple: FC<SearchMultipleProps> = ({
 
   useEffect(() => {
     dispatch(updateResults(hostelsResult));
-  }, [hostelsResult]);
+  }, [hostelsResult.list]);
+
+  useEffect(() => {
+    dispatch(updateResultsMap(hostelsResult));
+  }, [hostelsResult.listAll]);
 
   const UpdateQuery = useCallback(
     (value: any) => {
@@ -228,7 +253,14 @@ const SearchMultiple: FC<SearchMultipleProps> = ({
         query,
         mergeObject(getObjectTypeOptions(options), defaultSearchType)
       );
-      dispatch(actionSearch(newQuery));
+      if(actionSearch){
+        dispatch(actionSearch(newQuery));
+
+      }
+      if(actionSearchMap){
+        dispatch(actionSearchMap(newQuery));
+      }
+
     },
     [dispatch]
   );
@@ -240,6 +272,7 @@ const SearchMultiple: FC<SearchMultipleProps> = ({
     const nextSelectedTags = checked
       ? [...selectedTags[name], tag]
       : selectedTags[name]?.filter((t: string) => t !== tag);
+      console.log(259, nextSelectedTags)
     setSelectedTags({ [name]: nextSelectedTags });
   };
 
@@ -266,6 +299,14 @@ const SearchMultiple: FC<SearchMultipleProps> = ({
   const mergeObject = (object1: any, object2: any) => {
     return { ...object1, ...object2 };
   };
+
+  useEffect(() => {
+    if(handleWatch){
+      const subscription = watch((data, value) => handleWatch(data,value, resetField));
+      return () => subscription.unsubscribe()
+    }
+
+  }, [watch])
 
   return (
     <Form

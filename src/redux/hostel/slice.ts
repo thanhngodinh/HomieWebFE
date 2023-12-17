@@ -7,6 +7,7 @@ import { Rate } from '../../models/rate';
 export interface HostelState {
   loading?: boolean;
   list: Post[];
+  listAll?: Post[];
   compareHostel1?: Post;
   compareHostel2?: Post;
   listSuggest?: Post[];
@@ -19,6 +20,7 @@ export interface HostelState {
 const initialState: HostelState = {
   loading: false,
   list: [],
+  listAll:[],
   total: 0,
 };
 
@@ -38,6 +40,24 @@ export const elasticSearch = createAsyncThunk(
   'hostel/elasticSearch',
   async (query?: HostelFilter) => {
     try {
+      const response = await hostelApi.elasticSearch(query);
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
+export const elasticSearchForMap = createAsyncThunk(
+  'hostel/elasticSearchForMap',
+  async (query?: HostelFilter) => {
+    try {
+      if(query?.pageSize) {
+        delete query?.pageSize
+      }
+      if(query?.pageIdx) {
+        delete query?.pageIdx
+      }
       const response = await hostelApi.elasticSearch(query);
       return response;
     } catch (error) {
@@ -237,6 +257,21 @@ export const hostelSlice = createSlice({
         state.error = false;
       })
       .addCase(elasticSearch.rejected, (state, action) => {
+        state.error = true;
+        state.loading = false;
+      })
+      //elasticSearchForMap
+      .addCase(elasticSearchForMap.pending, (state, action) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(elasticSearchForMap.fulfilled, (state, action) => {
+        state.listAll = action.payload?.data || [];
+        state.total = action.payload?.total || 0;
+        state.loading = false;
+        state.error = false;
+      })
+      .addCase(elasticSearchForMap.rejected, (state, action) => {
         state.error = true;
         state.loading = false;
       })

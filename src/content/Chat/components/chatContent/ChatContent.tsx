@@ -4,8 +4,8 @@ import classNames from 'classnames/bind';
 import { UploadOutlined } from '@ant-design/icons';
 import Avatar from '../chatList/Avatar';
 import ChatItem from './ChatItem';
-import { Button, Form, Upload } from 'antd';
-import { useForm } from 'react-hook-form';
+import { Button, Form, Input, Upload } from 'antd';
+import { Controller, useForm } from 'react-hook-form';
 import { addNewDoc, updateDocument } from '../../../../firebase/service';
 import Chat, { Room } from '../../Chat';
 import { serverTimestamp } from 'firebase/firestore';
@@ -56,6 +56,7 @@ const ChatContent = ({data,user,me}: ChatContentProps) => {
     setValue,
     getValues,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<{message: string}>({
     defaultValues: {
@@ -64,6 +65,7 @@ const ChatContent = ({data,user,me}: ChatContentProps) => {
   });
 
   const handleSubmitForm = async (value: any) => {
+    console.log(68,value)
     const {message} = value
     if(!data?.roomId ) return;
     if(!message) return;
@@ -108,6 +110,14 @@ const ChatContent = ({data,user,me}: ChatContentProps) => {
   useEffect(()=>{refContent.current.scrollTop = refContent.current.scrollHeight},[refContent.current?.scrollHeight])
 
   console.log(108,user)
+  // useEffect(() => {
+  //   const subscription = watch((data, value) => {
+  //     console.log(114,data)
+  //   });
+  //   return () => subscription.unsubscribe()
+    
+
+  // }, [watch])
 
   return (
     <div className={cx('main__chatcontent')}>
@@ -150,7 +160,7 @@ const ChatContent = ({data,user,me}: ChatContentProps) => {
       </div>
       <Form
         form={form}
-        onFinish={handleSubmitForm}
+        onFinish={handleSubmit(handleSubmitForm)}
       >
         <div className={cx('content__footer')}>
           <div className={cx('sendNewMessage')}>
@@ -166,18 +176,24 @@ const ChatContent = ({data,user,me}: ChatContentProps) => {
               style={{ marginBottom: '0', width: '100%' }}
               control={control}
             >
-              <input
-                type="text"
-                placeholder="Type a message here"
-                autoComplete="false"
-              />
+               <Controller
+                  name='message'
+                  control={control}
+                  render={({ field }) => (
+                    <input
+                      type="text"
+                      {...field}
+                      // size="large"
+                      placeholder="Type a message here"
+                    />
+                  )}
+                />
             </FormItem>
             <div style={{ marginBottom: '0' }}>
               <button
                 type="submit"
                 className={cx('btnSendMsg')}
                 id="sendMsgBtn"
-                // onClick={}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

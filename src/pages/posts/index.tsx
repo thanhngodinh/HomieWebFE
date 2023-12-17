@@ -9,6 +9,7 @@ import { AppDispatch } from '../../app/store';
 import { useSelector } from 'react-redux';
 import {
   elasticSearch,
+  elasticSearchForMap,
   getHostelsWithQuerryParams,
   postHostelsWithQuerryParams,
   selectHostels,
@@ -16,11 +17,12 @@ import {
 import {
   selectSearchQuery,
   selectSearchResults,
+  selectSearchResultsMap,
 } from '../../redux/search/slice';
 import { useRouter } from 'next/router';
 import SearchMultiple from '../../components/SearchMultiple';
 import type { SliderMarks } from 'antd/es/slider';
-import { formatNumber } from '../../utils/func';
+import { formatGoogleAddress, formatNumber } from '../../utils/func';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBookAtlas,
@@ -32,6 +34,7 @@ import { getUtilitiess, selectUtilitiess } from '../../redux/utilities/slice';
 import MapBox from '../../components/MapBox';
 import { Button } from 'antd';
 import Pagination from '../../components/Pagination/Pagination';
+import { UseFormReset, UseFormResetField } from 'react-hook-form';
 
 const HostelSearchPage: NextPage & { Layout?: FC } = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -41,7 +44,10 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
     listUtilities,
     error: UtilitiessError,
   } = useSelector(selectUtilitiess);
-  const { list, total, loading, error } = useSelector(selectSearchResults);
+  const { list ,total, loading, error } = useSelector(selectSearchResults);
+  const { listAll ,total: totalMap} = useSelector(selectSearchResultsMap);
+
+  console.log(46,list)
 
   const [province, setProvince] = useState<
     { value: string; label: string; code: number }[]
@@ -54,6 +60,11 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
   >([]);
 
   const [showMap, setShowMap] = useState<boolean>(false);
+
+  const [valueProvince, setValueProvince] = useState("Thành phố Hà Nội")
+  const [valueDistrict, setValueDistrict] = useState("")
+  const [valueWard, setValueWard] = useState("")
+
 
   // const [codeProvince,setCodeProvince] = useState(1)
 
@@ -116,12 +127,15 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
     return option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1;
   };
   const onSelectProvince = (valueSelect: string) => {
+    setValueProvince(valueSelect)
     const provinceSelected = province.find((p) => p.value === valueSelect);
     if (provinceSelected) {
       // setCodeProvince(provinceSelected.code)
       getDistrict(provinceSelected.code);
     }
   };
+
+
   const onSelectDistrict = (valueSelect: string) => {
     const districtSelected = district.find((p) => p.value === valueSelect);
     if (districtSelected) {
@@ -129,6 +143,15 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
       getWard(districtSelected.code);
     }
   };
+
+  const handleWatch = (data: unknown, value: {name?: string, type?: string}, resetField:  UseFormResetField<any>) =>{
+    if(value && value.name === "province"){
+      resetField("district")
+      resetField("ward")
+
+      
+    }
+  }
 
   return (
     <>
@@ -164,7 +187,6 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
                 autoCompleteInputProperties: {
                   options: ward,
                   filterOption: filterProvince,
-                  onSelect: onSelectProvince,
                 },
               },
               { name: 'street', label: 'Đường' },
@@ -250,6 +272,8 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
               },
             ]}
             actionSearch={elasticSearch}
+            actionSearchMap={elasticSearchForMap}
+            handleWatch={handleWatch}
             // footerSearch={
             //   <Button
             //     htmlType="button"
@@ -272,9 +296,12 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
       <div id="map-box" className={`mt-8 w-4/5 mx-auto h-[400px]`}>
         <MapBox
           markers={
-            list && Array.isArray(list)
-              ? list.map((item) => {
+            listAll && Array.isArray(listAll)
+              ? listAll.map((item) => {
                   return {
+                    id: item.id,
+                    name: item.name,
+                    address: formatGoogleAddress({province: item.province,district: item.district,ward: item.ward, street: item.street}),
                     latitude: parseFloat(item.latitude),
                     longitude: parseFloat(item.longitude),
                   };

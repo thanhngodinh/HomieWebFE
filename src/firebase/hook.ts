@@ -7,9 +7,3 @@ type Codition = {
     operator: string,
     value: string
 }
-
-const useFirestore = (collectionName:string, condition: Codition) =>{
-    useEffect(()=>{
-        let collectionRef = query(collection(database,collectionName), )
-    })
-}
