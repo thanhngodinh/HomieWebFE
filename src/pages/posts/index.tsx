@@ -32,7 +32,7 @@ import {
 import { District, Province, Ward } from '../../models';
 import { getUtilitiess, selectUtilitiess } from '../../redux/utilities/slice';
 import MapBox from '../../components/MapBox';
-import { Button } from 'antd';
+import Head from 'next/head';
 import Pagination from '../../components/Pagination/Pagination';
 import { UseFormReset, UseFormResetField } from 'react-hook-form';
 
@@ -155,7 +155,13 @@ const HostelSearchPage: NextPage & { Layout?: FC } = () => {
 
   return (
     <>
-      {/* <SearchBar keySearch='name' /> */}
+      <Head>
+        <link
+          rel="shortcut icon"
+          href="https://firebasestorage.googleapis.com/v0/b/hommie-thanhtc.appspot.com/o/favicon.jpg?alt=media&token=9fd556b4-5171-4805-b044-33b617479fdf"
+        ></link>
+        <title>Homie | Tìm nhà</title>
+      </Head>
       <header className="w-screen h-fit grid grid-cols-9 my-auto py-4 bg-[#f4f4f4] ">
         <div className="col-start-2 col-span-7 flex justify-start items-center">
           <SearchMultiple
