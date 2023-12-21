@@ -58,7 +58,7 @@ const LoadProfile: FC<ProfileProps> = ({ profile }) => {
             className="button button__fill ml-6"
             onClick={() => {
               dispatch(verifyPhoneOTP({ otp: otp })).finally(() => {
-                router.push('/my/profile');
+                router.reload();
               });
               setIsOpenOTP(true);
             }}

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Login, LoginRes } from '../../models/auth';
-import User from '../../models/user';
 import classNames from 'classnames/bind';
 import styles from './Login.module.scss';
 import bg from '../../assets/img/bg-login.png';

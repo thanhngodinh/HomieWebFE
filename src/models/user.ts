@@ -1,3 +1,5 @@
+import { PageFilter } from './common';
+
 export type User = {
   id: string;
   username?: string;
@@ -32,4 +34,16 @@ export type ResetUser = {
   confirmPassword?: string;
 };
 
-export default User;
+export interface UserFilter extends PageFilter {
+  name?: string;
+  province?: string;
+  district?: string;
+  ward?: string;
+  street?: string;
+  status?: string;
+  costFrom?: number;
+  costTo?: number;
+  depositFrom?: number;
+  depositTo?: number;
+  capacity?: number;
+}

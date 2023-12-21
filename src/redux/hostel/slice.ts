@@ -20,7 +20,7 @@ export interface HostelState {
 const initialState: HostelState = {
   loading: false,
   list: [],
-  listAll:[],
+  listAll: [],
   total: 0,
 };
 
@@ -52,11 +52,11 @@ export const elasticSearchForMap = createAsyncThunk(
   'hostel/elasticSearchForMap',
   async (query?: HostelFilter) => {
     try {
-      if(query?.pageSize) {
-        delete query?.pageSize
+      if (query?.pageSize) {
+        delete query?.pageSize;
       }
-      if(query?.pageIdx) {
-        delete query?.pageIdx
+      if (query?.pageIdx) {
+        delete query?.pageIdx;
       }
       const response = await hostelApi.elasticSearch(query);
       return response;
@@ -140,6 +140,31 @@ export const createHostel = createAsyncThunk(
   }
 );
 
+export const updatePost = createAsyncThunk(
+  'hostel/updatePost',
+  async (hostel: CallBackParam<HostelCreate>) => {
+    try {
+      const response = await hostelApi.updatePost(hostel.data);
+      hostel.callback && hostel.callback();
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
+export const deletePost = createAsyncThunk(
+  'hostel/deletePost',
+  async (id: string) => {
+    try {
+      const response = await hostelApi.deletePost(id);
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
 export const likePost = createAsyncThunk(
   'hostel/likePost',
   async (postId: string) => {
@@ -199,6 +224,32 @@ export const hostelSlice = createSlice({
         state.error = false;
       })
       .addCase(createHostel.rejected, (state, action) => {
+        state.error = true;
+        state.loading = false;
+      })
+      // edit
+      .addCase(updatePost.pending, (state, action) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(updatePost.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+      })
+      .addCase(updatePost.rejected, (state, action) => {
+        state.error = true;
+        state.loading = false;
+      })
+      // delete
+      .addCase(deletePost.pending, (state, action) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(deletePost.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+      })
+      .addCase(deletePost.rejected, (state, action) => {
         state.error = true;
         state.loading = false;
       })

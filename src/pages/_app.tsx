@@ -26,6 +26,7 @@ import {
   faCamera,
   faSun,
   faHeart,
+  faClock,
 } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 import { getToken } from '../app/token';
@@ -47,7 +48,8 @@ library.add(
   faRestroom,
   faCamera,
   faHeart,
-  faHeartRegular
+  faHeartRegular,
+  faClock
 );
 
 type MyAppProps = AppProps & {

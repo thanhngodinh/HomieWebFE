@@ -4,6 +4,7 @@ import {
   Post,
   ResetUser,
   User,
+  UserFilter,
   VerifyOTPReq,
   VerifyPhoneReq,
 } from '../../models';
@@ -93,9 +94,9 @@ export const getMyLikedPosts = createAsyncThunk(
 
 export const searchRoommates = createAsyncThunk(
   'user/searchRoommates',
-  async () => {
+  async (query?: UserFilter) => {
     try {
-      const response = await userApi.searchRoommates({});
+      const response = await userApi.searchRoommates(query);
       return response;
     } catch (error) {
       console.error(error);
@@ -261,7 +262,7 @@ export const userSlice = createSlice({
       .addCase(getUserById.rejected, (state, action) => {
         state.error = true;
         state.loading = false;
-      })
+      });
   },
 });
 

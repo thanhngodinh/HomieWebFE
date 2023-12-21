@@ -38,6 +38,7 @@ export type Post = {
 };
 
 export type HostelCreate = {
+  id: string;
   name: string;
   province: string;
   district: string;

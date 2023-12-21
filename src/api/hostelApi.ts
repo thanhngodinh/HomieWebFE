@@ -47,9 +47,9 @@ export const hostelApi = {
     const url = '/posts';
     return axiosClient.post(url, params);
   },
-  updatePost({}): Promise<BaseResponse<Post[]>> {
-    const url = '/posts';
-    return axiosClient.patch(url);
+  updatePost(params: HostelCreate): Promise<BaseResponse<Post>> {
+    const url = `/posts/${params.id}`;
+    return axiosClient.put(url, params);
   },
   likePost(postId: string): Promise<BaseResponse<string>> {
     const url = `/posts/like/${postId}`;
@@ -58,6 +58,10 @@ export const hostelApi = {
   ratePost(params: Rate): Promise<BaseResponse<string>> {
     const url = `/rates/${params.postId}`;
     return axiosClient.post(url, params);
+  },
+  deletePost(id: string): Promise<BaseResponse<Post>> {
+    const url = `/posts/${id}`;
+    return axiosClient.delete(url);
   },
 };
 

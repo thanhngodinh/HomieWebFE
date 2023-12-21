@@ -18,6 +18,8 @@ import { getUtilitiess, selectUtilitiess } from '../../redux/utilities/slice';
 import SearchSingle from '../../components/SearchBar/SearchSingle';
 import { Province } from '../../models';
 import { cond } from 'lodash';
+import { searchRoommates, selectUsers } from '../../redux/user/slice';
+import RoommateItem from '../../components/RoommateItem';
 
 const cx = classNames.bind(styles);
 
@@ -28,7 +30,8 @@ interface HomeProps {
 
 const Home: FC<HomeProps> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { list, listSuggest, loading, error } = useSelector(selectHostels);
+  const { listSuggest, loading, error } = useSelector(selectHostels);
+  const { roommates, total } = useSelector(selectUsers);
   const [province, setProvince] = useState<
     { value: string; label: string; code: number }[]
   >([]);
@@ -75,8 +78,8 @@ const Home: FC<HomeProps> = (props) => {
   };
 
   useEffect(() => {
-    dispatch(postHostelsWithQuerryParams({ pageSize: 5 }));
     dispatch(getHostelSuggest());
+    dispatch(searchRoommates({pageSize: 5}));
     getProvince();
     getDistrict(1);
   }, [dispatch]);
@@ -168,8 +171,31 @@ const Home: FC<HomeProps> = (props) => {
         </div>
       </div>
 
-      <HostelList title="Gợi ý của chúng tôi" hostels={listSuggest} />
-      <HostelList title="Những nhà mới nhất được đăng" hostels={list} />
+      <HostelList
+        title="Gợi ý về những ngôi nhà phù hợp với bạn"
+        hostels={listSuggest}
+      />
+      <div className="mt-20 w-4/5 mx-auto">
+        <h1 className="text-4xl mb-5">Gợi ý về những người bạn ở ghép</h1>
+        <hr />
+        <div className="mt-6 relative">
+          {roommates?.map((item: any, i: number) => {
+            return (
+              <RoommateItem
+                key={i}
+                id={item.id}
+                name={item.name}
+                img={item.avatar}
+                province={item.province}
+                district={item.district}
+                costFrom={1500000}
+                costTo={2500000}
+                gender={item.gender}
+              />
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 };

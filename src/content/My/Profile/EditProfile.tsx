@@ -50,7 +50,7 @@ const EditProfile: FC<ProfileProps> = (props) => {
     formState: { errors },
   } = useForm<User>({
     defaultValues: useMemo(() => {
-      console.log('profile has changed');
+      // console.log('profile has changed');
       return props.profile;
     }, [props.profile]),
     resolver: yupResolver(schema),

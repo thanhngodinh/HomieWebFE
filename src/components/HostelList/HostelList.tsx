@@ -54,7 +54,7 @@ const HostelList: FC<HostelListProps> = ({ title, hostels }) => {
             <HostelItem
               id={item.id}
               name={item.name}
-              img={item.imageUrl[0]}
+              img={item?.imageUrl ? item.imageUrl[0] : ''}
               size={item.capacity}
               type={item.type}
               address={GenAddress(

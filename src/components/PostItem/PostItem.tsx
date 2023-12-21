@@ -4,6 +4,10 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import StatusBox from '../Status/StatusBox';
 import { formatShortDate } from '../../utils/date';
 import { PostTitleMapping } from '../../utils/common';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../app/store';
+import { deletePost } from '../../redux/hostel/slice';
+import { useRouter } from 'next/router';
 
 interface PostItemProps {
   id?: string;
@@ -24,6 +28,9 @@ const PostItem: FC<PostItemProps> = ({
   endDate,
   status,
 }) => {
+  const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+
   // console.log(new Date().toISOString());
   return (
     <div className="h-full w-full grid grid-cols-4 gap-4 text-base">
@@ -80,21 +87,30 @@ const PostItem: FC<PostItemProps> = ({
           </button>
         </Link>
         {/* Sửa tin */}
-        <button className="button button__border flex justify-center items-center">
-          <svg
-            className="inline-block mr-2"
-            xmlns="http://www.w3.org/2000/svg"
-            height="24"
-            viewBox="0 -960 960 960"
-            width="24"
-            fill="currentColor "
-          >
-            <path d="M80 0v-160h800V0H80Zm160-320h56l312-311-29-29-28-28-311 312v56Zm-80 80v-170l448-447q11-11 25.5-17t30.5-6q16 0 31 6t27 18l55 56q12 11 17.5 26t5.5 31q0 15-5.5 29.5T777-687L330-240H160Zm560-504-56-56 56 56ZM608-631l-29-29-28-28 57 57Z" />
-          </svg>
-          <span>Sửa tin</span>
-        </button>
+        <Link href={'/my/post/edit/' + id}>
+          <button className="button button__border flex justify-center items-center">
+            <svg
+              className="inline-block mr-2"
+              xmlns="http://www.w3.org/2000/svg"
+              height="24"
+              viewBox="0 -960 960 960"
+              width="24"
+              fill="currentColor "
+            >
+              <path d="M80 0v-160h800V0H80Zm160-320h56l312-311-29-29-28-28-311 312v56Zm-80 80v-170l448-447q11-11 25.5-17t30.5-6q16 0 31 6t27 18l55 56q12 11 17.5 26t5.5 31q0 15-5.5 29.5T777-687L330-240H160Zm560-504-56-56 56 56ZM608-631l-29-29-28-28 57 57Z" />
+            </svg>
+            <span>Sửa tin</span>
+          </button>
+        </Link>
         {/* Xóa tin */}
-        <button className="button button__border flex justify-center items-center">
+        <button
+          className="button button__border flex justify-center items-center"
+          onClick={() => {
+            dispatch(deletePost(id as string)).finally(() => {
+              router.reload();
+            });
+          }}
+        >
           <svg
             className="inline-block mr-2"
             xmlns="http://www.w3.org/2000/svg"

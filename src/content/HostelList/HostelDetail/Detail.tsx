@@ -40,6 +40,7 @@ import {
   faHeart,
   faMapLocationDot,
 } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as noheart } from '@fortawesome/free-regular-svg-icons';
 import Map from '../../../components/Map';
 
 const cx = classNames.bind(styles);
@@ -186,13 +187,13 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
               </div>
             ) : (
               <div className="absolute right-4 top-2 z-10">
-                <FontAwesomeIcon icon={faHeart} onClick={onLikeChange} />
+                <FontAwesomeIcon icon={noheart} onClick={onLikeChange} />
               </div>
             )
           ) : (
             <div className="absolute right-4 top-2 z-10">
               <Link href={'/login'}>
-                <FontAwesomeIcon icon={faHeart} />
+                <FontAwesomeIcon icon={noheart} />
               </Link>
             </div>
           )}
@@ -473,30 +474,53 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
               </Link>
             </div>
             <div className=" text-center mb-2">
-              <button
-                type="button"
-                className="button button__fill button__fill-large text__normal"
-                onClick={() => setIsShowPhone(!isShowPhone)}
-              >
-                {isShowPhone
-                  ? 'Liên hệ ' + hostel?.phone
-                  : 'Bấm để xem số điện thoại'}
-              </button>
+              {token ? (
+                <button
+                  type="button"
+                  className="button button__fill button__fill-large text__normal"
+                  onClick={() => setIsShowPhone(!isShowPhone)}
+                >
+                  {isShowPhone
+                    ? 'Liên hệ ' + hostel?.phone
+                    : 'Bấm để xem số điện thoại'}
+                </button>
+              ) : (
+                <Link href={'/login'}>
+                  <button
+                    type="button"
+                    className="button button__fill button__fill-large text__normal"
+                    onClick={() => setIsShowPhone(!isShowPhone)}
+                  >
+                    Bấm để xem số điện thoại
+                  </button>
+                </Link>
+              )}
             </div>
             <div className=" m-auto text-center">
-              <button
-                type="button"
-                className="button button__border button__border-large text__normal"
-                onClick={(e) =>
-                  handleChatWithAuthor({
-                    id: hostel.authorId,
-                    name: hostel.authorName,
-                    avatar: hostel.authorAvatar,
-                  })
-                }
-              >
-                Chat với người đăng
-              </button>
+              {token ? (
+                <button
+                  type="button"
+                  className="button button__border button__border-large text__normal"
+                  onClick={(e) =>
+                    handleChatWithAuthor({
+                      id: hostel.authorId,
+                      name: hostel.authorName,
+                      avatar: hostel.authorAvatar,
+                    })
+                  }
+                >
+                  Chat với người đăng
+                </button>
+              ) : (
+                <Link href={'/login'}>
+                  <button
+                    type="button"
+                    className="button button__border button__border-large text__normal"
+                  >
+                    Chat với người đăng
+                  </button>
+                </Link>
+              )}
             </div>
           </div>
         </div>
