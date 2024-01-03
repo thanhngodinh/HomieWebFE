@@ -47,3 +47,5 @@ export interface UserFilter extends PageFilter {
   depositTo?: number;
   capacity?: number;
 }
+
+export default User

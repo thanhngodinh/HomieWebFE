@@ -2,10 +2,9 @@ import { FC, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './HostelPostList.module.scss';
 import HostelList from '../../components/HostelList';
-import { Post } from '../../models/hostel';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../app/store';
-import { getHostels, selectHostels } from '../../redux/hostel/slice';
+import { elasticSearch, selectHostels } from '../../redux/hostel/slice';
 
 const cx = classNames.bind(styles);
 
@@ -16,7 +15,7 @@ const HostelPostList: FC<HostelListProps> = () => {
   const { list, total, loading, error } = useSelector(selectHostels);
 
   useEffect(() => {
-    dispatch(getHostels());
+    dispatch(elasticSearch());
   }, [dispatch]);
 
   return <HostelList hostels={list} />;

@@ -16,3 +16,5 @@ export type Register = {
   phone: string;
   name: string;
 };
+
+export default {}

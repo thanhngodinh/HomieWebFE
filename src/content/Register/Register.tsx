@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Login, Register } from '../../models/auth';
-import User from '../../models/user';
 import classNames from 'classnames/bind';
 import styles from './Register.module.scss';
 import Link from 'next/link';
@@ -17,6 +16,7 @@ import { AppDispatch } from '../../app/store';
 import { registerAccount } from '../../redux/auth/slice';
 import { FormItem } from 'react-hook-form-antd';
 import { useRouter } from 'next/router';
+import { CallBackParam } from '../../models';
 
 const cx = classNames.bind(styles);
 
@@ -50,12 +50,11 @@ const RegisterPage: React.FC = () => {
         name="validateOnly"
         layout="vertical"
         onFinish={handleSubmit((data) => {
-          dispatch(
-            registerAccount({
-              data: { ...data },
-              callback: () => router.push('/login'),
-            })
-          );
+          const payload = {
+            data: data,
+            callback: () => router.push('/login'),
+          } as CallBackParam<Register>;
+          dispatch(registerAccount(payload));
         })}
       >
         <div className={cx('right-side')}>

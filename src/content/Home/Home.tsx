@@ -24,8 +24,8 @@ import RoommateItem from '../../components/RoommateItem';
 const cx = classNames.bind(styles);
 
 interface HomeProps {
-  bgImg: string;
-  city: SuggestItemBasicProps[];
+  bgImg?: string;
+  city?: SuggestItemBasicProps[];
 }
 
 const Home: FC<HomeProps> = (props) => {
@@ -79,7 +79,7 @@ const Home: FC<HomeProps> = (props) => {
 
   useEffect(() => {
     dispatch(getHostelSuggest());
-    dispatch(searchRoommates({pageSize: 5}));
+    dispatch(searchRoommates({ pageSize: 5 }));
     getProvince();
     getDistrict(1);
   }, [dispatch]);
@@ -153,19 +153,20 @@ const Home: FC<HomeProps> = (props) => {
           <h1 className="text-4xl mb-5">Khám phá tại các thành phố</h1>
           <div className="">
             <Carousel autoplay slidesToShow={4}>
-              {[
-                ...props.city.map((i, index) => {
-                  return (
-                    <div className="p-2 mb-4">
-                      <SuggestItemBasic
-                        link={i.link}
-                        img={i.img}
-                        title={i.title}
-                      />
-                    </div>
-                  );
-                }),
-              ]}
+              {props.city &&
+                props.city.length > 0 && [
+                  ...props.city.map((i, index) => {
+                    return (
+                      <div className="p-2 mb-4">
+                        <SuggestItemBasic
+                          link={i.link}
+                          img={i.img}
+                          title={i.title}
+                        />
+                      </div>
+                    );
+                  }),
+                ]}
             </Carousel>
           </div>
         </div>

@@ -18,7 +18,7 @@ const HeaderFooterLayout: FC<HeaderFooterLayoutProps> = ({ children }) => {
 };
 
 HeaderFooterLayout.propTypes = {
-  children: PropTypes.node,
+  children: PropTypes.node as any,
 };
 
 export default HeaderFooterLayout;
