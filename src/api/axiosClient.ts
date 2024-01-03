@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { getToken } from '../app/token';
 
 const axiosClient = axios.create({
-  baseURL: 'http://103.56.160.173:8080/',
+  baseURL: 'https://homiebe.run-ap-south1.goorm.io/',
 });
 // Interceptors
 axiosClient.interceptors.request.use(
