@@ -44,6 +44,7 @@ const LikedPost: FC<MyPostProps> = () => {
                     img={post.imageUrl[0]}
                     size={post.capacity}
                     type={post.type}
+                    createdAt={post.createdAt}
                     address={GenAddress(
                       post.street,
                       post.ward,

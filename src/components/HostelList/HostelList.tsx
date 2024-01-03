@@ -57,6 +57,7 @@ const HostelList: FC<HostelListProps> = ({ title, hostels }) => {
               img={item?.imageUrl ? item.imageUrl[0] : ''}
               size={item.capacity}
               type={item.type}
+              createdAt={item.createdAt}
               address={GenAddress(
                 item.street,
                 item.ward,
@@ -104,6 +105,7 @@ const HostelList: FC<HostelListProps> = ({ title, hostels }) => {
                 img={item.imageUrl[0]}
                 type={item.type}
                 size={item.capacity}
+                createdAt={item.createdAt}
                 address={GenAddress(
                   item.street,
                   item.ward,

@@ -63,6 +63,18 @@ export const hostelApi = {
     const url = `/posts/${id}`;
     return axiosClient.delete(url);
   },
+  hiddenPost(id: string): Promise<BaseResponse<Post>> {
+    const url = `/posts/${id}/hidden`;
+    return axiosClient.patch(url);
+  },
+  activePost(id: string): Promise<BaseResponse<Post>> {
+    const url = `/posts/${id}/active`;
+    return axiosClient.patch(url);
+  },
+  extendPost(id: string): Promise<BaseResponse<Post>> {
+    const url = `/posts/${id}/extend`;
+    return axiosClient.patch(url);
+  },
 };
 
 export const utilitiesApi = {

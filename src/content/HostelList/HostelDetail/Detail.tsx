@@ -42,6 +42,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as noheart } from '@fortawesome/free-regular-svg-icons';
 import Map from '../../../components/Map';
+import { formatShortDate } from '../../../utils/date';
 
 const cx = classNames.bind(styles);
 
@@ -464,15 +465,18 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
               />
             </div>
             <p className="text-sm text-center mb-2  ">
-              {'Đăng bởi ' + hostel?.authorName}
+              {'Đăng bởi ' +
+                hostel?.authorName +
+                ' ngày ' +
+                formatShortDate(hostel?.createdAt)}
             </p>
-            <div className="cursor-pointer  text-center mb-2">
+            {/* <div className="cursor-pointer  text-center mb-2">
               <Link href={'/users/' + hostel?.createdBy}>
                 <p className="text-sm ml-2 text-gray-500 text-center">
                   {'Xem thêm các tin khác từ ' + hostel?.authorName}
                 </p>
               </Link>
-            </div>
+            </div> */}
             <div className=" text-center mb-2">
               {token ? (
                 <button

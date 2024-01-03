@@ -7,6 +7,7 @@ import { AppDispatch } from '../../app/store';
 import { likePost } from '../../redux/hostel/slice';
 import { Checkbox } from 'antd';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
+import { formatShortDate } from '../../utils/date';
 
 interface HostelItemProps {
   id: string;
@@ -14,6 +15,7 @@ interface HostelItemProps {
   name: string;
   size?: number;
   cost: number;
+  createdAt?: string;
   address: string;
   type: string;
   avgRate: number;
@@ -53,6 +55,10 @@ const HostelItem: FC<HostelItemProps> = (props) => {
           <span className="font-semibold">Giá thuê: </span>
           <span>{GenCurrecy(props.cost)}</span>
         </div>
+        <div className="text-base row-span-1 mb-1 ">
+          <span className="font-semibold">Ngày đăng: </span>
+          <span>{formatShortDate(props.createdAt)}</span>
+        </div>
       </div>
 
       {props.removeAction ? (
@@ -63,9 +69,7 @@ const HostelItem: FC<HostelItemProps> = (props) => {
             <div className="font-semibold text-xs my-1">Chưa có đánh giá</div>
           ) : (
             <div>
-              <span className="font-semibold ">
-                {props.avgRate + ' '}
-              </span>
+              <span className="font-semibold ">{props.avgRate + ' '}</span>
               <FontAwesomeIcon
                 size={'sm'}
                 icon={faStar}

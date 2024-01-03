@@ -6,7 +6,12 @@ import { formatShortDate } from '../../utils/date';
 import { PostTitleMapping } from '../../utils/common';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../app/store';
-import { deletePost } from '../../redux/hostel/slice';
+import {
+  activePost,
+  deletePost,
+  extendPost,
+  hiddenPost,
+} from '../../redux/hostel/slice';
 import { useRouter } from 'next/router';
 
 interface PostItemProps {
@@ -16,7 +21,7 @@ interface PostItemProps {
   code?: string;
   startDate?: string | Date;
   endDate?: string | Date;
-  status?: 'A' | 'I' | 'W';
+  status?: 'A' | 'I' | 'W' | 'H' | 'E';
 }
 
 const PostItem: FC<PostItemProps> = ({
@@ -34,15 +39,19 @@ const PostItem: FC<PostItemProps> = ({
   // console.log(new Date().toISOString());
   return (
     <div className="h-full w-full grid grid-cols-4 gap-4 text-base">
-      <div className="w-full h-[200px]">
-        <img
-          className="w-full h-full object-cover rounded-lg"
-          src={img}
-          alt="postitem"
-        />
-      </div>
+      <Link href={'/posts/' + id}>
+        <div className="w-full h-[200px] cursor-pointer">
+          <img
+            className="w-full h-full object-cover rounded-lg"
+            src={img}
+            alt="postitem"
+          />
+        </div>
+      </Link>
       <div className="col-span-2 ">
-        <div className="text-lg mb-12">{name}</div>
+        <Link href={'/posts/' + id}>
+          <div className="text-lg mb-12 cursor-pointer">{name}</div>
+        </Link>
         <div className="flex justify-start gap-12 text-center">
           <div className="text-center">
             <div className="text__title">Trạng thái</div>
@@ -70,22 +79,27 @@ const PostItem: FC<PostItemProps> = ({
         </div>
       </div>
       <div className="flex flex-col gap-4 items-end m-auto">
-        {/* Chi Tiết */}
-        <Link href={'/posts/' + id}>
-          <button className="button button__border flex justify-center items-center">
-            <svg
-              className="inline-block mr-2"
-              xmlns="http://www.w3.org/2000/svg"
-              height="24"
-              viewBox="0 -960 960 960"
-              width="24"
-              fill="currentColor "
-            >
-              <path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
-            </svg>
-            <span>Chi tiết</span>
-          </button>
-        </Link>
+        {/* Gia hạn */}
+        <button
+          className="button button__border flex justify-center items-center"
+          onClick={() => {
+            dispatch(extendPost(id as string)).finally(() => {
+              router.reload();
+            });
+          }}
+        >
+          <svg
+            className="inline-block mr-2"
+            xmlns="http://www.w3.org/2000/svg"
+            height="24"
+            viewBox="0 -960 960 960"
+            width="24"
+            fill="currentColor "
+          >
+            <path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+          </svg>
+          <span>Gia hạn</span>
+        </button>
         {/* Sửa tin */}
         <Link href={'/my/post/edit/' + id}>
           <button className="button button__border flex justify-center items-center">
@@ -102,6 +116,53 @@ const PostItem: FC<PostItemProps> = ({
             <span>Sửa tin</span>
           </button>
         </Link>
+        {/* Ẩn tin */}
+        {status == 'A' ? (
+          <button
+            className="button button__border flex justify-center items-center"
+            onClick={() => {
+              dispatch(hiddenPost(id as string)).finally(() => {
+                router.reload();
+              });
+            }}
+          >
+            <svg
+              className="inline-block mr-2"
+              xmlns="http://www.w3.org/2000/svg"
+              height="24"
+              viewBox="0 -960 960 960"
+              width="24"
+              fill="currentColor "
+            >
+              <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+            </svg>
+            <span>Ẩn tin</span>
+          </button>
+        ) : status == 'H' ? (
+          <button
+            className="button button__border flex justify-center items-center"
+            onClick={() => {
+              dispatch(activePost(id as string)).finally(() => {
+                router.reload();
+              });
+            }}
+          >
+            <svg
+              className="inline-block mr-2"
+              xmlns="http://www.w3.org/2000/svg"
+              height="24"
+              viewBox="0 -960 960 960"
+              width="24"
+              fill="currentColor "
+            >
+              <path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+            </svg>
+            <span>Mở tin</span>
+          </button>
+        ) : (
+          <></>
+        )}
+
         {/* Xóa tin */}
         <button
           className="button button__border flex justify-center items-center"

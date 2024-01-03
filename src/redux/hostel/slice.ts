@@ -152,12 +152,47 @@ export const updatePost = createAsyncThunk(
     }
   }
 );
-
 export const deletePost = createAsyncThunk(
   'hostel/deletePost',
   async (id: string) => {
     try {
       const response = await hostelApi.deletePost(id);
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
+export const hiddenPost = createAsyncThunk(
+  'hostel/hiddenPost',
+  async (id: string) => {
+    try {
+      const response = await hostelApi.hiddenPost(id);
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
+export const activePost = createAsyncThunk(
+  'hostel/activePost',
+  async (id: string) => {
+    try {
+      const response = await hostelApi.activePost(id);
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
+export const extendPost = createAsyncThunk(
+  'hostel/extendPost',
+  async (id: string) => {
+    try {
+      const response = await hostelApi.extendPost(id);
       return response;
     } catch (error) {
       console.error(error);
@@ -237,6 +272,45 @@ export const hostelSlice = createSlice({
         state.error = false;
       })
       .addCase(updatePost.rejected, (state, action) => {
+        state.error = true;
+        state.loading = false;
+      })
+      // active
+      .addCase(activePost.pending, (state, action) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(activePost.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+      })
+      .addCase(activePost.rejected, (state, action) => {
+        state.error = true;
+        state.loading = false;
+      })
+      // hidden
+      .addCase(hiddenPost.pending, (state, action) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(hiddenPost.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+      })
+      .addCase(hiddenPost.rejected, (state, action) => {
+        state.error = true;
+        state.loading = false;
+      })
+      // extend
+      .addCase(extendPost.pending, (state, action) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(extendPost.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+      })
+      .addCase(extendPost.rejected, (state, action) => {
         state.error = true;
         state.loading = false;
       })
