@@ -37,7 +37,7 @@ const EditProfile: FC<ProfileProps> = (props) => {
   const [form] = Form.useForm();
   const [province, setProvince] = useState<Province[]>([]);
   const [district, setDistrict] = useState<District[]>([]);
-  const [genderValue, setGenderValue] = useState('M');
+  const [genderValue, setGenderValue] = useState('Nam hoặc Nữ');
 
   const dispatch = useDispatch<AppDispatch>();
 
