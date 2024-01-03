@@ -16,6 +16,7 @@ import {
   setDoc,
 } from 'firebase/firestore';
 import database from './config';
+import { User } from '../models';
 
 export type Condition = {
   fieldName: string;
@@ -105,3 +106,18 @@ export const getDocumentWithFloatChat = async (
     )
   );
 };
+
+export const getDocumentWithRoomsIsExist = async (
+  profile: User,
+  author: User,
+) => {
+    return await getDocs(
+      query(
+        collection(database, "rooms"),
+        or(
+          and(where('id', '==', profile.id),where('keyUserId', '==', author.id)),
+          and(where('id', '==', author.id),where('keyUserId', '==', profile.id))
+        )
+      )
+    );
+  }

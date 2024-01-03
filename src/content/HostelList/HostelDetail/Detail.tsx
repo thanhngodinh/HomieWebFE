@@ -32,14 +32,12 @@ import { Input } from 'antd';
 import Review from '../../../components/Review';
 import { Rate } from '../../../models/rate';
 import { flatMap } from 'lodash';
-import { Condition, addDocument, getDocument } from '../../../firebase/service';
+import { Condition, addDocument, getDocument, getDocumentWithRoomsIsExist } from '../../../firebase/service';
 import { selectAuths } from '../../../redux/auth/slice';
 import { getMyProfile, selectUsers } from '../../../redux/user/slice';
-import {
-  faBookAtlas,
-  faHeart,
-  faMapLocationDot,
-} from '@fortawesome/free-solid-svg-icons';
+// import {
+//   faHeart,
+// } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as noheart } from '@fortawesome/free-regular-svg-icons';
 import Map from '../../../components/Map';
 import { formatShortDate } from '../../../utils/date';
@@ -108,13 +106,8 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
   }) => {
     if (!profile) return;
     try {
-      const condition: Condition = {
-        fieldName: 'id',
-        operator: '==',
-        value: author.id,
-      };
-      console.log(75, author);
-      const roomIsExist = await getDocument('rooms', condition);
+
+      const roomIsExist = await getDocumentWithRoomsIsExist(profile, author);
       if (roomIsExist.empty) {
         const docRef = await addDocument('rooms', {
           keyUserId: profile.id,
@@ -181,20 +174,21 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
             isLiked ? (
               <div className="absolute right-4 top-2 z-10">
                 <FontAwesomeIcon
-                  icon={faHeart}
+                  icon={'heart'}
+                  height={22}
                   style={{ color: '#eb0a0a' }}
                   onClick={onLikeChange}
                 />
               </div>
             ) : (
               <div className="absolute right-4 top-2 z-10">
-                <FontAwesomeIcon icon={noheart} onClick={onLikeChange} />
+                <FontAwesomeIcon icon={'heart'} height={22} onClick={onLikeChange} />
               </div>
             )
           ) : (
             <div className="absolute right-4 top-2 z-10">
               <Link href={'/login'}>
-                <FontAwesomeIcon icon={noheart} />
+                <FontAwesomeIcon icon={'heart'}  height={22}/>
               </Link>
             </div>
           )}
@@ -213,9 +207,9 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
                 size="small"
               >
                 {!showMap ? (
-                  <FontAwesomeIcon icon={faBookAtlas} size="xs" />
+                  <FontAwesomeIcon icon={'book-atlas'} height={15} size="xs" />
                 ) : (
-                  <FontAwesomeIcon icon={faMapLocationDot} size="xs" />
+                  <FontAwesomeIcon icon={'map-location-dot'} height={15} size="xs" />
                 )}
               </Button>
             </div>
@@ -436,13 +430,13 @@ const HostelDetail: FC<HostelDetailProps> = (props) => {
           <div className="py-5">
             <p className="text-xl font-semibold">Các tiện ích khác</p>
 
-            <div className="grid grid-cols-3 gap-2 mt-4">
+            <div className="grid grid-cols-4 gap-4 mt-4">
               {hostel?.utilities?.map((utility: string) => {
                 let u = GetUtility(utility, listUtilities);
                 return (
                   u && (
-                    <div className="">
-                      <FontAwesomeIcon icon={u.icon} size="xs" />
+                    <div className="flex justify-between  items-center flex-col gap-2">
+                      <FontAwesomeIcon icon={u.icon} height={24}  size="xs" />
                       <span className="text-sm ml-2 font-semibold">
                         {u.name}
                       </span>

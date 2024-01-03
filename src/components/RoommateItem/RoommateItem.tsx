@@ -7,7 +7,7 @@ import { faMessage } from '@fortawesome/free-solid-svg-icons';
 import { getMyProfile, selectUsers } from '../../redux/user/slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../app/store';
-import { Condition, addDocument, getDocument } from '../../firebase/service';
+import { Condition, addDocument, getDocument, getDocumentWithRoomsIsExist } from '../../firebase/service';
 import { useRouter } from 'next/router';
 
 interface RoommateItemProps {
@@ -37,14 +37,8 @@ const RoommateItem: FC<RoommateItemProps> = (props) => {
   }) => {
     if (!profile) return;
     try {
-      const condition: Condition = {
-        fieldName: 'id',
-        operator: '==',
-        value: author.id,
-      };
       console.log(75, author);
-      const roomIsExist = await getDocument('rooms', condition);
-      console.log(48,roomIsExist.empty)
+      const roomIsExist = await getDocumentWithRoomsIsExist(profile, author);
       if (roomIsExist.empty) {
         console.log(58,profile, author)
 

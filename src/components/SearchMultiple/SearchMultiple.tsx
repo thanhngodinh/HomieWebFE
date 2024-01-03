@@ -37,10 +37,11 @@ import { Control, Controller, EventType, UseFormReset, UseFormResetField, useFor
 import { yupResolver } from '@hookform/resolvers/yup';
 import { HostelFilter } from '../../models';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCompress,
-  faCompressArrowsAlt,
-} from '@fortawesome/free-solid-svg-icons';
+// import {
+//   faCompress,
+//   faCompressArrowsAlt,
+// } from '@fortawesome/free-solid-svg-icons';
+
 
 const cx = classNames.bind(styles);
 
@@ -382,8 +383,10 @@ const SearchMultiple: FC<SearchMultipleProps> = ({
                               }
                             >
                               {
-                                <div className="m-1">
+                                <div className="m-1 flex justify-center  items-center flex-col gap-2">
                                   <FontAwesomeIcon
+                                    width={24}
+                                    height={24}
                                     icon={(tag?.icon as any) || ''}
                                   />
                                   <span className="text-sm">
@@ -427,9 +430,9 @@ const SearchMultiple: FC<SearchMultipleProps> = ({
           onClick={() => setShowMore(!showMore)}
         >
           {!showMore ? (
-            <FontAwesomeIcon icon={faCompress} size="xs" />
+            <FontAwesomeIcon icon={'compress'}  height={22} size="xs" />
           ) : (
-            <FontAwesomeIcon icon={faCompressArrowsAlt} size="xs" />
+            <FontAwesomeIcon icon={'compress-arrows-alt'}  height={22}size="xs" />
           )}
         </Button>
         <Button htmlType="submit" className="button button__fill">
